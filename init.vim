@@ -161,7 +161,6 @@ Plug 'drmikehenry/vim-fixkey'                       " use ALT in Vim
 Plug 'lilydjwg/fcitx.vim'
 Plug 'ryanoasis/vim-devicons'                       " show icons of some file types
 Plug 'wincent/terminus'                             " add some GUI feature for terminal Vim
-Plug 'mhinz/vim-startify'                           " startup screen
 Plug 'vim-utils/vim-man'                            " read man page in Vim
 Plug 'mbbill/undotree'                              " display undo operations in tree view
 Plug 'farmergreg/vim-lastplace'                     " keep cursor to the same positon where we exit session
@@ -826,27 +825,6 @@ nmap gLt <Plug>VimwikiRemoveCBInList
 nmap zv <Plug>VimwikiToggleListItem
 " VimwikiToc
 nnoremap <Leader>vt :VimwikiTOC<CR>"}}}
-
-" vim-startify{{{
-
-let g:startify_change_to_dir = 0    " 禁止自动切换目录
-let g:startify_custom_header = [
-            \ '',
-            \ '                       __         _    _        _    _      _         _      ',
-            \ '                      / /    ___ | |_ ( ) ___  | |_ | |__  (_) _ __  | | __  ',
-            \ '                     / /    / _ \| __||/ / __| | __|| |_ \ | || |_ \ | |/ /  ',
-            \ '                    / /___ |  __/| |_    \__ \ | |_ | | | || || | | ||   <   ',
-            \ '                    \____/  \___| \__|   |___/  \__||_| |_||_||_| |_||_|\_\  ',
-            \ '                                                                             ',
-            \ '',
-            \ ]
-function! s:center(lines) abort
-    let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-    let centered_lines = map(copy(a:lines),
-                \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-    return centered_lines
-endfunction
-"}}}
 
 " md paste {{{
 let g:mdip_imdir_intext = "./images"
