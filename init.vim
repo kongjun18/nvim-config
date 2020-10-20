@@ -1,18 +1,96 @@
 " (Neo)vim configuration 
-" Last Change: 2020-10-19
+" Last Change: 2020-10-22     
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
 
-" general setting ---- {{{
+" functions ---{{{
+
+" if @dir exists, just exit.
+" if @dir not exists, create it
 function! EnsureDirExists(dir)
     if !isdirectory(a:dir)
-        echomsg a:dir
         call mkdir(a:dir, 'p')
     endif
 endfunction
 
-set nocompatible
+" integrate LeaderF and Asynctask
+function! s:lf_task_source(...)
+	let rows = asynctasks#source(&columns * 48 / 100)
+	let source = []
+	for row in rows
+		let name = row[0]
+		let source += [name . '  ' . row[1] . '  : ' . row[2]]
+	endfor
+	return source
+endfunction
+
+
+function! s:lf_task_accept(line, arg)
+	let pos = stridx(a:line, '<')
+	if pos < 0
+		return
+	endif
+	let name = strpart(a:line, 0, pos)
+	let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
+	if name != ''
+		exec "AsyncTask " . name
+	endif
+endfunction
+
+function! s:lf_task_digest(line, mode)
+	let pos = stridx(a:line, '<')
+	if pos < 0
+		return [a:line, 0]
+	endif
+	let name = strpart(a:line, 0, pos)
+	return [name, 0]
+endfunction
+
+function! s:lf_win_init(...)
+	setlocal nonumber
+	setlocal nowrap
+endfunction
+
+function! LightlineLinterWarnings() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? '' : printf('%d ▲', all_non_errors)
+endfunction
+
+function! LightlineLinterErrors() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
+endfunction
+
+function! LightlineLinterOK() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? '✓' : ''
+endfunction
+
+
+
+" }}}
+
+" general setting ---- {{{
+
+if &compatible
+    set nocompatible
+endif
+
+let s:grepper = 'grep'
+let s:findder = 'find'
+if executable('fd')
+    let s:findder = 'fd'
+endif
+if executable('rg')
+    let s:grepper = 'rg'
+endif
 
 " leader
 let mapleader=' '
@@ -62,9 +140,6 @@ set noautochdir         " Rust 的 quickfix 设置有问题，无法正确地记
 set wildmenu        "command complement
 set wildmode=full
 set shortmess+=c    " 去除选择补全时左下角"匹配 x / N"的提示
-filetype on
-filetype plugin on
-filetype indent on
 
 if &shell =~? 'fish'
     set shellpipe=&>\ %s          " fish shell
@@ -76,15 +151,7 @@ if has('win32')
     autocmd VimEnter * cd C:\Users\kongjun\Documents
 endif
 
-let s:grepper = 'grep'
-let s:findder = 'find'
-if executable('fd')
-    let s:findder = 'fd'
-endif
-if executable('rg')
-    let s:grepper = 'rg'
-    set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " grep 使用 rg
-endif
+set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " grep 使用 rg
 
 " gvim自动全屏，并且去除工具栏、菜单栏、滚动栏。
 autocmd GUIEnter * simalt ~x
@@ -122,140 +189,189 @@ colorscheme one
 
 " --- }}}
 
-" plugins which I installed  -----------{{{
-
+" dein ----{{{
 if has('unix')
-    if empty(glob('~/.vim/autoload/plug.vim'))
-          silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-              \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-            autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-            if isdirectory('~/.vim')
-                rename('~/.vim', '~/.vim.backup.madeby.kongjun')
-            endif
-            if filereadable('~/.vimrc')
-                rename('~/.vimrc', '~/.vim.backup.madeby.kongjun')
-            endif
-            system('ln -s ~/.config/nvim ~/.vim')
-            system('ln -s ~/.config/nvim/init.vim ~/.vimrc')
+    if empty(glob('~/.config/nvim/plugged'))
+            silent !curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+            silent !sh ./installer.sh ~/.config/nvim/plugged
+            autocmd VimEnter * call dein#install()
     endif
 endif
-
 let loaded_matchit = 1
 
-" Plugins installed by vim-plug
-if has('win32')
-    call plug#begin("C:\\Users\\kongjun\\vimfiles\\plugged")
-else
-    call plug#begin("~/.vim/plugged")
+set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
+if dein#load_state('~/.config/nvim/plugged')
+    call dein#begin('~/.config/nvim/plugged')
+    call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
+    " Vim enhacement
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " automatically switch relative line number and absulute line number.
+    call dein#add('rhysd/accelerated-jk')                         " accelerate speed of key 'j' and 'k'
+    call dein#add('bronson/vim-visual-star-search')               " use * and # in visual mod
+    call dein#add('tweekmonster/startuptime.vim', {
+                \ 'lazy': 1,
+                \ 'on_cmd': ['StartupTime'] 
+                \ })                 " measure startup time
+    " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+    call dein#add('easymotion/vim-easymotion')
+    call dein#add('wsdjeg/FlyGrep.vim')
+    call dein#add('drmikehenry/vim-fixkey')                       " use ALT in Vim
+    call dein#add('lilydjwg/fcitx.vim', {
+               \ 'lazy': 1,
+               \ 'on_if': executable('fcitx')
+               \ })
+    call dein#add('ryanoasis/vim-devicons')                       " show icons of some file types
+    call dein#add('wincent/terminus')                             " add some GUI feature for terminal Vim
+    call dein#add('vim-utils/vim-man')                            " read man page in Vim
+    call dein#add('mbbill/undotree')                              " display undo operations in tree view
+    call dein#add('farmergreg/vim-lastplace')                     " keep cursor to the same positon where we exit session
+    call dein#add('xolox/vim-misc')                               " dependency of vim-session
+    call dein#add('xolox/vim-session')                            " save Vim session without pain
+
+    " text edit
+    call dein#add('wellle/targets.vim')                           " text objects
+    call dein#add('haya14busa/is.vim')                            " some enhancement of incsearch
+    call dein#add('matze/vim-move')                               " move text block in visual mode
+    call dein#add('tommcdo/vim-exchange')                         " exchange two words or lines
+    call dein#add('SirVer/ultisnips', {'on_if':"has('python3')"})                            " code snippets engine
+    call dein#add('preservim/nerdcommenter')
+    call dein#add('jiangmiao/auto-pairs')                         " pairs matching/completion
+    call dein#add('tpope/vim-repeat')                             " repeat modification made by vim-commentary, vim-surround
+    call dein#add('tpope/vim-unimpaired')                         " some shortcut should be built in Vim
+    call dein#add('junegunn/vim-easy-align')                      " align code
+    call dein#add('Yggdroot/indentLine', {'on_event': 'BufEnter'})    " indent indication
+    call dein#add('Chiel92/vim-autoformat', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python']
+                \ })                       " wrapper of code formater
+    call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " a fork of machakann/vim-sandwich, using vim-surround mapping
+    call dein#add('machakann/vim-highlightedyank')                " highlight yanked area
+
+    " leetcode
+    call dein#add('ianding1/leetcode.vim', {
+                \ 'lazy': 1,
+                \ 'on_cmd': ['LeetCodeSignIn', 'LeetCodeList'] 
+                \ })                        " practise leetcode in Vim
+
+    " vimwiki
+    call dein#add('vimwiki/vimwiki')                              " personal wiki
+    call dein#add('mattn/calendar-vim')                           " calendar
+
+    " tag system
+    call dein#add('vim-scripts/gtags.vim')
+    call dein#add('liuchengxu/vista.vim')
+    call dein#add('ludovicchabant/vim-gutentags')
+    call dein#add('skywind3000/gutentags_plus')
+
+    " debug
+    call dein#add('puremourning/vimspector', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python']
+                \ })
+
+    " Git
+    call dein#add('tpope/vim-fugitive')
+    call dein#add('tpope/vim-rhubarb')
+    call dein#add('airblade/vim-gitgutter')
+    call dein#add('junegunn/gv.vim')
+
+    " status
+    call dein#add('itchyny/lightline.vim')
+    call dein#add('edkolev/tmuxline.vim')
+    call dein#add('luochen1990/rainbow')
+    call dein#add('itchyny/vim-cursorword')   " underline the word of cursor
+    call dein#add('lfv89/vim-interestingwords') " highlight word
+
+    " language-enhancement
+    call dein#add('Townk/vim-qt', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'cpp'
+                \ })
+    call dein#add('wsdjeg/vim-lua', {    
+                \ 'lazy': 1,
+                \ 'on_ft': 'lua'
+                \ })     
+    call dein#add('dag/vim-fish', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'fish'
+                \ })
+    call dein#add('cespare/vim-toml', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'toml'
+                \ })
+    call dein#add('octol/vim-cpp-enhanced-highlight', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp']
+                \ }) "cpp hightlight
+
+    " markdown
+    call dein#add('tpope/vim-markdown', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'markdown'
+                \ }) 
+    call dein#add('iamcco/markdown-preview.nvim', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'markdown'
+                \ })
+    call dein#add('mzlogin/vim-markdown-toc', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'markdown'
+                \ })
+    call dein#add('ferrine/md-img-paste.vim', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'markdown'
+                \ })
+
+    " vimL
+    call dein#add('tpope/vim-scriptease', { 
+                \ 'lazy': 1,
+                \ 'on_ft': 'vim'
+                \ })             
+
+    " color scheme
+    call dein#add('KeitaNakamura/neodark.vim')
+    call dein#add('rakr/vim-one')
+
+
+    " project management
+    call dein#add('Yggdroot/LeaderF')                 " fuzzy find
+    call dein#add('vim-scripts/DoxygenToolkit.vim', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'python']
+                \ })   " manage Doxygen
+    call dein#add('tpope/vim-projectionist')
+    call dein#add('skywind3000/asyncrun.vim')
+    call dein#add('skywind3000/asynctasks.vim')
+    call dein#add('dense-analysis/ale', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
+                \ })
+    call dein#add('Shougo/echodoc.vim', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'python', 'rust']
+                \ })      " echo parameter of funciton
+    call dein#add('neoclide/coc.nvim', {'on_ft': ['json', 'cmake']})   " code completion for CMake and Json
+    call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                               " code completion for C/C++, Java and Rust.
+    " call dein#add('rdnetto/YCM-Generator')          " automatically generator YCM configuration.
+    call dein#add(expand('~/.config/nvim/tools/gitignore.vim'))     " create ignore
+
+    " other
+    call dein#add('voldikss/vim-translator')          " translator
+    call dein#add('voldikss/vim-floaterm')            " popup terminal
+    call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})                 " use UNIX command in Vim
+    call dein#add('skywind3000/vim-quickui')
+    call dein#add('wakatime/vim-wakatime')
+    call dein#add('wsdjeg/dein-ui.vim')
+    
+    call dein#end()
+    call dein#save_state()
 endif
 
-" Vim enhacement
-Plug 'jeffkreeftmeijer/vim-numbertoggle'            " automatically switch relative line number and absulute line number.
-Plug 'rhysd/accelerated-jk'                         " accelerate speed of key 'j' and 'k'
-Plug 'bronson/vim-visual-star-search'               " use * and # in visual mod
-Plug 'tweekmonster/startuptime.vim'                 " measure startup time
-" Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-Plug 'easymotion/vim-easymotion'
-Plug 'wsdjeg/FlyGrep.vim'
-Plug 'drmikehenry/vim-fixkey'                       " use ALT in Vim
-Plug 'lilydjwg/fcitx.vim'
-Plug 'ryanoasis/vim-devicons'                       " show icons of some file types
-Plug 'wincent/terminus'                             " add some GUI feature for terminal Vim
-Plug 'vim-utils/vim-man'                            " read man page in Vim
-Plug 'mbbill/undotree'                              " display undo operations in tree view
-Plug 'farmergreg/vim-lastplace'                     " keep cursor to the same positon where we exit session
-Plug 'xolox/vim-misc'                               " dependency of vim-session
-Plug 'xolox/vim-session'                            " save Vim session without pain
-
-" text edit
-Plug 'wellle/targets.vim'                           " text objects
-Plug 'haya14busa/is.vim'                            " some enhancement of incsearch
-Plug 'matze/vim-move'                               " move text block in visual mode
-Plug 'tommcdo/vim-exchange'                         " exchange two words or lines
-Plug 'SirVer/ultisnips'                             " code snippets engine
-Plug 'honza/vim-snippets'                           " code snippets for popular languages
-Plug 'tpope/vim-commentary'                         " comment/uncomment code
-Plug 'jiangmiao/auto-pairs'                         " pairs matching/completion
-Plug 'tpope/vim-repeat'                             " repeat modification made by vim-commentary, vim-surround
-Plug 'tpope/vim-unimpaired'                         " some shortcut should be built in Vim
-Plug 'junegunn/vim-easy-align'                      " align code
-Plug 'Yggdroot/indentLine', {'on': ['BufEnter']}    " indent indication
-Plug 'Chiel92/vim-autoformat'                       " wrapper of code formater
-Plug 'https://gitee.com/kongjun18/vim-sandwich.git' " a fork of machakann/vim-sandwich, using vim-surround mapping
-Plug 'machakann/vim-highlightedyank'                " highlight yanked area
-
-" leetcode
-Plug 'ianding1/leetcode.vim'                        " practise leetcode in Vim
-
-" vimwiki
-Plug 'vimwiki/vimwiki'                              " personal wiki
-Plug 'mattn/calendar-vim'                           " calendar
-
-" tag system
-Plug 'vim-scripts/gtags.vim'
-Plug 'liuchengxu/vista.vim'
-Plug 'ludovicchabant/vim-gutentags', {'for': ['c', 'cpp', 'rust', 'python']}
-Plug 'skywind3000/gutentags_plus', {'for': ['c', 'cpp', 'rust', 'python']}  "默认的scope操作不会直接跳转到quickfix中，需要修改源代码
-
-" debug
-Plug 'puremourning/vimspector', {'for': ['c', 'cpp', 'rust', 'python']}
-
-" Git
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/gv.vim'
-
-" status
-Plug 'itchyny/lightline.vim'
-Plug 'edkolev/tmuxline.vim'
-Plug 'luochen1990/rainbow'
-Plug 'itchyny/vim-cursorword'   " underline the word of cursor
-Plug 'lfv89/vim-interestingwords' " highlight word
-
-" language-enhancement
-Plug 'Townk/vim-qt', {'for': ['cpp']}
-Plug 'wsdjeg/vim-lua', {'for': ['lua']}     " Lua 语法高亮
-Plug 'dag/vim-fish', {'for': ['fish']}
-Plug 'cespare/vim-toml', {'for': ['toml']}
-Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']} "cpp hightlight
-
-" markdown
-Plug 'tpope/vim-markdown' , {'for': ['makrdown']}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'for':['markdown']  }
-Plug 'mzlogin/vim-markdown-toc',     {'for':['markdown']}
-Plug 'ferrine/md-img-paste.vim', {'for': ['markdown']}
-
-" vimL
-Plug 'tpope/vim-scriptease', {'for': ['vim']}             " make vimL easy
-
-" color scheme
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'rakr/vim-one'
-
-
-" project management
-Plug 'Yggdroot/LeaderF'                 " fuzzy find
-Plug 'vim-scripts/DoxygenToolkit.vim', {'for': ['c', 'cpp', 'python']}   " manage Doxygen
-Plug 'tpope/vim-projectionist'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'skywind3000/asynctasks.vim'
-Plug 'dense-analysis/ale'               " linter
-Plug 'Shougo/echodoc.vim', {'for': ['java', 'rust', 'ruby', 'lua', 'bash', 'vim', 'c', 'cpp']}      " echo parameter of funciton
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'for': ['cmake', 'json']}   " code completion for CMake and Json
-Plug 'Valloric/YouCompleteMe'                                " code completion for C/C++, Java and Rust.
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}          " automatically generator YCM configuration.
-
-
-" other
-Plug 'voldikss/vim-translator'          " translator
-Plug 'voldikss/vim-floaterm'            " popup terminal
-Plug 'tpope/vim-eunuch'                 " use UNIX command in Vim
-Plug 'skywind3000/vim-quickui'
-Plug 'wakatime/vim-wakatime'
-
-call plug#end()
-" --------------------}}}
+if dein#check_install()
+    call dein#install()
+endif
+filetype plugin indent on
+syntax on
+" }}}
 
 " YouCompleteMe setting{{{
 "
@@ -288,7 +404,7 @@ let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unkno
 
 " 禁止自动添加头文件
 " 详细的补全建议
-let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed', '--compile-commands-dir=_builds' ]
+let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
 
 let g:ycm_confirm_extra_conf = 0
 "}}}
@@ -299,43 +415,46 @@ let g:echodoc#type = "floating"
 highlight link EchoDocFloat Pmenu"}}}
 
 " ale{{{
-let g:ale_linters_explicit = 1
-" \ 'c': ['gcc', 'cppcheck'],
-" \ 'cpp': ['gcc', 'cppcheck'],
-let g:ale_linters = {
-            \ 'asm': ['gcc'],
-            \ 'rust': ['cargo', 'rls'],
-            \ 'sh': ['shellcheck', 'sh'],
-            \ 'fish': ['fish']
-            \}
+"
+let g:ale_enabled = 0
+let g:ale_c_parse_compile_commands = 1
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_save = 1
 
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+                \ 'asm': ['gcc'],
+                \ 'c': ['gcc', 'cppcheck'],
+                \ 'cpp': ['gcc', 'cppcheck'],
+                \ 'rust': ['cargo', 'rls'],
+                \ 'sh': ['shellcheck', 'sh'],
+                \ 'fish': ['fish']
+                \}
+let g:ale_c_cc_executable='gcc'
+let g:ale_cpp_cc_executable='g++'
+" " "  -Wall will open option -Wconversion.
+" " "  -Wextra will open option -Wsign-compare
+" " "  -Wconversion open -Wsign-conversion defaultly.
+" let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
+" " "  -Wconversion don't open -Wsign-conversion for C++
+" " "  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
+" let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
+"
+" let g:ale_c_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c11'
+" let g:ale_cpp_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c++2a'
+
 " 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
 let g:ale_set_quickfix = 0
-" let g:ale_set_loclist = 1
-" let g:ale_open_list = 1
-" let g:ale_keep_list_window_open = 1
+let g:ale_set_loclist = 1
+let g:ale_open_list = 0
 
-" let g:ale_c_cc_executable='gcc'
-" let g:ale_cpp_cc_executable='g++'
-"  -Wall will open option -Wconversion.
-"  -Wextra will open option -Wsign-compare
-"  -Wconversion open -Wsign-conversion defaultly.
-" let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
-" "  -Wconversion don't open -Wsign-conversion for C++
-" "  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
-" let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
-" let g:ale_c_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c11'
-" let g:ale_cpp_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c++20'
-
-" 使用 compile_commands.json，在当前目录的 _builds 中查找。
-let g:ale_c_build_dir_names = ['_builds']
+" 使用 compile_commands.json，在项目目录中查找
 
 " key-mapping
 nnoremap gn :ALENext<CR>
 nnoremap gN :ALEPrevious<CR>
+
 
 " 修改错误标志
 let g:ale_sign_error = "✖"
@@ -350,8 +469,7 @@ hi! SpellCap gui=undercurl guisp=blue
 hi! SpellRare gui=undercurl guisp=magenta
 
 function! MyOnBattery()
-    return readfile('/sys/class/power_supply/AC/online') == ['0']
-    return 0
+    return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
 endfunction
 
 if MyOnBattery()
@@ -394,24 +512,59 @@ let g:rainbow_conf = {
             \   }
             \}"}}}
 
+" LeaderF{{{
+
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_DefaultExternalTool = s:findder
+if s:findder == 'fd'
+    let g:Lf_ExternalCommand = 'fd --type f "%s"'           " On MacOSX/Linux
+endif
+let g:Lf_PreviewResult = {
+        \ 'File': 0,
+        \ 'Buffer': 0,
+        \ 'Mru': 0,
+        \ 'Tag': 1,
+        \ 'BufTag': 1,
+        \ 'Function': 1,
+        \ 'Line': 0,
+        \ 'Colorscheme': 0,
+        \ 'Rg': 0,
+        \ 'Gtags': 1
+        \}
+" let g:Lf_GtagsAutoGenerate = 0
+" let g:Lf_GtagsGutentags = 1
+" let g:Lf_Gtagslabel = 'native-pygments'
+" let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_RootMarkers = ['.root', '.git', '.pro', 'Cargo.toml']   " 设置项目根目录标记
+let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
+let g:Lf_ShortcutF = "<Leader>lf"
+let g:Lf_ShortcutB = "<Leader>lb"
+nnoremap <Leader>lp :LeaderfFunction<CR>
+nnoremap <Leader>lt :LeaderfBufTagAll<CR>
+nnoremap <Leader>ld :LeaderfTag<CR>
+nnoremap <leader>lh :LeaderfHelp<CR>
+"}}}
+
 " tag system ------------{{{
 
 "       gutentags ----------------{{{
 
-" 调试使用
-let g:gutentags_define_advanced_commands = 1
-let g:gutentags_trace = 1
+" for debug
+" let g:gutentags_define_advanced_commands = 1
+" let g:gutentags_trace = 1
 
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 " let $GTAGSCONF =
 
 " gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
-let g:gutentags_project_root = ['.root', '.project', '.git', 'Cargo.toml', '.pro', ]
+let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml']
 
 " 所生成的数据文件的名称
-let g:gutentags_ctags_tagfile = '.tags'
+let g:gutentags_ctags_tagfile = '.git'
 
 " 同时开启 ctags 和 gtags 支持：
 let g:gutentags_modules = []
@@ -432,6 +585,10 @@ let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
 let g:gutentags_ctags_extra_args = ['--fields=+niazS']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--exclude=_builds/']
+let g:gutentags_ctags_extra_args += ['--exclude=Makefile']
+let g:gutentags_ctags_extra_args += ['--exclude=CMakeLists.txt']
+
 
 " 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
@@ -442,11 +599,11 @@ if has('win32')
     let g:gutentags_gtags_dbpath ="C:Users\\kongjunDocuments\\.cache\\tags"
 elseif has('unix')
     let g:gutentags_cache_dir = expand('~/.cache/tags')
-    let g:gutentags_gtags_dbpath = '~/.cache/tags'
+    " let g:gutentags_gtags_dbpath = expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
 endif
 
 " 自动加载gtags_cscope数据库
-let g:gutentags_auto_add_gtags_cscope = 1
+let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
 "       gutentags_plus ------------{{{
@@ -455,16 +612,16 @@ let g:gutentags_auto_add_gtags_cscope = 1
 let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
-noremap <silent> <leader>cs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>cg :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>cc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>ct :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>ce :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>cf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-noremap <silent> <leader>ci :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-noremap <silent> <leader>cd :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>ca :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
-noremap <silent> <leader>cz :GscopeFind z <C-R><C-W><cr>:cnext<CR>zz
+
+nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> gd :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gz :GscopeFind z <C-R><C-W><cr>:cnext<CR>zz
 " --------------}}}
 
 " gtags(global) {{{
@@ -484,11 +641,11 @@ let g:vista#extensions = ['vimwiki']"}}}
 
 " easy-align{{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)"}}}
+" " Start interactive EasyAlign in visual mode (e.g. vipga)
+" xmap ga <Plug>(EasyAlign)
+"
+" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+" nmap ga <Plug>(EasyAlign)"}}}
 
 " vim-commentary{{{
 
@@ -543,96 +700,113 @@ let g:UltiSnipsEditSplit="vertical"
 " vim-quickui{{{
 
 if has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0
-    finish
+    echoerr "vim-quickui can't work"
+else
+   call quickui#menu#reset()
+
+   call quickui#menu#install('&Build', [
+               \ [ "Build &File", 'AsyncTask file-build' ],
+               \ [ "Run &File", 'AsyncTask file-run' ],
+               \ [ "Build &Project", 'AsyncTask project-build' ],
+               \ [ "Run &Project", 'AsyncTask project-run' ],
+               \ [ "Run &Test", 'AsyncTask file-test' ]
+               \ ])
+   call quickui#menu#install('&Symbol', [
+               \ [ "Find &Definition\t(GNU Global)", 'call MenuHelp_Gscope("g")', 'GNU Global search g'],
+               \ [ "Find &Symbol\t(GNU Global)", 'call MenuHelp_Gscope("s")', 'GNU Gloal search s'],
+               \ [ "Find &Called by\t(GNU Global)", 'call MenuHelp_Gscope("d")', 'GNU Global search d'],
+               \ [ "Find C&alling\t(GNU Global)", 'call MenuHelp_Gscope("c")', 'GNU Global search c'],
+               \ [ "Find &From Ctags\t(GNU Global)", 'call MenuHelp_Gscope("z")', 'GNU Global search c'],
+               \ [ "--", ],
+               \ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
+               \ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
+               \ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
+               \ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
+               \ ])
+   " call quickui#menu#install('&Tools', [
+   "           \ ['List &Buffer', 'call quickui#tools#list_buffer("e")', ],
+   "           \ ['List &Function', 'call quickui#tools#list_function()', ],
+   "           \ ['--',''],
+   "           \ ['&Spell %{&spell? "Disable":"Enable"}', 'set spell!', 'Toggle spell check %{&spell? "off" : "on"}'],
+   "           \ ])
+
+   call quickui#menu#install('&Vimwiki', [
+               \ ["&Vimwiki2HTMLBrowse", "Vimwiki2HTMLBrowse", "Convert Vimwiki to HTML and browse it"],
+               \ ['&VimwikiTOC', "VimwikiTOC", "Generate TOC"]
+               \ ])
+
+   call quickui#menu#install('&Plugin', [
+               \ ["Plugin &Snapshot", "PlugSnapshot", "Update snapshort"],
+               \ ["Plugin &Update", "PlugUpdate", "Update plugin"],
+               \ ["Plugin &upgrade", "PlugUpgrade", "Upgrade plugin manager"],
+               \ ["Plugin &Install", "PlugInstall", "Install plugin"],
+               \ ["Plugin &Clean", "PlugClean", "Clean plugin"]
+               \ ])
+
+
+   call quickui#menu#install('Help (&?)', [
+               \ ["&Index", 'tab help index', ''],
+               \ ['Ti&ps', 'tab help tips', ''],
+               \ ['--',''],
+               \ ["&Tutorial", 'tab help tutor', ''],
+               \ ['&Quick Reference', 'tab help quickref', ''],
+               \ ['&Summary', 'tab help summary', ''],
+               \ ['--',''],
+               \ ['&Vim Script', 'tab help eval', ''],
+               \ ['&Function List', 'tab help function-list', ''],
+               \ ], 10000)
+
+   let g:quickui_show_tip = 1
+
+
+   "----------------------------------------------------------------------
+   " context menu
+   "----------------------------------------------------------------------
+   let g:context_menu_k = [
+               \ ["&Peek Definition\tAlt+;", 'call quickui#tools#preview_tag("")'],
+               \ ["S&earch in Project\t\\cx", 'exec "silent! GrepCode! " . expand("<cword>")'],
+               \ [ "--", ],
+               \ [ "Find &Definition\t\\cg", 'call MenuHelp_Fscope("g")', 'GNU Global search g'],
+               \ [ "Find &Symbol\t\\cs", 'call MenuHelp_Fscope("s")', 'GNU Gloal search s'],
+               \ [ "Find &Called by\t\\cd", 'call MenuHelp_Fscope("d")', 'GNU Global search d'],
+               \ [ "Find C&alling\t\\cc", 'call MenuHelp_Fscope("c")', 'GNU Global search c'],
+               \ [ "Find &From Ctags\t\\cz", 'call MenuHelp_Fscope("z")', 'GNU Global search c'],
+               \ [ "--", ],
+               \ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
+               \ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
+               \ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
+               \ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
+               \ [ "--", ],
+               \ ['Dash &Help', 'call asclib#utils#dash_ft(&ft, expand("<cword>"))'],
+               \ ['Cpp&man', 'exec "Cppman " . expand("<cword>")', '', 'c,cpp'],
+               \ ['P&ython Doc', 'call quickui#tools#python_help("")', 'python'],
+               \ ]
+
+    " 定义按两次空格就打开上面的目录
+    noremap  <localleader>m :call quickui#menu#open()<cr>
+    nnoremap <localleader>p :call quickui#tools#preview_tag('')<cr>
+    nnoremap <localleader>j :call quickui#preview#scroll(5)<cr>
+    nnoremap <localleader>k :call quickui#preview#scroll(-5)<cr>
 endif
-
-call quickui#menu#reset()
-
-call quickui#menu#install('&Build', [
-            \ [ "Build &File", 'AsyncTask file-build' ],
-            \ [ "Run &File", 'AsyncTask file-run' ],
-            \ [ "Build &Project", 'AsyncTask project-build' ],
-            \ [ "Run &Project", 'AsyncTask project-run' ],
-            \ [ "Run &Test", 'AsyncTask file-test' ]
-            \ ])
-call quickui#menu#install('&Symbol', [
-            \ [ "Find &Definition\t(GNU Global)", 'call MenuHelp_Gscope("g")', 'GNU Global search g'],
-            \ [ "Find &Symbol\t(GNU Global)", 'call MenuHelp_Gscope("s")', 'GNU Gloal search s'],
-            \ [ "Find &Called by\t(GNU Global)", 'call MenuHelp_Gscope("d")', 'GNU Global search d'],
-            \ [ "Find C&alling\t(GNU Global)", 'call MenuHelp_Gscope("c")', 'GNU Global search c'],
-            \ [ "Find &From Ctags\t(GNU Global)", 'call MenuHelp_Gscope("z")', 'GNU Global search c'],
-            \ [ "--", ],
-            \ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
-            \ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
-            \ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
-            \ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
-            \ ])
-" call quickui#menu#install('&Tools', [
-"           \ ['List &Buffer', 'call quickui#tools#list_buffer("e")', ],
-"           \ ['List &Function', 'call quickui#tools#list_function()', ],
-"           \ ['--',''],
-"           \ ['&Spell %{&spell? "Disable":"Enable"}', 'set spell!', 'Toggle spell check %{&spell? "off" : "on"}'],
-"           \ ])
-
-call quickui#menu#install('&Vimwiki', [
-            \ ["&Vimwiki2HTMLBrowse", "Vimwiki2HTMLBrowse", "Convert Vimwiki to HTML and browse it"],
-            \ ['&VimwikiTOC', "VimwikiTOC", "Generate TOC"]
-            \ ])
-
-call quickui#menu#install('&Plugin', [
-            \ ["Plugin &Snapshot", "PlugSnapshot", "Update snapshort"],
-            \ ["Plugin &Update", "PlugUpdate", "Update plugin"],
-            \ ["Plugin &upgrade", "PlugUpgrade", "Upgrade plugin manager"],
-            \ ["Plugin &Install", "PlugInstall", "Install plugin"],
-            \ ["Plugin &Clean", "PlugClean", "Clean plugin"]
-            \ ])
-
-
-call quickui#menu#install('Help (&?)', [
-            \ ["&Index", 'tab help index', ''],
-            \ ['Ti&ps', 'tab help tips', ''],
-            \ ['--',''],
-            \ ["&Tutorial", 'tab help tutor', ''],
-            \ ['&Quick Reference', 'tab help quickref', ''],
-            \ ['&Summary', 'tab help summary', ''],
-            \ ['--',''],
-            \ ['&Vim Script', 'tab help eval', ''],
-            \ ['&Function List', 'tab help function-list', ''],
-            \ ], 10000)
-
-let g:quickui_show_tip = 1
-
-
-"----------------------------------------------------------------------
-" context menu
-"----------------------------------------------------------------------
-let g:context_menu_k = [
-            \ ["&Peek Definition\tAlt+;", 'call quickui#tools#preview_tag("")'],
-            \ ["S&earch in Project\t\\cx", 'exec "silent! GrepCode! " . expand("<cword>")'],
-            \ [ "--", ],
-            \ [ "Find &Definition\t\\cg", 'call MenuHelp_Fscope("g")', 'GNU Global search g'],
-            \ [ "Find &Symbol\t\\cs", 'call MenuHelp_Fscope("s")', 'GNU Gloal search s'],
-            \ [ "Find &Called by\t\\cd", 'call MenuHelp_Fscope("d")', 'GNU Global search d'],
-            \ [ "Find C&alling\t\\cc", 'call MenuHelp_Fscope("c")', 'GNU Global search c'],
-            \ [ "Find &From Ctags\t\\cz", 'call MenuHelp_Fscope("z")', 'GNU Global search c'],
-            \ [ "--", ],
-            \ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
-            \ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
-            \ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
-            \ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
-            \ [ "--", ],
-            \ ['Dash &Help', 'call asclib#utils#dash_ft(&ft, expand("<cword>"))'],
-            \ ['Cpp&man', 'exec "Cppman " . expand("<cword>")', '', 'c,cpp'],
-            \ ['P&ython Doc', 'call quickui#tools#python_help("")', 'python'],
-            \ ]
-
-" 定义按两次空格就打开上面的目录
-noremap  <localleader>m :call quickui#menu#open()<cr>
-nnoremap <localleader>p :call quickui#tools#preview_tag('')<cr>
-nnoremap <localleader>j :call quickui#preview#scroll(5)<cr>
-nnoremap <localleader>k :call quickui#preview#scroll(-5)<cr>"}}}
+"}}}
 
 "       Asyncrun and Asynctask{{{
+" integrate LeaderF and Asynctask
+let g:Lf_Extensions = get(g:, 'Lf_Extensions', {})
+let g:Lf_Extensions.task = {
+			\ 'source': string(function('s:lf_task_source'))[10:-3],
+			\ 'accept': string(function('s:lf_task_accept'))[10:-3],
+			\ 'get_digest': string(function('s:lf_task_digest'))[10:-3],
+			\ 'highlights_def': {
+			\     'Lf_hl_funcScope': '^\S\+',
+			\     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
+			\ },
+		\ }
+
+" integrate fugitive and Asyncrun
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+
+let g:asynctasks_term_pos = 'tab'
 
 " 自动打开 quickfix window ，高度为 10
 let g:asyncrun_open = 10
@@ -640,20 +814,13 @@ let g:asyncrun_open = 10
 " 任务结束时候响铃提醒
 let g:asyncrun_bell = 1
 " 设置项目根
-let g:asyncrun_rootmarks = ['.git', '.root', 'project', 'Cargo.toml']
+let g:asyncrun_rootmarks = ['.root', '.git', '.pro', 'Cargo.toml']
 
-" 在下方的内置终端中运行任务
-let g:asynctasks_term_pos = 'tab'
-"
-" 外部终端运行任务
-" let g:asynctasks_term_pos = 'external'
 let g:asynctasks_term_rows = 20    " 设置纵向切割时，高度为 10
 let g:asynctasks_term_cols = 80    " 设置横向切割时，宽度为 80
 
-" set profile clang
-let g:asynctasks_profile = 'gcc'
-
 " " 编译、运行
+" noremap <F5> :AsyncTask file-build<cr>
 nnoremap  <Leader>fb :AsyncTask file-build<cr>
 nnoremap  <Leader>fr :AsyncTask file-run<cr>
 nnoremap  <leader>pg :AsyncTask cxx_project-configurate<CR>
@@ -755,48 +922,7 @@ let g:lightline = {
             \ },
             \ }
 autocmd User ALELint call lightline#update()
-
-function! LightlineLinterWarnings() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '' : printf('%d ▲', all_non_errors)
-endfunction
-
-function! LightlineLinterErrors() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
-endfunction
-
-function! LightlineLinterOK() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '✓' : ''
-endfunction
-
 " }}}
-
-" LeaderF{{{
-
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_DefaultExternalTool = s:findder
-if s:findder == 'fd'
-    let g:Lf_ExternalCommand = 'fd --type f "%s"'           " On MacOSX/Linux
-endif
-let g:Lf_RootMarkers = ['.project', '.root', '.git', 'Cargo.toml', '.pro']   " 设置项目根目录标记
-let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
-
-let g:Lf_ShortcutF = "<Leader>lf"
-let g:Lf_ShortcutB = "<Leader>lb"
-nnoremap <Leader>lp :LeaderfFunction<CR>
-nnoremap <Leader>lt :LeaderfBufTag<CR>
-nnoremap <Leader>ld :LeaderfTag<CR>
-nnoremap <leader>lh :LeaderfHelp<CR>
-"}}}
 
 " vim-mam{{{
 
@@ -855,6 +981,30 @@ let g:FlyGrep_search_tools = s:grepper
 let g:FlyGrep_enable_statusline = 1
 nnoremap <Leader>sp :FlyGrep<CR>
 " -----}}}
+
+" nerdcommmenter ---{{{
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" " Add your own custom formats or override the defaults
+" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+" }}}
 
 " window shortcut{{{
 
@@ -996,3 +1146,4 @@ noremap ]op :setlocal nopaste<CR>
 noremap yop :setlocal paste!<CR>"}}}
 
 " -----------}}}2
+

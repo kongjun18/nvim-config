@@ -3,3 +3,5 @@ swap/
 backup/
 session/
 undo/
+plugged.plug/
+installer.sh

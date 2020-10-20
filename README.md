@@ -1,5 +1,5 @@
 # My neovim configuartion
-Github: https://github.com/kongjun18/nvim-configuration
+Github: https://github.com/kongjun18/nvim-config.git
 
 Gitee: https://github.com/kongjun18/nvim-config.git
 
