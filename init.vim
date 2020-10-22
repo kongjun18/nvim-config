@@ -352,7 +352,6 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('neoclide/coc.nvim', {'on_ft': ['json', 'cmake']})   " code completion for CMake and Json
     call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                               " code completion for C/C++, Java and Rust.
     " call dein#add('rdnetto/YCM-Generator')          " automatically generator YCM configuration.
-    call dein#add(expand('~/.config/nvim/tools/gitignore.vim'))     " create ignore
 
     " other
     call dein#add('voldikss/vim-translator')          " translator
@@ -369,6 +368,7 @@ endif
 if dein#check_install()
     call dein#install()
 endif
+source ~/.config/nvim/tools/gitignore.vim           " create .gitignore automatically
 filetype plugin indent on
 syntax on
 " }}}
