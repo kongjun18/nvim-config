@@ -1,11 +1,11 @@
-# My neovim configuartion
+# My configuration of (Neo)vim
 Github: https://github.com/kongjun18/nvim-config.git
 
 Gitee: https://github.com/kongjun18/nvim-config.git
 
-This repo is my personal neovim configuration based on UNIX.
+The repository is my personal configuration based on UNIX.
 
-If you want to a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
+If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Prerequisite
 Compulsory:

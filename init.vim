@@ -209,20 +209,18 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('bronson/vim-visual-star-search')               " use * and # in visual mod
     call dein#add('tweekmonster/startuptime.vim', {
                 \ 'lazy': 1,
-                \ 'on_cmd': ['StartupTime'] 
+                \ 'on_cmd': ['StartupTime']
                 \ })                 " measure startup time
     " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-    call dein#add('easymotion/vim-easymotion')
+    call dein#add('easymotion/vim-easymotion', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('wsdjeg/FlyGrep.vim')
     call dein#add('drmikehenry/vim-fixkey')                       " use ALT in Vim
-    call dein#add('lilydjwg/fcitx.vim', {
-               \ 'lazy': 1,
-               \ 'on_if': executable('fcitx')
-               \ })
     call dein#add('ryanoasis/vim-devicons')                       " show icons of some file types
     call dein#add('wincent/terminus')                             " add some GUI feature for terminal Vim
     call dein#add('vim-utils/vim-man')                            " read man page in Vim
-    call dein#add('mbbill/undotree')                              " display undo operations in tree view
     call dein#add('farmergreg/vim-lastplace')                     " keep cursor to the same positon where we exit session
     call dein#add('xolox/vim-misc')                               " dependency of vim-session
     call dein#add('xolox/vim-session')                            " save Vim session without pain
@@ -232,20 +230,31 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('haya14busa/is.vim')                            " some enhancement of incsearch
     call dein#add('matze/vim-move')                               " move text block in visual mode
     call dein#add('tommcdo/vim-exchange')                         " exchange two words or lines
-    call dein#add('SirVer/ultisnips', {'on_if':"has('python3')"})                            " code snippets engine
-    call dein#add('preservim/nerdcommenter')
+    call dein#add('SirVer/ultisnips', {
+                \ 'on_if':"has('python3')",
+                \ 'on_event': 'BufWrite'
+                \ })                            " code snippets engine
+    call dein#add('preservim/nerdcommenter', {
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('jiangmiao/auto-pairs')                         " pairs matching/completion
     call dein#add('tpope/vim-repeat')                             " repeat modification made by vim-commentary, vim-surround
-    call dein#add('tpope/vim-unimpaired')                         " some shortcut should be built in Vim
+    call dein#add('tpope/vim-unimpaired', {
+                \ 'lazy': 1, 
+                \ 'on_event': 'BufReadPost'
+                \ })                         " some shortcut should be built in Vim
     call dein#add('junegunn/vim-easy-align')                      " align code
-    call dein#add('Yggdroot/indentLine', {'on_event': 'BufEnter'})    " indent indication
+    call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'})    " indent indication
     call dein#add('Chiel92/vim-autoformat', {
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'rust', 'python']
                 \ })                       " wrapper of code formater
     call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " a fork of machakann/vim-sandwich, using vim-surround mapping
     call dein#add('machakann/vim-highlightedyank')                " highlight yanked area
-
+    call dein#add('vim-scripts/fcitx.vim', {
+                \ 'lazy': 1,
+                \ 'on_event': 'InsertEnter'
+                \ })
     " leetcode
     call dein#add('ianding1/leetcode.vim', {
                 \ 'lazy': 1,
@@ -303,7 +312,7 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'on_ft': ['c', 'cpp']
                 \ }) "cpp hightlight
 
-    " markdown
+    " writing
     call dein#add('tpope/vim-markdown', {
                 \ 'lazy': 1,
                 \ 'on_ft': 'markdown'
@@ -320,7 +329,10 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': 'markdown'
                 \ })
-
+    call dein#add('reedes/vim-wordy', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['markdown', 'vimwiki', 'text']
+                \ })
     " vimL
     call dein#add('tpope/vim-scriptease', { 
                 \ 'lazy': 1,
@@ -329,7 +341,8 @@ if dein#load_state('~/.config/nvim/plugged')
 
     " color scheme
     call dein#add('KeitaNakamura/neodark.vim')
-    call dein#add('rakr/vim-one')
+    call dein#add('laggardkernel/vim-one')
+    call dein#add('YorickPeterse/happy_hacking.vim')
 
 
     " project management
@@ -349,17 +362,22 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'python', 'rust']
                 \ })      " echo parameter of funciton
-    call dein#add('neoclide/coc.nvim', {'on_ft': ['json', 'cmake']})   " code completion for CMake and Json
+    call dein#add('elzr/vim-json', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'json'
+                \ })
+    call dein#add('neoclide/coc.nvim', {'on_ft': 'cmake'})   " code completion for CMake
     call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                               " code completion for C/C++, Java and Rust.
-    " call dein#add('rdnetto/YCM-Generator')          " automatically generator YCM configuration.
 
     " other
     call dein#add('voldikss/vim-translator')          " translator
     call dein#add('voldikss/vim-floaterm')            " popup terminal
     call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})                 " use UNIX command in Vim
     call dein#add('skywind3000/vim-quickui')
-    call dein#add('wakatime/vim-wakatime')
-    call dein#add('wsdjeg/dein-ui.vim')
+    call dein#add('wakatime/vim-wakatime', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufRead'
+                \ })
     
     call dein#end()
     call dein#save_state()
@@ -554,7 +572,7 @@ nnoremap <leader>lh :LeaderfHelp<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown']
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
@@ -619,9 +637,9 @@ nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gd :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gz :GscopeFind z <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
 " --------------}}}
 
 " gtags(global) {{{
@@ -1146,4 +1164,3 @@ noremap ]op :setlocal nopaste<CR>
 noremap yop :setlocal paste!<CR>"}}}
 
 " -----------}}}2
-
