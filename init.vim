@@ -373,7 +373,10 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('voldikss/vim-translator')          " translator
     call dein#add('voldikss/vim-floaterm')            " popup terminal
     call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})                 " use UNIX command in Vim
-    call dein#add('skywind3000/vim-quickui')
+    call dein#add('skywind3000/vim-quickui', {
+                \ 'lazy': 1,
+                \ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
+                \ })
     call dein#add('wakatime/vim-wakatime', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufRead'
@@ -449,8 +452,8 @@ let g:ale_linters = {
                 \ 'sh': ['shellcheck', 'sh'],
                 \ 'fish': ['fish']
                 \}
-let g:ale_c_cc_executable='gcc'
-let g:ale_cpp_cc_executable='g++'
+" let g:ale_c_cc_executable='gcc'
+" let g:ale_cpp_cc_executable='g++'
 " " "  -Wall will open option -Wconversion.
 " " "  -Wextra will open option -Wsign-compare
 " " "  -Wconversion open -Wsign-conversion defaultly.
@@ -572,7 +575,7 @@ nnoremap <leader>lh :LeaderfHelp<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets']
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
@@ -863,14 +866,28 @@ vmap <silent> <Leader>tr <Plug>TranslateRV
 " Translate the text in clipboard
 nmap <silent> <Leader>tx <Plug>TranslateX"}}}
 
-" vim-plug and plugin shortcut{{{
+" plugin shortcut{{{
 
-nmap <Leader>pin :w<CR><Leader>es:PlugInstall<CR>
-nnoremap <leader>pup :PlugUpdate<CR>
-nnoremap <Leader>pug :PlugUpgrade<CR>
-nnoremap <Leader>pc  :PlugClean<CR>
-nnoremap <Leader>pst :PlugStatus<CR>
-nnoremap <Leader>pss :PlugSnapshot<CR>"}}}
+function <SID>PluginClean()
+    let unused_plugin_dir = dein#check_clean()
+    if len(unused_plugin_dir) == 0
+        echomsg "There is no unused plugin"
+    endif
+    for dir in unused_plugin_dir
+        echomsg dir
+        try
+            call delete(dir, 'rf')
+        catch /.*/
+            echoerr "remove unused plugin directory failed"
+        endtry
+        echomsg "removed unused plugin directory"
+    endfor
+endfunction
+
+nnoremap <Leader>pi :w<CR><Leader>es:call dein#install()<CR>
+nnoremap <leader>pu :call dein#update()<CR>
+nnoremap <Leader>pc  :call <SID>PluginClean()<CR>
+" }}}
 
 " coc.nvim{{{
 
