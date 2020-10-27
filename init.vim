@@ -232,7 +232,7 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('tommcdo/vim-exchange')                         " exchange two words or lines
     call dein#add('SirVer/ultisnips', {
                 \ 'on_if':"has('python3')",
-                \ 'on_event': 'BufWrite'
+                \ 'on_event': 'TextChangedI'
                 \ })                            " code snippets engine
     call dein#add('preservim/nerdcommenter', {
                 \ 'on_event': 'BufReadPost'
@@ -541,6 +541,7 @@ let g:Lf_DefaultExternalTool = s:findder
 if s:findder == 'fd'
     let g:Lf_ExternalCommand = 'fd --type f "%s"'           " On MacOSX/Linux
 endif
+let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
         \ 'File': 0,
         \ 'Buffer': 0,
@@ -575,11 +576,10 @@ nnoremap <leader>lh :LeaderfHelp<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini']
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
-" let $GTAGSCONF =
 
 " gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
 let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml']
@@ -620,7 +620,6 @@ if has('win32')
     let g:gutentags_gtags_dbpath ="C:Users\\kongjunDocuments\\.cache\\tags"
 elseif has('unix')
     let g:gutentags_cache_dir = expand('~/.cache/tags')
-    " let g:gutentags_gtags_dbpath = expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
 endif
 
 " 自动加载gtags_cscope数据库
@@ -723,17 +722,17 @@ let g:UltiSnipsEditSplit="vertical"
 if has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0
     echoerr "vim-quickui can't work"
 else
-   call quickui#menu#reset()
+   autocmd VimEnter * call quickui#menu#reset()
 
-   call quickui#menu#install('&Build', [
+   autocmd VimEnter * call quickui#menu#install('&Build', [
                \ [ "Build &File", 'AsyncTask file-build' ],
                \ [ "Run &File", 'AsyncTask file-run' ],
                \ [ "Build &Project", 'AsyncTask project-build' ],
                \ [ "Run &Project", 'AsyncTask project-run' ],
                \ [ "Run &Test", 'AsyncTask file-test' ]
                \ ])
-   call quickui#menu#install('&Symbol', [
-               \ [ "Find &Definition\t(GNU Global)", 'call MenuHelp_Gscope("g")', 'GNU Global search g'],
+   autocmd VimEnter * call quickui#menu#install('&Symbol', [
+               \ [ "Find &Definition\t(GNU Global)", 'autocmd VimEnter * call MenuHelp_Gscope("g")', 'GNU Global search g'],
                \ [ "Find &Symbol\t(GNU Global)", 'call MenuHelp_Gscope("s")', 'GNU Gloal search s'],
                \ [ "Find &Called by\t(GNU Global)", 'call MenuHelp_Gscope("d")', 'GNU Global search d'],
                \ [ "Find C&alling\t(GNU Global)", 'call MenuHelp_Gscope("c")', 'GNU Global search c'],
@@ -751,12 +750,12 @@ else
    "           \ ['&Spell %{&spell? "Disable":"Enable"}', 'set spell!', 'Toggle spell check %{&spell? "off" : "on"}'],
    "           \ ])
 
-   call quickui#menu#install('&Vimwiki', [
+   autocmd VimEnter * call quickui#menu#install('&Vimwiki', [
                \ ["&Vimwiki2HTMLBrowse", "Vimwiki2HTMLBrowse", "Convert Vimwiki to HTML and browse it"],
                \ ['&VimwikiTOC', "VimwikiTOC", "Generate TOC"]
                \ ])
 
-   call quickui#menu#install('&Plugin', [
+   autocmd VimEnter * call quickui#menu#install('&Plugin', [
                \ ["Plugin &Snapshot", "PlugSnapshot", "Update snapshort"],
                \ ["Plugin &Update", "PlugUpdate", "Update plugin"],
                \ ["Plugin &upgrade", "PlugUpgrade", "Upgrade plugin manager"],
@@ -765,7 +764,7 @@ else
                \ ])
 
 
-   call quickui#menu#install('Help (&?)', [
+   autocmd VimEnter * call quickui#menu#install('Help (&?)', [
                \ ["&Index", 'tab help index', ''],
                \ ['Ti&ps', 'tab help tips', ''],
                \ ['--',''],
