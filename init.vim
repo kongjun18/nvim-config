@@ -563,9 +563,10 @@ let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录
 let g:Lf_ShortcutF = "<Leader>lf"
 let g:Lf_ShortcutB = "<Leader>lb"
 nnoremap <Leader>lp :LeaderfFunction<CR>
-nnoremap <Leader>lt :LeaderfBufTagAll<CR>
+nnoremap <Leader>ll :LeaderfBufTagAll<CR>
 nnoremap <Leader>ld :LeaderfTag<CR>
 nnoremap <leader>lh :LeaderfHelp<CR>
+nnoremap <leader>ll :Leaderf task<CR>
 "}}}
 
 " tag system ------------{{{
