@@ -566,7 +566,7 @@ nnoremap <Leader>lp :LeaderfFunction<CR>
 nnoremap <Leader>ll :LeaderfBufTagAll<CR>
 nnoremap <Leader>ld :LeaderfTag<CR>
 nnoremap <leader>lh :LeaderfHelp<CR>
-nnoremap <leader>ll :Leaderf task<CR>
+nnoremap <leader>lt :Leaderf task<CR>
 "}}}
 
 " tag system ------------{{{
