@@ -537,6 +537,7 @@ let g:rainbow_conf = {
 
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
+let g:Lf_PopupHeight = 0.3
 let g:Lf_DefaultExternalTool = s:findder
 if s:findder == 'fd'
     let g:Lf_ExternalCommand = 'fd --type f "%s"'           " On MacOSX/Linux
@@ -551,7 +552,7 @@ let g:Lf_PreviewResult = {
         \ 'Function': 1,
         \ 'Line': 0,
         \ 'Colorscheme': 0,
-        \ 'Rg': 0,
+        \ 'Rg': 1,
         \ 'Gtags': 1
         \}
 " let g:Lf_GtagsAutoGenerate = 0
@@ -566,6 +567,7 @@ nnoremap <Leader>lp :LeaderfFunction<CR>
 nnoremap <Leader>ll :LeaderfBufTagAll<CR>
 nnoremap <Leader>ld :LeaderfTag<CR>
 nnoremap <leader>lh :LeaderfHelp<CR>
+nnoremap <Leader>lr :Leaderf rg<Space><Right>
 nnoremap <leader>lt :Leaderf task<CR>
 "}}}
 
