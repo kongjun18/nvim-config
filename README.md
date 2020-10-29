@@ -44,7 +44,7 @@ python3 install.py --rust-completer
 ```vim
 let g:ycm_clangd_binary_path = '/usr/bin/clangd-10'
 ```
-# problem and solution
+# Problem and Solution
 1. YouCompleteMe warnning: "requires Vim compiled with Python (3.6.0+) support."
 It is because your Vim without Python3.6.0+ support. 
 Please compile your Vim with python3 support or install pynvim using `pip3 install pynvim`.
