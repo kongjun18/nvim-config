@@ -810,6 +810,10 @@ else
     nnoremap <localleader>p :call quickui#tools#preview_tag('')<cr>
     nnoremap <localleader>j :call quickui#preview#scroll(5)<cr>
     nnoremap <localleader>k :call quickui#preview#scroll(-5)<cr>
+    augroup MyQuickfixPreview
+          au!
+          au FileType qf noremap <silent><buffer> p :call quickui#tools#preview_quickfix()<cr>
+    augroup END
 endif
 "}}}
 
