@@ -1,5 +1,5 @@
 " (Neo)vim configuration 
-" Last Change: 2020-10-22     
+" Last Change: 2020-10-31 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -579,7 +579,7 @@ nnoremap <leader>lt :Leaderf task<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit']
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'make']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
@@ -588,7 +588,7 @@ let $GTAGSLABEL = 'native-pygments'
 let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml']
 
 " 所生成的数据文件的名称
-let g:gutentags_ctags_tagfile = '.git'
+let g:gutentags_ctags_tagfile = '.tag'
 
 " 同时开启 ctags 和 gtags 支持：
 let g:gutentags_modules = []
@@ -610,8 +610,7 @@ let g:gutentags_ctags_extra_args = ['--fields=+niazS']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--exclude=_builds/']
-let g:gutentags_ctags_extra_args += ['--exclude=Makefile']
-let g:gutentags_ctags_extra_args += ['--exclude=CMakeLists.txt']
+let g:gutentags_ctags_extra_args += ['--exclude=doc/']
 
 
 " 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
