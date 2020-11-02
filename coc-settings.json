@@ -1,0 +1,21 @@
+{
+	"languageserver": {
+		"cmake": {
+			"command": "cmake-language-server",
+			"filetypes": ["cmake"],
+			"rootPatterns": [".git", ".root", "compile_commands.json"],
+			"initializationOptions": {
+				"buildDirectory": "_build"
+			}
+		}
+    },
+    // change diagnostic sign
+    "diagnostic.errorSign": "✖",
+    "diagnostic.warningSign": "‼",
+
+    // vim-lsp-cxx-hightlight
+    "clangd.semanticHighlighting": true,
+
+    // clangd arguments
+    "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"]
+}

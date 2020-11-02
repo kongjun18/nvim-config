@@ -1,8 +1,8 @@
-" (Neo)vim configuration 
-" Last Change: 2020-10-31 
+" Vim global plugin for something
+" Last Change: 2020-11-02
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
-" License: GPL-2.0
+" License: GPL-3.0
 
 " functions ---{{{
 
@@ -52,29 +52,6 @@ function! s:lf_win_init(...)
 	setlocal nowrap
 endfunction
 
-function! LightlineLinterWarnings() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '' : printf('%d ▲', all_non_errors)
-endfunction
-
-function! LightlineLinterErrors() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
-endfunction
-
-function! LightlineLinterOK() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? '✓' : ''
-endfunction
-
-
-
 " }}}
 
 " general setting ---- {{{
@@ -98,10 +75,11 @@ let maplocalleader='z'
 
 
 set path+=include
-set updatetime=100
+set updatetime=300
 set foldmethod=marker
 set laststatus=2    " always show status line
 set number
+" set cmdheight=1
 set showtabline=2
 set noerrorbells    " 在错误时发出蜂鸣声
 set visualbell      " 错误时出现视觉提示
@@ -140,6 +118,14 @@ set noautochdir         " Rust 的 quickfix 设置有问题，无法正确地记
 set wildmenu        "command complement
 set wildmode=full
 set shortmess+=c    " 去除选择补全时左下角"匹配 x / N"的提示
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 if &shell =~? 'fish'
     set shellpipe=&>\ %s          " fish shell
@@ -311,7 +297,11 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp']
                 \ }) "cpp hightlight
-
+    call dein#add('jackguo380/vim-lsp-cxx-highlight', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp']
+                \ })
+    
     " writing
     call dein#add('tpope/vim-markdown', {
                 \ 'lazy': 1,
@@ -354,10 +344,6 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('tpope/vim-projectionist')
     call dein#add('skywind3000/asyncrun.vim')
     call dein#add('skywind3000/asynctasks.vim')
-    call dein#add('dense-analysis/ale', {
-                \ 'lazy': 1,
-                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
-                \ })
     call dein#add('Shougo/echodoc.vim', {
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'python', 'rust']
@@ -366,8 +352,7 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': 'json'
                 \ })
-    call dein#add('neoclide/coc.nvim', {'on_ft': 'cmake'})   " code completion for CMake
-    call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                               " code completion for C/C++, Java and Rust.
+    call dein#add('neoclide/coc.nvim', {'rev': 'release'})   " code completion for CMake
 
     " other
     call dein#add('voldikss/vim-translator')          " translator
@@ -394,111 +379,46 @@ filetype plugin indent on
 syntax on
 " }}}
 
-" YouCompleteMe setting{{{
+" " YouCompleteMe setting{{{
+" "
+" let g:ycm_auto_trigger = 1
+" let g:ycm_add_preview_to_completeopt = 0
+" let g:ycm_show_diagnostics_ui = 0
+" let g:ycm_server_log_level = 'info'
+" let g:ycm_min_num_identifier_candidate_chars = 2
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" let g:ycm_complete_in_strings=1
+" let g:ycm_key_invoke_completion = '<c-z>'
+" " let g:ycm_global_ycm_extra_conf = '/usr/lib/ycmd/ycm_extra_conf.py'
+" set completeopt=menu,menuone
 "
-let g:ycm_auto_trigger = 1
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_server_log_level = 'info'
-let g:ycm_min_num_identifier_candidate_chars = 2
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_complete_in_strings=1
-let g:ycm_key_invoke_completion = '<c-z>'
-" let g:ycm_global_ycm_extra_conf = '/usr/lib/ycmd/ycm_extra_conf.py'
-set completeopt=menu,menuone
-
-noremap <c-z> <NOP>
-
-let g:ycm_semantic_triggers =  {
-            \ 'c,cpp,rust,java,bash': ['re!\w{2}'],
-            \ 'lua': ['re!\w{2}'],
-            \ }
-
-let g:ycm_filetype_whitelist = {
-            \ "c":1,
-            \ "cpp":1,
-            \ "rust":1,
-            \ "java":1,
-            \ }
-
-let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
-
-" 禁止自动添加头文件
-" 详细的补全建议
-let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
-
-let g:ycm_confirm_extra_conf = 0
+" noremap <c-z> <NOP>
+"
+" let g:ycm_semantic_triggers =  {
+"             \ 'c,cpp,rust,java,bash': ['re!\w{2}'],
+"             \ 'lua': ['re!\w{2}'],
+"             \ }
+"
+" let g:ycm_filetype_whitelist = {
+"             \ "c":1,
+"             \ "cpp":1,
+"             \ "rust":1,
+"             \ "java":1,
+"             \ }
+"
+" let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+"
+" " 禁止自动添加头文件
+" " 详细的补全建议
+" let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
+"
+" let g:ycm_confirm_extra_conf = 0
 "}}}
 
 " echodoc setting{{{
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = "floating"
 highlight link EchoDocFloat Pmenu"}}}
-
-" ale{{{
-"
-let g:ale_enabled = 0
-let g:ale_c_parse_compile_commands = 1
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_save = 1
-
-let g:ale_linters_explicit = 1
-let g:ale_linters = {
-                \ 'asm': ['gcc'],
-                \ 'c': ['gcc', 'cppcheck'],
-                \ 'cpp': ['gcc', 'cppcheck'],
-                \ 'rust': ['cargo', 'rls'],
-                \ 'sh': ['shellcheck', 'sh'],
-                \ 'fish': ['fish']
-                \}
-" let g:ale_c_cc_executable='gcc'
-" let g:ale_cpp_cc_executable='g++'
-" " "  -Wall will open option -Wconversion.
-" " "  -Wextra will open option -Wsign-compare
-" " "  -Wconversion open -Wsign-conversion defaultly.
-" let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
-" " "  -Wconversion don't open -Wsign-conversion for C++
-" " "  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
-" let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
-"
-" let g:ale_c_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c11'
-" let g:ale_cpp_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c++2a'
-
-" 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
-let g:ale_set_quickfix = 0
-let g:ale_set_loclist = 1
-let g:ale_open_list = 0
-
-" 使用 compile_commands.json，在项目目录中查找
-
-" key-mapping
-nnoremap gn :ALENext<CR>
-nnoremap gN :ALEPrevious<CR>
-
-
-" 修改错误标志
-let g:ale_sign_error = "✖"
-let g:ale_sign_warning = "‼"
-" ➤
-let g:ale_sign_info = "ℹ"
-hi! clear SpellBad
-hi! clear SpellCap
-hi! clear SpellRare
-hi! SpellBad gui=undercurl guisp=red
-hi! SpellCap gui=undercurl guisp=blue
-hi! SpellRare gui=undercurl guisp=magenta
-
-function! MyOnBattery()
-    return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
-endfunction
-
-if MyOnBattery()
-    let g:ale_completion_delay = 500
-    let g:ale_echo_delay = 20
-    let g:ale_lint_delay = 500
-endif
-"}}}
 
 "cpp-enhanced-highlight setting{{{
 
@@ -579,7 +499,7 @@ nnoremap <leader>lt :Leaderf task<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'txt', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'make']
+let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'make', 'json']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
@@ -635,15 +555,15 @@ let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
 
-nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+" nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+" nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+" nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
 " --------------}}}
 
 " gtags(global) {{{
@@ -895,31 +815,81 @@ nnoremap <Leader>pc  :call <SID>PluginClean()<CR>
 " }}}
 
 " coc.nvim{{{
+hi! CocErrorSign guifg=#d1666a
+let g:coc_status_error_sign = "✖ "
+let g:coc_status_warning_sign = "‼ "
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-autocmd FileType cmake,json inoremap <buffer> <silent><expr> <TAB>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
-autocmd FileType cmake,json inoremap <buffer> <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" 希望能够在进入 cmake 文件的 buffer 是开启 coc，退出 buffer是禁止
-" coc。问题在于 autocmd 的活动似乎是“或”而不是“与”，无法做到同时同时是 cmake
-" 类型且进入缓冲区时设置自动命令。
-"
-" autocmd FileType cmake,json BufEnter CocEnable
-" autocmd FileType cmake,json BufLeave CocDisable
 function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+nmap <silent> gN <Plug>(coc-diagnostic-prev)
+nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 
-" autocmd FileType vim,c,cpp,rust,bash,java CocDisable}}}
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
+
+" Use K to show documentation in preview window.
+nnoremap <silent> gK :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+" NeoVim-only mapping for visual mode scroll
+" Useful on signatureHelp after jump placeholder of snippet expansion
+if has('nvim')
+  vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
+  vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
+endif
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 "    vim-which-key{{{
 " let g:mapleader = "\<Space>"
 " let g:maplocalleader = 'z'
@@ -942,26 +912,19 @@ let g:leetcode_browser = 'firefox'
 let g:leetcode_china = 1
 "}}}
 
-" lightline -{{{
+" " lightline -{{{
 let g:lightline = {
             \ 'colorscheme': 'one',
             \ 'active': {
-            \   'left': [['mode', 'paste'], ['filename', 'modified']],
-            \   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
+            \   'left': [['mode', 'paste'], ['filename', 'modified'], [ 'cocstatus' ]],
+            \   'right': [['lineinfo'], ['percent'], ['readonly']]
             \ },
             \ 'component_function': {
-            \   'linter_warnings': 'LightlineLinterWarnings',
-            \   'linter_errors': 'LightlineLinterErrors',
-            \   'linter_ok': 'LightlineLinterOK'
-            \ },
-            \ 'component_type': {
-            \   'readonly': 'error',
-            \   'linter_warnings': 'warning',
-            \   'linter_errors': 'error',
-            \   'linter_ok': 'ok'
+            \   'cocstatus': 'coc#status'
             \ },
             \ }
-autocmd User ALELint call lightline#update()
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
 " }}}
 
 " vim-mam{{{
@@ -1140,6 +1103,9 @@ augroup Rust
                 \%.%#panicked\ at\ \\'%m\\'\\,\ %f:%l:%c
 augroup END"}}}
 
+" jsonc {{{
+autocmd FileType json syntax match Comment +\/\/.\+$+
+" }}}
 " -----------}}}2
 
 " abbreviation{{{
