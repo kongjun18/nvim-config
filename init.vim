@@ -73,6 +73,9 @@ endif
 let mapleader=' '
 let maplocalleader='z'
 
+map j gj
+map k gk
+
 
 set path+=include
 set updatetime=300
