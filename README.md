@@ -10,6 +10,7 @@ If you want a community-driven configuration, please see [Spacevim](https://gith
 ## Prerequisite
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.0+ with python3 support
+- Node 10.12
 - curl:                download dein.vim
 - gcc, make and CMake: build YouCompleteMe
 - Python3.6+:          for YouCompleteMe, Ultisnips and other plugins

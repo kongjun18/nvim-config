@@ -1,4 +1,5 @@
 {
+    "coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",

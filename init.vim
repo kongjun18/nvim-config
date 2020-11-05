@@ -1,5 +1,5 @@
-" Vim global plugin for something
-" Last Change: 2020-11-02
+" (Neo)vim configuration 
+" Last Change: 2020-11-05 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -8,7 +8,7 @@
 
 " if @dir exists, just exit.
 " if @dir not exists, create it
-function! EnsureDirExists(dir)
+function! s:ensure_dir_exist(dir)
     if !isdirectory(a:dir)
         call mkdir(a:dir, 'p')
     endif
@@ -82,7 +82,6 @@ set updatetime=300
 set foldmethod=marker
 set laststatus=2    " always show status line
 set number
-" set cmdheight=1
 set showtabline=2
 set noerrorbells    " 在错误时发出蜂鸣声
 set visualbell      " 错误时出现视觉提示
@@ -90,9 +89,9 @@ set undofile    " 保存撤销历史
 set backup
 set writebackup " 删除旧备份，备份当前文件
 
-call EnsureDirExists($HOME . '/.vim/backup')
-call EnsureDirExists($HOME . '/.vim/swap')
-call EnsureDirExists($HOME . '/.vim/undo')
+call s:ensure_dir_exist($HOME . '/.vim/backup')
+call s:ensure_dir_exist($HOME . '/.vim/swap')
+call s:ensure_dir_exist($HOME . '/.vim/undo')
 set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//
 set undodir=$HOME/.vim/undo//
@@ -188,6 +187,8 @@ if has('unix')
 endif
 let loaded_matchit = 1
 
+let g:YCM_enabled = 0
+
 set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
     call dein#begin('~/.config/nvim/plugged')
@@ -270,7 +271,6 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('tpope/vim-fugitive')
     call dein#add('tpope/vim-rhubarb')
     call dein#add('airblade/vim-gitgutter')
-    call dein#add('junegunn/gv.vim')
 
     " status
     call dein#add('itchyny/lightline.vim')
@@ -300,10 +300,11 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp']
                 \ }) "cpp hightlight
-    call dein#add('jackguo380/vim-lsp-cxx-highlight', {
-                \ 'lazy': 1,
-                \ 'on_ft': ['c', 'cpp']
-                \ })
+    " call dein#add('jackguo380/vim-lsp-cxx-highlight', {
+    "             \ 'lazy': 1,
+    "             \ 'on_ft': ['c', 'cpp']
+    "             \ })
+    call dein#disable('vim-lsp-cxx-height')
     
     " writing
     call dein#add('tpope/vim-markdown', {
@@ -335,11 +336,18 @@ if dein#load_state('~/.config/nvim/plugged')
     " color scheme
     call dein#add('KeitaNakamura/neodark.vim')
     call dein#add('laggardkernel/vim-one')
-    call dein#add('YorickPeterse/happy_hacking.vim')
-
 
     " project management
     call dein#add('Yggdroot/LeaderF')                 " fuzzy find
+    if (g:YCM_enabled)
+        call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
+        call dein#add('dense-analysis/ale', {         " lint
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
+                \ })
+    else
+        call dein#add('neoclide/coc.nvim', {'rev': 'release'})   " code completion for C/C++ and Rust
+    endif
     call dein#add('vim-scripts/DoxygenToolkit.vim', {
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'python']
@@ -355,7 +363,6 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': 'json'
                 \ })
-    call dein#add('neoclide/coc.nvim', {'rev': 'release'})   " code completion for CMake
 
     " other
     call dein#add('voldikss/vim-translator')          " translator
@@ -377,46 +384,113 @@ endif
 if dein#check_install()
     call dein#install()
 endif
-source ~/.config/nvim/tools/gitignore.vim           " create .gitignore automatically
+source ~/.config/nvim/tools/tools.vim           " Some tools writen in vimL
 filetype plugin indent on
 syntax on
 " }}}
 
-" " YouCompleteMe setting{{{
-" "
-" let g:ycm_auto_trigger = 1
-" let g:ycm_add_preview_to_completeopt = 0
-" let g:ycm_show_diagnostics_ui = 0
-" let g:ycm_server_log_level = 'info'
-" let g:ycm_min_num_identifier_candidate_chars = 2
-" let g:ycm_collect_identifiers_from_comments_and_strings = 1
-" let g:ycm_complete_in_strings=1
-" let g:ycm_key_invoke_completion = '<c-z>'
-" " let g:ycm_global_ycm_extra_conf = '/usr/lib/ycmd/ycm_extra_conf.py'
-" set completeopt=menu,menuone
-"
-" noremap <c-z> <NOP>
-"
-" let g:ycm_semantic_triggers =  {
-"             \ 'c,cpp,rust,java,bash': ['re!\w{2}'],
-"             \ 'lua': ['re!\w{2}'],
-"             \ }
-"
-" let g:ycm_filetype_whitelist = {
-"             \ "c":1,
-"             \ "cpp":1,
-"             \ "rust":1,
-"             \ "java":1,
-"             \ }
-"
-" let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
-"
-" " 禁止自动添加头文件
-" " 详细的补全建议
-" let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
-"
-" let g:ycm_confirm_extra_conf = 0
+"YouCompleteMe setting{{{
+if g:YCM_enabled
+    let g:ycm_auto_trigger = 1
+    let g:ycm_add_preview_to_completeopt = 0
+    let g:ycm_show_diagnostics_ui = 0
+    let g:ycm_server_log_level = 'info'
+    let g:ycm_min_num_identifier_candidate_chars = 2
+    let g:ycm_collect_identifiers_from_comments_and_strings = 1
+    let g:ycm_complete_in_strings=1
+    let g:ycm_key_invoke_completion = '<c-z>'
+    " let g:ycm_global_ycm_extra_conf = '/usr/lib/ycmd/ycm_extra_conf.py'
+    set completeopt=menu,menuone
+
+    noremap <c-z> <NOP>
+
+    let g:ycm_semantic_triggers =  {
+                \ 'c,cpp,rust,java,bash': ['re!\w{2}'],
+                \ 'lua': ['re!\w{2}'],
+                \ }
+
+    let g:ycm_filetype_whitelist = {
+                \ "c":1,
+                \ "cpp":1,
+                \ "rust":1,
+                \ "java":1,
+                \ }
+
+    let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+
+    " 禁止自动添加头文件
+    " 详细的补全建议
+    let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
+
+    let g:ycm_confirm_extra_conf = 0
+endif
 "}}}
+
+" ale {{{
+if g:YCM_enabled
+	let g:ale_enabled = 0
+	let g:ale_c_parse_compile_commands = 1
+	let g:ale_lint_on_text_changed = 'normal'
+	let g:ale_lint_on_insert_leave = 1
+	let g:ale_lint_on_save = 1
+
+	let g:ale_linters_explicit = 1
+	let g:ale_linters = {
+					\ 'asm': ['gcc'],
+					\ 'c': ['gcc', 'cppcheck'],
+					\ 'cpp': ['gcc', 'cppcheck'],
+					\ 'rust': ['cargo', 'rls'],
+					\ 'sh': ['shellcheck', 'sh'],
+					\ 'fish': ['fish']
+					\}
+	" let g:ale_c_cc_executable='gcc'
+	" let g:ale_cpp_cc_executable='g++'
+	" " "  -Wall will open option -Wconversion.
+	" " "  -Wextra will open option -Wsign-compare
+	" " "  -Wconversion open -Wsign-conversion defaultly.
+	" let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
+	" " "  -Wconversion don't open -Wsign-conversion for C++
+	" " "  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
+	" let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
+	"
+	" let g:ale_c_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c11'
+	" let g:ale_cpp_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c++2a'
+
+	" 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
+	let g:ale_set_quickfix = 0
+	let g:ale_set_loclist = 1
+	let g:ale_open_list = 0
+
+	" 使用 compile_commands.json，在项目目录中查找
+
+	" key-mapping
+	nnoremap gn :ALENext<CR>
+	nnoremap gN :ALEPrevious<CR>
+
+
+	" 修改错误标志
+	let g:ale_sign_error = "✖"
+	let g:ale_sign_warning = "‼"
+	" ➤
+	let g:ale_sign_info = "ℹ"
+	hi! clear SpellBad
+	hi! clear SpellCap
+	hi! clear SpellRare
+	hi! SpellBad gui=undercurl guisp=red
+	hi! SpellCap gui=undercurl guisp=blue
+	hi! SpellRare gui=undercurl guisp=magenta
+	if MyOnBattery()
+		let g:ale_completion_delay = 500
+		let g:ale_echo_delay = 20
+		let g:ale_lint_delay = 500
+	endif
+	function! MyOnBattery()
+		return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
+	endfunction
+endif
+
+
+" }}}
 
 " echodoc setting{{{
 let g:echodoc#enable_at_startup = 1
@@ -429,7 +503,9 @@ let g:cpp_class_scope_highlight=1
 let g:cpp_member_variable_highlight=1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_experimental_simple_template_highlight = 1
-let c_no_curly_error=1"}}}
+let c_no_curly_error=1
+
+"}}}
 
 "rainbow{{{
 let g:rainbow_active = 1 "0 if you want to enable it later via :rainbowtoggle
@@ -502,13 +578,13 @@ nnoremap <leader>lt :Leaderf task<CR>
 " let g:gutentags_define_advanced_commands = 1
 " let g:gutentags_trace = 1
 
-let g:gutentags_exclude_filetypes = ['vim', 'sh', 'bash', 'fish', 'text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'make', 'json']
+let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
 " let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
-let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml']
+let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
 
 " 所生成的数据文件的名称
 let g:gutentags_ctags_tagfile = '.tag'
@@ -532,8 +608,9 @@ let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
 let g:gutentags_ctags_extra_args = ['--fields=+niazS']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-let g:gutentags_ctags_extra_args += ['--exclude=_builds/']
-let g:gutentags_ctags_extra_args += ['--exclude=doc/']
+let g:gutentags_ctags_extra_args += ['--exclude=_builds']
+let g:gutentags_ctags_extra_args += ['--exclude=doc']
+let g:gutentags_ctags_extra_args += ['--exclude=plugged']
 
 
 " 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
@@ -558,15 +635,17 @@ let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
 
-" nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-" nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-" nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
-" nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+if g:YCM_enabled
+	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+	nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+	nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+endif
 " --------------}}}
 
 " gtags(global) {{{
@@ -818,81 +897,85 @@ nnoremap <Leader>pc  :call <SID>PluginClean()<CR>
 " }}}
 
 " coc.nvim{{{
-hi! CocErrorSign guifg=#d1666a
-let g:coc_status_error_sign = "✖ "
-let g:coc_status_warning_sign = "‼ "
+if !g:YCM_enabled
+	hi! CocErrorSign guifg=#d1666a
+	let g:coc_status_error_sign = "✖ "
+	let g:coc_status_warning_sign = "‼ "
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+	" Use tab for trigger completion with characters ahead and navigate.
+	" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+	" other plugin before putting this into your config.
+	inoremap <silent><expr> <TAB>
+		  \ pumvisible() ? "\<C-n>" :
+		  \ <SID>check_back_space() ? "\<TAB>" :
+		  \ coc#refresh()
+	inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+	function! s:check_back_space() abort
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]  =~# '\s'
+	endfunction
 
-nmap <silent> gN <Plug>(coc-diagnostic-prev)
-nmap <silent> gn <Plug>(coc-diagnostic-next)
-
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+	nmap <silent> gN <Plug>(coc-diagnostic-prev)
+	nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 
-" Use K to show documentation in preview window.
-nnoremap <silent> gK :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+	" GoTo code navigation.
+	nmap <silent> gd <Plug>(coc-definition)
+	nmap <silent> gy <Plug>(coc-type-definition)
+	nmap <silent> gi <Plug>(coc-implementation)
+	nmap <silent> gr <Plug>(coc-references)
 
 
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+	" Use K to show documentation in preview window.
+	nnoremap <silent> gK :call <SID>show_documentation()<CR>
 
-" NeoVim-only mapping for visual mode scroll
-" Useful on signatureHelp after jump placeholder of snippet expansion
-if has('nvim')
-  vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
-  vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
+	function! s:show_documentation()
+	  if (index(['vim','help'], &filetype) >= 0)
+		execute 'h '.expand('<cword>')
+	  elseif (coc#rpc#ready())
+		call CocActionAsync('doHover')
+	  else
+		execute '!' . &keywordprg . " " . expand('<cword>')
+	  endif
+	endfunction
+
+	" Symbol renaming.
+	nmap <leader>rn <Plug>(coc-rename)
+
+	" Map function and class text objects
+	" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+	xmap if <Plug>(coc-funcobj-i)
+	omap if <Plug>(coc-funcobj-i)
+	xmap af <Plug>(coc-funcobj-a)
+	omap af <Plug>(coc-funcobj-a)
+	xmap ic <Plug>(coc-classobj-i)
+	omap ic <Plug>(coc-classobj-i)
+	xmap ac <Plug>(coc-classobj-a)
+	omap ac <Plug>(coc-classobj-a)
+
+
+	" Remap <C-f> and <C-b> for scroll float windows/popups.
+	" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+	nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+	nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+	inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+	inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+	" NeoVim-only mapping for visual mode scroll
+	" Useful on signatureHelp after jump placeholder of snippet expansion
+	if has('nvim')
+	  vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
+	  vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
+	endif
+
+	" Add `:Fold` command to fold current buffer.
+	command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 endif
+" }}}
 
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 "    vim-which-key{{{
 " let g:mapleader = "\<Space>"
 " let g:maplocalleader = 'z'
@@ -915,24 +998,56 @@ let g:leetcode_browser = 'firefox'
 let g:leetcode_china = 1
 "}}}
 
-" " lightline -{{{
-let g:lightline = {
-            \ 'colorscheme': 'one',
-            \ 'active': {
-            \   'left': [['mode', 'paste'], ['filename', 'modified'], [ 'cocstatus' ]],
-            \   'right': [['lineinfo'], ['percent'], ['readonly']]
-            \ },
-            \ 'component_function': {
-            \   'cocstatus': 'coc#status'
-            \ },
-            \ }
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+"  lightline -{{{
+if g:YCM_enabled
+    let g:lightline = {
+                \ 'colorscheme': 'one',
+                \ 'active': {
+                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
+                \   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
+                \ },
+                \ 'component_function': {
+                \   'linter_warnings': 'LightlineLinterWarnings',
+                \   'linter_errors': 'LightlineLinterErrors',
+                \   'linter_ok': 'LightlineLinterOK',
+                \   'gutentags': 'gutentags#statusline',
+                \   'gitbranch': 'FugitiveHead'
+                \ },
+                \ 'component_type': {
+                \   'readonly': 'error',
+                \   'linter_warnings': 'warning',
+                \   'linter_errors': 'error',
+                \   'linter_ok': 'ok'
+                \ },
+                \ }
+    autocmd User ALELint call lightline#update()
+else
+    let g:lightline = {
+                \ 'colorscheme': 'one',
+                \ 'active': {
+                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
+                \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus']]
+                \ },
+                \ 'component_function': {
+                \   'gutentags': 'gutentags#statusline',
+                \   'gitbranch': 'FugitiveHead',
+                \   'cocstatus': 'coc#status'
+                \ },
+                \ 'component_type': {
+                \   'readonly': 'error',
+                \ },
+                \ }
+    autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+endif
+autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
+
+
 
 " }}}
 
 " vim-mam{{{
-
 nnoremap <Leader>hm :Vman 2 <C-r><C-w><CR>
+nnoremap <Leader>hh :vertical help <C-r><C-w><CR>
 "}}}
 
 " vimspector setting{{{
@@ -958,6 +1073,10 @@ nmap zv <Plug>VimwikiToggleListItem
 " VimwikiToc
 nnoremap <Leader>vt :VimwikiTOC<CR>"}}}
 
+" vim-markdown {{{
+let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
+" }}}
+
 " md paste {{{
 let g:mdip_imdir_intext = "./images"
 "设置默认图片名称。当图片名称没有给出时，使用默认图片名称
@@ -968,7 +1087,7 @@ nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
 
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
-call EnsureDirExists($HOME . '/.vim/session')
+call s:ensure_dir_exist($HOME . '/.vim/session')
 let g:session_directory = "~/.vim/session"
 "}}}
 
