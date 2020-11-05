@@ -180,13 +180,14 @@ colorscheme one
 " dein ----{{{
 if has('unix')
     if empty(glob('~/.config/nvim/plugged'))
-            silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
+            silent !curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+            silent !sh ./installer.sh ~/.config/nvim/plugged
             autocmd VimEnter * call dein#install()
     endif
 endif
 let loaded_matchit = 1
 
-let g:YCM_enabled = 0
+let g:YCM_enabled = 1
 
 set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
@@ -340,7 +341,7 @@ if dein#load_state('~/.config/nvim/plugged')
     call dein#add('Yggdroot/LeaderF')                 " fuzzy find
     if (g:YCM_enabled)
         call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
-        call dein#add('dense-analysis/ale', {         " lint
+        call dein#add('dense-analysis/ale', {         
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
                 \ })
@@ -476,16 +477,16 @@ if g:YCM_enabled
 	hi! clear SpellCap
 	hi! clear SpellRare
 	hi! SpellBad gui=undercurl guisp=red
+    hi! SpellRare gui=undercurl guisp=magenta
 	hi! SpellCap gui=undercurl guisp=blue
-	hi! SpellRare gui=undercurl guisp=magenta
+	function! MyOnBattery()
+		return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
+	endfunction
 	if MyOnBattery()
 		let g:ale_completion_delay = 500
 		let g:ale_echo_delay = 20
 		let g:ale_lint_delay = 500
 	endif
-	function! MyOnBattery()
-		return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
-	endfunction
 endif
 
 
