@@ -180,8 +180,7 @@ colorscheme one
 " dein ----{{{
 if has('unix')
     if empty(glob('~/.config/nvim/plugged'))
-            silent !curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-            silent !sh ./installer.sh ~/.config/nvim/plugged
+            silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
             autocmd VimEnter * call dein#install()
     endif
 endif
