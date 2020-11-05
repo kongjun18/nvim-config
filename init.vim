@@ -189,6 +189,10 @@ let loaded_matchit = 1
 
 let g:YCM_enabled = 1
 
+if executable('axel')
+    let g:dein#download_command = 'axel -n 4 -o'
+endif
+let g:dein#types#git#clone_depth = 1
 set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
     call dein#begin('~/.config/nvim/plugged')
