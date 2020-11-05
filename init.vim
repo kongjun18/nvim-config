@@ -345,8 +345,11 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
                 \ })
+        call dein#disable('coc.nvim')
     else
         call dein#add('neoclide/coc.nvim', {'rev': 'release'})   " code completion for C/C++ and Rust
+        call dein#disable('youcompleteme.git')
+        call dein#disable('ale')
     endif
     call dein#add('vim-scripts/DoxygenToolkit.vim', {
                 \ 'lazy': 1,
