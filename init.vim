@@ -187,12 +187,13 @@ if has('unix')
 endif
 let loaded_matchit = 1
 
-let g:YCM_enabled = 1
+let g:YCM_enabled = 0
 
 if executable('axel')
     let g:dein#download_command = 'axel -n 4 -o'
 endif
 let g:dein#types#git#clone_depth = 1
+let g:dein#install_progress_type = 'none'
 set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
     call dein#begin('~/.config/nvim/plugged')
@@ -272,7 +273,10 @@ if dein#load_state('~/.config/nvim/plugged')
                 \ })
 
     " Git
-    call dein#add('tpope/vim-fugitive')
+    call dein#add('tpope/vim-fugitive', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('tpope/vim-rhubarb')
     call dein#add('airblade/vim-gitgutter')
 
@@ -347,7 +351,8 @@ if dein#load_state('~/.config/nvim/plugged')
         call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
         call dein#add('dense-analysis/ale', {         
                 \ 'lazy': 1,
-                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash']
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
+                \ 'depends': 'lightline.vim'
                 \ })
         call dein#disable('coc.nvim')
     else
@@ -389,7 +394,7 @@ if dein#load_state('~/.config/nvim/plugged')
 endif
 
 if dein#check_install()
-    call dein#install()
+    call dein#update()
 endif
 source ~/.config/nvim/tools/tools.vim           " Some tools writen in vimL
 filetype plugin indent on
@@ -1010,7 +1015,7 @@ if g:YCM_enabled
     let g:lightline = {
                 \ 'colorscheme': 'one',
                 \ 'active': {
-                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
+                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
                 \   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
                 \ },
                 \ 'component_function': {
@@ -1018,7 +1023,8 @@ if g:YCM_enabled
                 \   'linter_errors': 'LightlineLinterErrors',
                 \   'linter_ok': 'LightlineLinterOK',
                 \   'gutentags': 'gutentags#statusline',
-                \   'gitbranch': 'FugitiveHead'
+                \   'gitbranch': 'FugitiveHead',
+                \   'dein': 'dein#get_progress'
                 \ },
                 \ 'component_type': {
                 \   'readonly': 'error',
@@ -1032,13 +1038,14 @@ else
     let g:lightline = {
                 \ 'colorscheme': 'one',
                 \ 'active': {
-                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
+                \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
                 \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus']]
                 \ },
                 \ 'component_function': {
                 \   'gutentags': 'gutentags#statusline',
                 \   'gitbranch': 'FugitiveHead',
-                \   'cocstatus': 'coc#status'
+                \   'cocstatus': 'coc#status',
+                \   'dein': 'dein#get_progress'
                 \ },
                 \ 'component_type': {
                 \   'readonly': 'error',
