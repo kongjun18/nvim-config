@@ -73,13 +73,21 @@ function! s:nvim_is_latest()
     if l:nvim_version_list[0] != 0
         return 0
     elseif l:nvim_version_list[1] < 5
-        echomsg "l:nvim_version_list[0] != 0"
         return 0
     " Because lastest version is 0.5.0, so don't need check last number.
     endif
 
-    let g:nvim_version_middle = matchstr(l:version_verbose, '\-\zs\d\+\ze\-')
-    if g:nvim_version_middle < 812
+    let l:nvim_version_middle = matchstr(l:version_verbose, '\-\zs\d\+\ze\-')
+    let l:len = len(l:nvim_version_middle)
+    if l:len == 2
+        if l:nvim_version_middle < 40
+            return 0
+        endif
+    elseif l:len == 3
+        if l:nvim_version_middle < 812
+            return 0
+        endif
+    else
         return 0
     endif
     return 1
@@ -113,8 +121,7 @@ map k gk
 
 
 set path+=include
-set updatetime=300
-set foldmethod=syntax
+set foldmethod=marker
 set laststatus=2    " always show status line
 set number
 set showtabline=2
@@ -500,7 +507,6 @@ if g:YCM_enabled
 				\ }
 
 	let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
-
 	" 禁止自动添加头文件
 	" 详细的补全建议
 	let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
@@ -1326,10 +1332,6 @@ augroup END
 
 " jsonc {{{
 autocmd FileType json syntax match Comment +\/\/.\+$+
-" }}}
-
-" vimL {{{
-autocmd FileType vim setlocal foldmethod=marker
 " }}}
 
 " markdown {{{
