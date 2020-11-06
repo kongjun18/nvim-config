@@ -94,6 +94,7 @@ if &compatible
 	set nocompatible
 endif
 
+let g:YCM_enabled = 0
 let s:grepper = 'grep'
 let s:findder = 'find'
 if executable('fd')
@@ -225,7 +226,6 @@ if has('unix')
 endif
 let loaded_matchit = 1
 
-let g:YCM_enabled = 0
 
 if executable('axel')
 	let g:dein#download_command = 'axel -n 4 -o'
@@ -358,10 +358,10 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'on_ft': 'fish'
 				\ })
 	" writing
-	call dein#add('tpope/vim-markdown', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'markdown'
-				\ }) 
+    call dein#add('plasticboy/vim-markdown', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'markdown'
+                \ })
 	call dein#add('iamcco/markdown-preview.nvim', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
@@ -1169,6 +1169,10 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 
 	" vim-markdown {{{
 	let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
+    let g:vim_markdown_folding_disabled = 1
+    let g:vim_markdown_math = 1
+    let g:vim_markdown_strikethrough = 1
+
 	" }}}
 
 	" md paste {{{
@@ -1326,6 +1330,12 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " vimL {{{
 autocmd FileType vim setlocal foldmethod=marker
+" }}}
+
+" markdown {{{
+autocmd FileType makrdown setlocal wrap
+autocmd FileType makrdown setlocal spell
+autocmd FileType markdown setlocal autowrite
 " }}}
 " -----------}}}
 
