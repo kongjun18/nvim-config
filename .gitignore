@@ -2,8 +2,10 @@ plugged/
 swap/
 backup/
 session/
+sessions
 undo/
 plugged.plug/
 installer.sh
 .notags
 .netrwhist
+

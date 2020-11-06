@@ -88,10 +88,6 @@ function g:tools#rm_gtags(project_dir)
 endfunction
 " }}}
 
-" tools#ensure_dir() {{{
-
-"}}}
-
 " Integrate lightline and ale {{{
 function! g:LightlineLinterWarnings() abort
 let l:counts = ale#statusline#Count(bufnr(''))
@@ -114,3 +110,4 @@ let l:all_non_errors = l:counts.total - l:all_errors
 return l:counts.total == 0 ? '✓' : ''
 endfunction
 " }}}
+
