@@ -14,9 +14,6 @@
     "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "‼",
 
-    // vim-lsp-cxx-hightlight
-    "clangd.semanticHighlighting": true,
-
     // clangd arguments
     "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"]
 }
