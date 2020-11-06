@@ -507,6 +507,7 @@ if g:YCM_enabled
 				\ }
 
 	let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+    let g:ycm_clangd_binary_path = exepath('clangd')
 	" 禁止自动添加头文件
 	" 详细的补全建议
 	let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
