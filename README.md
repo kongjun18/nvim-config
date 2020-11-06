@@ -14,6 +14,8 @@ I use (Neo)vim edit almost any files. My (Neo)vim is configured for C/C++, Rust,
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.4+ with python3 support
 - Node 10.12:          for coc.nvim
+- clangd:              C++ LSP
+- rust-analyzer:       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
 - gcc, make and CMake: build YouCompleteMe
@@ -48,10 +50,6 @@ By default, my configuration only enables YouCompleteMe support for C/C++. If yo
 ```sh
 cd ~/.config/nvim/plugged/repos/gitee.com/mirrors/youcompleteme
 python3 install.py --rust-completer
-```
-**Note**: On some GNU/Linux distribution(such as Debian10.2), you might need set `g:ycm_clangd_binary_path` manually. For example:
-```vim
-let g:ycm_clangd_binary_path = '/usr/bin/clangd-10'
 ```
 # Problem and Solution
 1. YouCompleteMe warnning: "requires Vim compiled with Python (3.6.0+) support."
