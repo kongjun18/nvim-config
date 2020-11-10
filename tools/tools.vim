@@ -111,3 +111,44 @@ return l:counts.total == 0 ? '✓' : ''
 endfunction
 " }}}
 
+" scroll window {{{
+"
+" @para mode  0 -- up  1 -- down
+"
+" @complain neovim don't support win_execute(). What a pity!!!
+function tools#scroll_adjacent_window(mode)
+    let l:left_winnr = winnr('h')
+    let l:right_winnr = winnr('l')
+    let l:cur_winnr = winnr()
+    if l:left_winnr <= 0 && l:right_winnr <= 0
+        echomsg "Unknown error in tools#scroll_adjacent_window()"
+    endif
+
+    if l:left_winnr != l:cur_winnr && l:right_winnr != l:cur_winnr
+        echomsg "More than two adjcent windows"
+        return 
+    endif
+    
+    if l:left_winnr == l:right_winnr
+        echomsg "Only a single window"
+        return 
+    endif
+
+    let l:go_direction = 'h'
+    let l:back_direction = 'l'
+    if l:right_winnr != l:cur_winnr
+        let l:go_direction = 'l'
+        let l:back_direction = 'h'
+    endif
+
+    " scroll up
+    noautocmd silent! wincmd p
+    " echomsg "winnr " . l:winnr
+    if a:mode == 0 
+        exec "normal! \<ESC>\<C-W>" . l:go_direction . "\<C-U>\<C_W>" . l:back_direction
+    elseif a:mode == 1
+        exec "normal! \<ESC>\<C-W>" . l:go_direction . "\<C-D>\<C_W>" . l:back_direction
+    endif
+    noautocmd silent! wincmd p
+endfunction
+" }}}

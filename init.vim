@@ -1271,6 +1271,9 @@ nnoremap <leader>w, <C-w><            " decrease current window widen
 nnoremap <Leader>w. <C-w>>             " increase current window widen
 tnoremap <M-q> <C-\><C-n>       " 内置终端切换为 normal 模式}}}
 
+nnoremap <M-m> :call tools#scroll_adjacent_window(1)<CR>
+nnoremap <M-p> :call tools#scroll_adjacent_window(0)<CR>
+
 " buffer shortcut{{{
 
 nnoremap <leader>bd :bdelete<CR>
