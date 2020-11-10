@@ -1,5 +1,5 @@
-" (Neo)vim configuration 
-" Last Change: 2020-11-05 
+" (Neo)vim configuration
+" Last Change: 2020-11-10
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -204,7 +204,7 @@ if has('nvim')
 	" enable true color
 	set termguicolors
 elseif has('termguicolors')
-	" fix bug for Vim 
+	" fix bug for Vim
 	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 	" enable true color
@@ -214,7 +214,7 @@ else
 	set t_Co=256
 endif
 
-" skip python search to accelerate startup 
+" skip python search to accelerate startup
 let g:python_host_skip_check=1
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
@@ -225,11 +225,10 @@ let g:python3_host_prog = '/usr/bin/python3'
 
 " dein ----{{{
 if has('unix')
-	if empty(glob('~/.config/nvim/plugged'))
-		silent !curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-		silent !sh ./installer.sh ~/.config/nvim/plugged
-		autocmd VimEnter * call dein#install()
-	endif
+    if empty(glob('~/.config/nvim/plugged'))
+            silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
+            autocmd VimEnter * call dein#install()
+    endif
 endif
 let loaded_matchit = 1
 
@@ -251,11 +250,6 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'lazy': 1,
 				\ 'on_cmd': ['StartupTime']
 				\ })                 " measure startup time
-	" Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-	call dein#add('easymotion/vim-easymotion', {
-				\ 'lazy': 1,
-				\ 'on_event': 'BufReadPost'
-				\ })
 	call dein#add('wsdjeg/FlyGrep.vim')
 	call dein#add('drmikehenry/vim-fixkey')                       " use ALT in Vim
 	call dein#add('ryanoasis/vim-devicons')                       " show icons of some file types
@@ -280,15 +274,12 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('jiangmiao/auto-pairs')                         " pairs matching/completion
 	call dein#add('tpope/vim-repeat')                             " repeat modification made by vim-commentary, vim-surround
 	call dein#add('tpope/vim-unimpaired', {
-				\ 'lazy': 1, 
+				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                         " some shortcut should be built in Vim
 	call dein#add('junegunn/vim-easy-align')                      " align code
 	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'})    " indent indication
-	call dein#add('Chiel92/vim-autoformat', {
-				\ 'lazy': 1,
-				\ 'on_ft': ['c', 'cpp', 'rust', 'python']
-				\ })                       " wrapper of code formater
+    call dein#add('Chiel92/vim-autoformat')                        
 	call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " a fork of machakann/vim-sandwich, using vim-surround mapping
 	call dein#add('machakann/vim-highlightedyank')                " highlight yanked area
 	call dein#add('vim-scripts/fcitx.vim', {
@@ -298,7 +289,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	" leetcode
 	call dein#add('ianding1/leetcode.vim', {
 				\ 'lazy': 1,
-				\ 'on_cmd': ['LeetCodeSignIn', 'LeetCodeList'] 
+				\ 'on_cmd': ['LeetCodeSignIn', 'LeetCodeList']
 				\ })                        " practise leetcode in Vim
 
 	" vimwiki
@@ -306,7 +297,6 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'lazy': 1,
 				\ 'on_cmd': ['VimwikiIndex']
 				\ })                              " personal wiki
-	call dein#add('mattn/calendar-vim')                           " calendar
 
 	" tag system
 	call dein#add('vim-scripts/gtags.vim')
@@ -325,7 +315,6 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })
-	call dein#add('tpope/vim-rhubarb')
 	call dein#add('airblade/vim-gitgutter')
 
 	" status
@@ -338,14 +327,13 @@ if dein#load_state('~/.config/nvim/plugged')
 	" language-enhancement
     if s:nvim_is_latest()
         call dein#add('nvim-treesitter/nvim-treesitter')
-        call dein#disable('vim-lua')
         call dein#disable('vim-toml')
         call dein#disable('vim-cpp-enhanced-hightlight')
     else
-        call dein#add('wsdjeg/vim-lua', {    
+        call dein#add('wsdjeg/vim-lua', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'lua'
-                    \ })     
+                    \ })
         call dein#add('cespare/vim-toml', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'toml'
@@ -386,10 +374,10 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'on_ft': ['markdown', 'vimwiki', 'text']
 				\ })
 	" vimL
-	call dein#add('tpope/vim-scriptease', { 
+	call dein#add('tpope/vim-scriptease', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'vim'
-				\ })             
+				\ })
 
 	" color scheme
 	call dein#add('KeitaNakamura/neodark.vim')
@@ -402,7 +390,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	if (g:YCM_enabled)
         " using YCM and ALE
 		call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
-		call dein#add('dense-analysis/ale', {         
+		call dein#add('dense-analysis/ale', {
 					\ 'lazy': 1,
 					\ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
 					\ 'depends': 'lightline.vim'
@@ -410,20 +398,20 @@ if dein#load_state('~/.config/nvim/plugged')
 		call dein#disable('coc.nvim')
         call dein#disable('coc-clangd')
         call dein#disable('coc-rust-analyzer')
-	else 
-        " using coc.nvim 
+	else
+        " using coc.nvim
 		call dein#add('neoclide/coc.nvim', {
 					\ 'rev': 'release',
 					\ 'lazy': 1,
 					\ 'on_event': 'BufReadPost'
-					\ })  
+					\ })
         call dein#add('clangd/coc-clangd', {
                     \ 'build': 'yarn install --frozen-lockfile',
                     \ 'depends': 'coc.nvim'
                     \ })
         call dein#add('fannheyward/coc-rust-analyzer', {
                     \ 'build': 'yarn install --frozen-lockfile',
-                    \ 'depends': 'coc.nvim' 
+                    \ 'depends': 'coc.nvim'
                     \ })
 		call dein#disable('youcompleteme.git')
 		call dein#disable('ale')
@@ -776,11 +764,15 @@ let g:indentLine_char_list = ['|', '¦', '┆', '┊']"}}}
 
 " AutoFormat{{{
 
-" using clang-format as default formatter
-" using mozilla style as default C/C++ style
+" use clang-format as default formatter
+" use mozilla style as default C/C++ style
 let g:formatdef_my_custom_c = '"clang-format --style=\"{BasedOnStyle: mozilla, IndentWidth: 4}\""'
 let g:formatters_c = ['my_custom_c']
 let g:formatters_cpp = ['my_custom_c']
+
+" use lua-format as default lua formatter
+let g:formatdef_my_custom_lua = 'lua-format -i'
+let g:formatter_lua = ['my_custom_lua']
 nnoremap <Leader>bf :Autoformat<CR>
 "}}}
 
@@ -923,6 +915,8 @@ let g:Lf_Extensions.task = {
 
 " integrate fugitive and Asyncrun
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+" edit tasks.init
+command! TaskEdit vsp ~/.config/nvim/tasks.ini
 
 let g:asynctasks_term_pos = 'tab'
 
@@ -982,7 +976,7 @@ function <SID>PluginClean()
 endfunction
 
 function <SID>PluginRecache()
-	try 
+	try
 		call dein#clear_state()
 		call dein#recache_runtimepath()
 	catch /.*/
@@ -1232,7 +1226,7 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 	" Enable trimming of trailing whitespace when uncommenting
 	let g:NERDTrimTrailingWhitespace = 1
 
-	" Enable NERDCommenterToggle to check all selected lines is commented or not 
+	" Enable NERDCommenterToggle to check all selected lines is commented or not
 	let g:NERDToggleCheckAllLines = 1
 	" }}}
 
@@ -1286,19 +1280,22 @@ nnoremap <Leader><Tab> <C-^>
 
 " language specific autocmd  -----------{{{
 
-" lua{{{
+" Lua{{{
 augroup lua
 	autocmd!
 	autocmd FileType lua setlocal tabstop=2
 	autocmd FileType lua setlocal shiftwidth=2
-augroup END"}}}
+    autocmd FileType lua setlocal efm=%E%.%#\ %f:%l:\ %m
+augroup END
+"}}}
 
 " fish{{{
 augroup fish
 	autocmd FileType fish compiler fish
 	autocmd FileType fish setlocal textwidth=79
 	autocmd FileType fish setlocal foldmethod=expr
-augroup END"}}}
+augroup END
+"}}}
 
 " vimwiki{{{
 augroup vimwiki
@@ -1307,7 +1304,7 @@ augroup vimwiki
 	" autocmd FileType vimwiki, BufWrite VimwikiTOC
 augroup END"}}}
 
-" Rust setting{{{
+" Rust{{{
 
 augroup Rust
 	autocmd!
@@ -1340,16 +1337,23 @@ autocmd FileType makrdown setlocal wrap
 autocmd FileType makrdown setlocal spell
 autocmd FileType markdown setlocal autowrite
 " }}}
+
 " -----------}}}
+
+" general autocmd {{{
+"
+" remove trailing space before write
+autocmd BufWritePre *.h, *.c, *.cpp, *.rs RemoveTrailingSpace
+" }}}
 
 " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
 
-" tab shortcut{{{ 
-nnoremap <leader>1 1gt 
-nnoremap <leader>2 2gt 
+" tab shortcut{{{
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
 nnoremap <leader>4 4gt
 nnoremap <leader>5 5gt
@@ -1391,12 +1395,12 @@ noremap yop :setlocal paste!<CR>"}}}
 if s:nvim_is_latest()
 lua << EOF
     require'nvim-treesitter.configs'.setup {
-    ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"}, 
+    ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
     highlight = {
-    enable = true,              
+    enable = true,
     },
     indent = {
-    enable = true,
+    enable = flase,
     }
     }
 EOF
