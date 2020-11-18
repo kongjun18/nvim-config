@@ -1,11 +1,10 @@
 " (Neo)vim configuration
-" Last Change: 2020-11-10
+" Last Change: 2020-11-11 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
 " functions ---{{{
-
 " if @dir exists, just exit.
 " if @dir not exists, create it
 function! s:ensure_dir_exist(dir)
@@ -96,8 +95,7 @@ endfunction
 
 " ---}}}
 
-" general setting ---- {{{
-
+" general settings {{{
 if &compatible
 	set nocompatible
 endif
@@ -110,12 +108,46 @@ if executable('fd')
 endif
 if executable('rg')
 	let s:grepper = 'rg'
+    set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
 
-" leader
+" Leader
 let mapleader=' '
 let maplocalleader='z'
 
+" Disable standard plugins except of matchit
+let g:loaded_gzip = 1
+let g:loaded_tar = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_zip = 1
+let g:loaded_zipPlugin = 1
+let g:loaded_getscript = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_vimball = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+let g:loaded_rrhelper = 1
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+let g:loaded_netrwFileHandlers = 1
+let g:loaded_gzip = 1
+let g:loaded_tar = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_zip = 1
+let g:loaded_zipPlugin = 1
+let g:loaded_getscript = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_vimball = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_logiPat = 1
+let g:loaded_rrhelper = 1
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+let g:loaded_netrwFileHandlers = 1
 map j gj
 map k gk
 
@@ -125,11 +157,11 @@ set foldmethod=marker
 set laststatus=2    " always show status line
 set number
 set showtabline=2
-set noerrorbells    " 在错误时发出蜂鸣声
-set visualbell      " 错误时出现视觉提示
-set undofile    " 保存撤销历史
-set backup
-set writebackup " 删除旧备份，备份当前文件
+set noerrorbells    " No beep
+set visualbell      " Visual hint of error
+set undofile        " Persist undo history
+set backup          " Backup files
+set wildignore=*.o,*.obj,*.bin,*.img,*.lock,.git "Ignore files when expanding wildcards
 
 call s:ensure_dir_exist($HOME . '/.vim/backup')
 call s:ensure_dir_exist($HOME . '/.vim/swap')
@@ -138,30 +170,30 @@ set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//
 set undodir=$HOME/.vim/undo//
 
-set hlsearch    " 模式查找高亮
-set incsearch   " 增量查找
-set wrapscan    " 在遇到文件结尾后从头查找
-set nopaste     " 希望设置为 paste，但是设置为 paste 后似乎导致一些插件异常，所以在需要从外部粘贴时再手动开启
-set ignorecase
-set ttimeoutlen=100
-set timeoutlen=1300
-set encoding=utf-8
-set termencoding=utf-8
-set smartindent
-set cursorline       " 特殊显示光标所在行
-set nowrap
-set linebreak       " 禁止在单词内部折行
-set showmatch       " 搜索时高亮匹配的括号
-set expandtab       " tab 自动转为空格
-set tabstop=4      "set a tab equal to four space
-set shiftwidth=4
-set noshowmode      "use lightline
-set showcmd
-set showmatch
-set noautochdir         " Rust 的 quickfix 设置有问题，无法正确地记录目录栈，所以禁止自动切换目录，只在根目录打开文件，确保 quickfix 可以正确跳转。详见:h quickfix-directory-stack
-set wildmenu        "command complement
-set wildmode=full
-set shortmess+=c    " 去除选择补全时左下角"匹配 x / N"的提示
+set hlsearch    " Highlight matched pattern
+set incsearch   " Show matched pattern when type regex
+set wrapscan    " Search wrap around the end of the file
+set nopaste     " Don't enable paste mode. 
+set ignorecase  " If type lowercase letter, search both lowercase and uppercase.
+set smartcase   " If type uppercase letter, only search uppercase letter.
+" set ttimeoutlen=100
+set timeoutlen=1300 " Spend more time to wait for user to type map
+set encoding=utf-8  " Use utf-8 to encode string
+set termencoding=utf-8 
+set smartindent     " Do smart autoindenting when staring a new line 
+set cursorline      " Show current line
+set nowrap          " Don't wrap long line
+set linebreak       " Don't wrap lone line in the boundary of word
+set showmatch       " Highlight matched pair and bracket when insert it
+set expandtab       " Transform tab to space
+set tabstop=4       " One tap counts for 4 spaces
+set shiftwidth=4    " Use 4 spaces for each step of (auto)indent
+set noshowmode      " Don't use show current edit mode. I use lightline.
+set showcmd         " Show command in the last line of the screen.
+set noautochdir     " Don't change working directory automatically. I always launch Vim at the root of the project .
+set wildmenu        " Enhance command completion
+set wildmode=full   "
+set shortmess+=c    " Don't give ins-completion-menu messages
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -171,20 +203,23 @@ else
 	set signcolumn=yes
 endif
 
+" suppress the output of external program
+"
+" I use fish shell, so give it extra attention  
 if &shell =~? 'fish'
-	set shellpipe=&>\ %s          " fish shell
+	set shellpipe=&>\ %s        
 else
-	set shellpipe=>\ %s\ 2>&1   " 用来压缩调用外部命令（比如make、grep）时的输出
+	set shellpipe=>\ %s\ 2>&1   
 endif
 
+" On Windows, use the Documents as default working directory
 if has('win32')
-	autocmd VimEnter * cd C:\Users\kongjun\Documents
+	autocmd VimEnter * cd "$HOME\Documents"
 endif
 
-set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " grep 使用 rg
-
-" gvim自动全屏，并且去除工具栏、菜单栏、滚动栏。
+" Fullscreen
 autocmd GUIEnter * simalt ~x
+" Delete tool bar, menu bar and scroll bar
 set guioptions-=m
 set guioptions-=T
 set guioptions-=L
@@ -192,36 +227,35 @@ set guioptions-=R
 set guioptions-=r
 set guioptions-=l
 
-" guifont
+" Set GUI font
 if has('win32')
 	set guifont=Source_Code_Pro:h9:cANSI:qDRAFT
 elseif has('unix')
 	set guifont="Source Code Pro 10"
 endif
 
-" turn on true color
+" Turn on true color
 if has('nvim')
-	" enable true color
+	" Enable true color
 	set termguicolors
 elseif has('termguicolors')
-	" fix bug for Vim
+	" Fix bug for Vim
 	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-	" enable true color
 	set termguicolors
 else
 	" 8-bit color
 	set t_Co=256
 endif
 
-" skip python search to accelerate startup
+" Skip python search to accelerate startup time
 let g:python_host_skip_check=1
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
 
-
-" --- }}}
+command ToolEdit :vsp ~/.config/nvim/tools/tools.vim
+" }}}
 
 " dein ----{{{
 if has('unix')
@@ -230,110 +264,119 @@ if has('unix')
             autocmd VimEnter * call dein#install()
     endif
 endif
-let loaded_matchit = 1
 
-
+" Substitute wget or curl with axel which is a multi-threaded downloader
 if executable('axel')
 	let g:dein#download_command = 'axel -n 4 -o'
 endif
+
+" Don't clone deeply
 let g:dein#types#git#clone_depth = 1
+" Don't show progress in message. I use lightline to show grogress.
 let g:dein#install_progress_type = 'none'
 set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
 	" Vim enhacement
-	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " automatically switch relative line number and absulute line number.
-	call dein#add('rhysd/accelerated-jk')                         " accelerate speed of key 'j' and 'k'
-	call dein#add('bronson/vim-visual-star-search')               " use * and # in visual mod
+	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
+	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
+	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
 	call dein#add('tweekmonster/startuptime.vim', {
 				\ 'lazy': 1,
 				\ 'on_cmd': ['StartupTime']
-				\ })                 " measure startup time
-	call dein#add('wsdjeg/FlyGrep.vim')
-	call dein#add('drmikehenry/vim-fixkey')                       " use ALT in Vim
-	call dein#add('ryanoasis/vim-devicons')                       " show icons of some file types
-	call dein#add('wincent/terminus')                             " add some GUI feature for terminal Vim
-	call dein#add('vim-utils/vim-man')                            " read man page in Vim
-	call dein#add('farmergreg/vim-lastplace')                     " keep cursor to the same positon where we exit session
-	call dein#add('xolox/vim-misc')                               " dependency of vim-session
-	call dein#add('xolox/vim-session')                            " save Vim session without pain
+				\ })                                              " Measure startup time
+	call dein#add('drmikehenry/vim-fixkey')                       " Use ALT in Vim
+	call dein#add('ryanoasis/vim-devicons')                       " Show icons of some file types
+	call dein#add('wincent/terminus')                             " Add some GUI feature for terminal Vim
+	call dein#add('vim-utils/vim-man')                            " Read man page in Vim
+	call dein#add('farmergreg/vim-lastplace')                     " Keep cursor to the same position where we exit session
+	call dein#add('xolox/vim-misc')                               " Dependency of vim-session
+	call dein#add('xolox/vim-session')                            " Save Vim session without pain
 
-	" text edit
-	call dein#add('wellle/targets.vim')                           " text objects
-	call dein#add('haya14busa/is.vim')                            " some enhancement of incsearch
-	call dein#add('matze/vim-move')                               " move text block in visual mode
-	call dein#add('tommcdo/vim-exchange')                         " exchange two words or lines
+	" Text edit
+	call dein#add('wellle/targets.vim')                           " Text objects
+	call dein#add('haya14busa/is.vim')                            " Some enhancement of incsearch
+	call dein#add('matze/vim-move')                               " Move text block in visual mode
+	call dein#add('tommcdo/vim-exchange')                         " Exchange two words or lines
 	call dein#add('SirVer/ultisnips', {
 				\ 'on_if':"has('python3')",
 				\ 'on_event': 'TextChangedI'
-				\ })                            " code snippets engine
+				\ })                                              " Code snippets engine
 	call dein#add('preservim/nerdcommenter', {
 				\ 'on_event': 'BufReadPost'
 				\ })
-	call dein#add('jiangmiao/auto-pairs')                         " pairs matching/completion
-	call dein#add('tpope/vim-repeat')                             " repeat modification made by vim-commentary, vim-surround
+	call dein#add('jiangmiao/auto-pairs')                         " Pairs matching/completion
+	call dein#add('tpope/vim-repeat')                             " Repeat modification made by vim-commentary, vim-surround
 	call dein#add('tpope/vim-unimpaired', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
-				\ })                         " some shortcut should be built in Vim
-	call dein#add('junegunn/vim-easy-align')                      " align code
-	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'})    " indent indication
+				\ })                                              " Some shortcuts should be built in Vim
+	call dein#add('junegunn/vim-easy-align')                      " Align code
+	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'}) " Indent indication
     call dein#add('Chiel92/vim-autoformat')                        
-	call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " a fork of machakann/vim-sandwich, using vim-surround mapping
-	call dein#add('machakann/vim-highlightedyank')                " highlight yanked area
-	call dein#add('vim-scripts/fcitx.vim', {
-				\ 'lazy': 1,
-				\ 'on_event': 'InsertEnter'
-				\ })
-	" leetcode
+	call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " A fork of machakann/vim-sandwich, using vim-surround mapping
+	call dein#add('machakann/vim-highlightedyank')                " Highlight yanked area
+	" call dein#add('vim-scripts/fcitx.vim', {
+	"             \ 'lazy': 1,
+	"             \ 'on_event': 'InsertEnter'
+	"             \ })
+    call dein#add('lilydjwg/fcitx.vim', {
+                  \ 'lazy': 1,
+                  \ 'on_event': 'InsertEnter'
+                  \ })
+	" Leetcode
 	call dein#add('ianding1/leetcode.vim', {
 				\ 'lazy': 1,
 				\ 'on_cmd': ['LeetCodeSignIn', 'LeetCodeList']
-				\ })                        " practise leetcode in Vim
+				\ })                                             " Practise leetcode in Vim
 
-	" vimwiki
+	" Vimwiki
 	call dein#add('vimwiki/vimwiki', {
 				\ 'lazy': 1,
 				\ 'on_cmd': ['VimwikiIndex']
-				\ })                              " personal wiki
+				\ })                                            " Personal wiki
 
-	" tag system
-	call dein#add('vim-scripts/gtags.vim')
-	call dein#add('liuchengxu/vista.vim')
-	call dein#add('ludovicchabant/vim-gutentags')
-	call dein#add('skywind3000/gutentags_plus')
+	" Tag system
+	call dein#add('vim-scripts/gtags.vim')                      " Integrate gtags(GNU Global) and Vim
+	call dein#add('liuchengxu/vista.vim')                       " Show tags in sidebar 
+	call dein#add('ludovicchabant/vim-gutentags')               " Generate tags automatically
+	call dein#add('skywind3000/gutentags_plus')                 " Switch cscope automatically
 
 	" debug
 	call dein#add('puremourning/vimspector', {
 				\ 'lazy': 1,
 				\ 'on_ft': ['c', 'cpp', 'rust', 'python']
-				\ })
+				\ })                                            " Debug adaptor of Vim
 
 	" Git
 	call dein#add('tpope/vim-fugitive', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
-				\ })
-	call dein#add('airblade/vim-gitgutter')
+				\ })                                            " Git wrapper of Vim
+	call dein#add('airblade/vim-gitgutter')                     " Show diff status
 
-	" status
-	call dein#add('itchyny/lightline.vim')
-	call dein#add('edkolev/tmuxline.vim')
-	call dein#add('luochen1990/rainbow')
-	call dein#add('itchyny/vim-cursorword')   " underline the word of cursor
-	call dein#add('lfv89/vim-interestingwords') " highlight word
+	" Status
+	call dein#add('itchyny/lightline.vim')                      " Status line
+	call dein#add('edkolev/tmuxline.vim')                       " Show tmux status when using tmux
+	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color 
+	call dein#add('itchyny/vim-cursorword')                     " Underline the word of cursor
+	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
 
-	" language-enhancement
+	" Language-enhancement
     if s:nvim_is_latest()
-        call dein#add('nvim-treesitter/nvim-treesitter')
-        call dein#disable('vim-toml')
-        call dein#disable('vim-cpp-enhanced-hightlight')
+        call dein#add('nvim-treesitter/nvim-treesitter')        " A syntax highlight plugin
+        call dein#disable('vim-toml')                           " A syntax file of toml 
+        call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
     else
-        call dein#add('wsdjeg/vim-lua', {
+        call dein#add('wsdjeg/vim-lua', {    
                     \ 'lazy': 1,
                     \ 'on_ft': 'lua'
-                    \ })
+                    \ })                                        " A syntax file of Lua
+        call dein#add('elzr/vim-json', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': 'json'
+                    \ })                                        " A syntax file of json
         call dein#add('cespare/vim-toml', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'toml'
@@ -341,52 +384,52 @@ if dein#load_state('~/.config/nvim/plugged')
         call dein#add('octol/vim-cpp-enhanced-highlight', {
                     \ 'lazy': 1,
                     \ 'on_ft': ['c', 'cpp']
-                    \ }) "cpp hightlight
+                    \ })
         call dein#disable('nvim-treesitter')
     endif
 	call dein#add('Townk/vim-qt', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'cpp'
-				\ })
+				\ })                                           " A syntax file of Qt 
 	call dein#add('dag/vim-fish', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'fish'
-				\ })
-	" writing
+				\ })                                           " A syntax file of fish shell
+	" Writing
     call dein#add('plasticboy/vim-markdown', {
                 \ 'lazy': 1,
                 \ 'on_ft': 'markdown'
-                \ })
+                \ })                                           " Enhance the support of markdown
 	call dein#add('iamcco/markdown-preview.nvim', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
-				\ })
+				\ })                                           " Preview markdown in the browser
 	call dein#add('mzlogin/vim-markdown-toc', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
-				\ })
+				\ })                                           " Generate TOC of markdown 
 	call dein#add('ferrine/md-img-paste.vim', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
-				\ })
+				\ })                                           " Paste image in Vim
 	call dein#add('reedes/vim-wordy', {
 				\ 'lazy': 1,
 				\ 'on_ft': ['markdown', 'vimwiki', 'text']
-				\ })
-	" vimL
+				\ })                                           " English check
+	" VimL
 	call dein#add('tpope/vim-scriptease', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'vim'
-				\ })
+				\ })                                           " Ease the development of vimscript
 
-	" color scheme
+	" Color scheme
 	call dein#add('KeitaNakamura/neodark.vim')
 	call dein#add('laggardkernel/vim-one')
 	call dein#add('morhetz/gruvbox')
-	call dein#add('sainnhe/edge') 				" defualt color scheme
+	call dein#add('sainnhe/edge') 				               " Defualt color scheme
 
 	" project management
-	call dein#add('Yggdroot/LeaderF')                 " fuzzy find
+	call dein#add('Yggdroot/LeaderF')                          " Fuzzy finder
 	if (g:YCM_enabled)
         " using YCM and ALE
 		call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
@@ -419,41 +462,37 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('vim-scripts/DoxygenToolkit.vim', {
 				\ 'lazy': 1,
 				\ 'on_ft': ['c', 'cpp', 'python']
-				\ })   " manage Doxygen
-	call dein#add('tpope/vim-projectionist')
-	call dein#add('skywind3000/asyncrun.vim')
-	call dein#add('skywind3000/asynctasks.vim')
+				\ })                                             " Manage Doxygen
+	call dein#add('tpope/vim-projectionist')                     " Switch between files
+	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
+	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
 	call dein#add('Shougo/echodoc.vim', {
 				\ 'lazy': 1,
 				\ 'on_ft': ['c', 'cpp', 'python', 'rust']
-				\ })      " echo parameter of funciton
-	call dein#add('elzr/vim-json', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'json'
-				\ })
+				\ })                                            " Echo parameters of function
 
 	" other
-	call dein#add('voldikss/vim-translator')          " translator
-	call dein#add('voldikss/vim-floaterm')            " popup terminal
-	call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})                 " use UNIX command in Vim
+	call dein#add('voldikss/vim-translator')                    " Translator
+	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
+	call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
-				\ })
+				\ })                                            " Simple menu bar of terminal Vim
 	call dein#add('wakatime/vim-wakatime', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
-				\ })
+				\ })                                            " Time statistics
 
 	call dein#end()
 	call dein#save_state()
 endif
 
-if dein#check_install()
+if dein#check_install()                                         " Install plugins automatically
 	call dein#install()
 endif
-source ~/.config/nvim/tools/tools.vim           " Some tools writen in vimL
-filetype plugin indent on
+source ~/.config/nvim/tools/tools.vim                           " Some tools written in vimL
+filetype plugin indent on                                       " Use filetype-specific plugins
 syntax on
 
 " }}}
@@ -617,7 +656,7 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
 let g:Lf_DefaultExternalTool = s:findder
 if s:findder == 'fd'
-	let g:Lf_ExternalCommand = 'fd --type f "%s"'           " On MacOSX/Linux
+    let g:Lf_ExternalCommand = 'fd -E _builds --type f "%s"'           " On MacOSX/Linux
 endif
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
@@ -740,14 +779,6 @@ let g:vista#renderer#enable_icon = 1
 let g:vista#extensions = ['vimwiki']"}}}
 
 " -----------}}}
-
-" easy-align{{{
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" " Start interactive EasyAlign in visual mode (e.g. vipga)
-" xmap ga <Plug>(EasyAlign)
-"
-" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-" nmap ga <Plug>(EasyAlign)"}}}
 
 " vim-commentary{{{
 
@@ -1069,12 +1100,6 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 	endif
 	" }}}
 
-	"    vim-which-key{{{
-	" let g:mapleader = "\<Space>"
-	" let g:maplocalleader = 'z'
-	" nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-	" nnoremap <silent> <localleader> :<c-u>WhichKey  'z'<CR>}}}
-
 	" netrw{{{
 
 	let g:netrw_liststyle = 3
@@ -1200,12 +1225,6 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 	" nnoremap <silent> <M-/> :TmuxNavigatePrevious<cr>
 	" " ------}}}
 
-	" FlyGrep ----{{{
-	let g:FlyGrep_search_tools = s:grepper
-	let g:FlyGrep_enable_statusline = 1
-	nnoremap <Leader>sp :FlyGrep<CR>
-	" -----}}}
-
 	" nerdcommmenter ---{{{
 
 	" Add spaces after comment delimiters by default
@@ -1230,7 +1249,7 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 	let g:NERDToggleCheckAllLines = 1
 	" }}}
 
-" window shortcut{{{
+" window shortcut {{{
 
 nnoremap <Leader>wt <C-w>T<CR>  " 将当前窗口移动为 tab
 
@@ -1269,84 +1288,16 @@ nnoremap <Leader>w- <C-w>-             " decrease current window height
 nnoremap <Leader>w+ <C-w>+            " increase current window height
 nnoremap <leader>w, <C-w><            " decrease current window widen
 nnoremap <Leader>w. <C-w>>             " increase current window widen
-tnoremap <M-q> <C-\><C-n>       " 内置终端切换为 normal 模式}}}
-
+tnoremap <M-q> <C-\><C-n>       " 内置终端切换为 normal 模式
 nnoremap <M-m> :call tools#scroll_adjacent_window(1)<CR>
 nnoremap <M-p> :call tools#scroll_adjacent_window(0)<CR>
+" }}}
 
 " buffer shortcut{{{
 
 nnoremap <leader>bd :bdelete<CR>
 nnoremap <Leader><Tab> <C-^>
 
-" }}}
-
-" language specific autocmd  -----------{{{
-
-" Lua{{{
-augroup lua
-	autocmd!
-	autocmd FileType lua setlocal tabstop=2
-	autocmd FileType lua setlocal shiftwidth=2
-    autocmd FileType lua setlocal efm=%E%.%#\ %f:%l:\ %m
-augroup END
-"}}}
-
-" fish{{{
-augroup fish
-	autocmd FileType fish compiler fish
-	autocmd FileType fish setlocal textwidth=79
-	autocmd FileType fish setlocal foldmethod=expr
-augroup END
-"}}}
-
-" vimwiki{{{
-augroup vimwiki
-	autocmd!
-	autocmd FileType vimwiki setlocal wrap
-	" autocmd FileType vimwiki, BufWrite VimwikiTOC
-augroup END"}}}
-
-" Rust{{{
-
-augroup Rust
-	autocmd!
-	autocmd FileType rust setlocal makeprg=cargo\ $*
-	autocmd FileType rust setlocal errorformat=
-				\%-G,
-				\%-Gerror:\ aborting\ %.%#,
-				\%-Gerror:\ Could\ not\ compile\ %.%#,
-				\%Eerror:\ %m,
-				\%Eerror[E%n]:\ %m,
-				\%Wwarning:\ %m,
-				\%Inote:\ %m,
-				\%C\ %#-->\ %f:%l:%c,
-				\%-G%\\s%#Downloading%.%#,
-				\%-G%\\s%#Compiling%.%#,
-				\%-G%\\s%#Finished%.%#,
-				\%-G%\\s%#error:\ Could\ not\ compile\ %.%#,
-				\%-G%\\s%#To\ learn\ more\\,%.%#,
-				\%-Gnote:\ Run\ with\ \`RUST_BACKTRACE=%.%#,
-				\%.%#panicked\ at\ \\'%m\\'\\,\ %f:%l:%c
-augroup END
-"}}}
-
-" jsonc {{{
-autocmd FileType json syntax match Comment +\/\/.\+$+
-" }}}
-
-" markdown {{{
-autocmd FileType makrdown setlocal wrap
-autocmd FileType makrdown setlocal spell
-autocmd FileType markdown setlocal autowrite
-" }}}
-
-" -----------}}}
-
-" general autocmd {{{
-"
-" remove trailing space before write
-autocmd BufWritePre *.h, *.c, *.cpp, *.rs RemoveTrailingSpace
 " }}}
 
 " abbreviation{{{
@@ -1365,7 +1316,9 @@ nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
 nnoremap <leader>- gT
-nnoremap <leader>= gt"}}}
+nnoremap <leader>= gt
+
+"}}}
 
 " shortcut of open and source vimrc {{{
 if has('win32')

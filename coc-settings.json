@@ -25,14 +25,12 @@
                     }
                 }
             }
-        }
+        },
     },
-    // change diagnostic sign
     "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "‼",
 
     "suggest.enablePreview": true,
-    // clangd arguments
     "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"],
 
 }

@@ -1,0 +1,63 @@
+# CMake-generated file
+_builds
+build
+_build
+builds
+
+# fd dotfile
+.fdignore
+
+# rg dotfile
+.fdignore
+
+# Vim-generated file
+.nvimlog
+.root
+.project
+.swp
+.session
+session
+swp
+.undo
+undo
+projectins.json
+.ycm_extra_config.py
+
+# object file
+*.o
+
+# precompiled headers
+*.gch
+*.pch
+
+# exetable
+a.out
+
+# os
+*.tmp
+*.img
+*.bin
+
+# other
+TODO
+TODO.wiki
+
+# LSP
+compile_commands.json
+.clangd
+.ccl
+
+# library
+*.so
+*.so.*
+*.dylib
+
+# cache
+.cache
+
+# tags
+GPATH
+GTAGS
+GRTAGS
+tags
+.notags

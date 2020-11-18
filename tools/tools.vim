@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2020-11-10
+" Last Change: 2020-11-18 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -20,42 +20,14 @@ function g:tools#create_gitignore(filetype)
         return 
     endif
 
-    let l:gitignore_content = []
-    if a:filetype == 'c' && a:filetype == 'cpp'
-        call add(l:gitignore_content, "# CMake-generated file")
-        call add(l:gitignore_content, "_builds")
-        call add(l:gitignore_content, "compile_commands.json")
-        call add(l:gitignore_content, "\n")
-
-        call add(l:gitignore_content, "# fd dotfile")
-        call add(l:gitignore_content, ".fdignore")
-        call add(l:gitignore_content, "\n")
-
-        call add(l:gitignore_content, "# rg dotfile")
-        call add(l:gitignore_content, ".fdignore")
-        call add(l:gitignore_content, "\n")
-
-        call add(l:gitignore_content, "# Vim-generated file")
-        call add(l:gitignore_content, ".root")
-        call add(l:gitignore_content, ".project")
-        call add(l:gitignore_content, ".swp")
-        call add(l:gitignore_content, ".session")
-        call add(l:gitignore_content, "session")
-        call add(l:gitignore_content, "swp")
-        call add(l:gitignore_content, ".undo")
-        call add(l:gitignore_content, "undo")
-        call add(l:gitignore_content, "projectins.json")
-        call add(l:gitignore_content, ".ycm_extra_config.py")
-        call add(l:gitignore_content, '.notags')
-        call add(l:gitignore_content, "\n")
-        
-        call add(l:gitignore_content, "# object file")
-        call add(l:gitignore_content, "*.o")
-        call add(l:gitignore_content, "*.tmp") 
-        call add(l:gitignore_content, "*.bin")
-        call add(l:gitignore_content, "\n")
-
-        call writefile(l:gitignore_content, '.gitignore')
+    if a:filetype == 'c' ||  a:filetype == 'cpp'
+        try 
+            call system("cp ~/.config/nvim/tools/gitignore/c_gitignore " . getcwd() . "/.gitignore")
+        catch *
+            echomsg "Error in tools#create_gitignore()"
+        endtry
+    else
+        echomsg "This type don't impletemted"
     endif
 endfunction
 " }}}
@@ -151,4 +123,62 @@ function tools#scroll_adjacent_window(mode)
     endif
     noautocmd silent! wincmd p
 endfunction
+" }}}
+
+" Create Qt project {{{
+function tools#create_qt_project(type, to)
+    if a:type != "QMainWindow" && a:type != "QWidget" && a:type != "QDialog"
+        echoerr "Please input correct argument"
+    endif
+    if !isdirectory(a:to)
+        echoerr "Please input correct argument"
+    endif
+    call system("cp " . "$HOME/.config/nvim/tools/Qt/" . a:type . "/* " . a:to)
+endfunction
+" }}}
+
+" disassembly current file {{{
+"
+" only impletemt C and C++
+function tools#disassembly()
+    let path = ''
+    if &filetype == 'c'
+        let path = '/tmp/' . substitute(expand('%:t'), '\.c$', '\.s', '')
+        try
+            call system('gcc -S ' . expand('%') . ' -o ' . path)
+        catch *
+            echomsg "tools#disassembly: compile error"
+        endtry
+    elseif &filetype == 'cpp'
+        "Because symbol mangling, I disassembly from executable or object file 
+        let path = '/tmp/' . substitute(expand('%:t'), '\.\(cc\|cpp\)$', '\.s', '')
+        let executable = substitute(path, '\.s', '', '')
+        echomsg 'path: ' . path
+        echomsg 'executable: ' . executable
+        silent exec '!g++ -std=c++17 ' . expand('%') . ' -o ' . executable
+        echomsg 'system: ' . 'g++ -std=c++17 ' . expand('%') . ' -o ' . executable 
+        if v:shell_error
+            silent exec '!g++ -std=c++17 -c ' . expand('%') . ' -o ' . executable
+            echomsg 'system: ' . 'g++ -std=c++17 -c ' . expand('%') . ' -o ' . executable
+            if v:shell_error
+                echomsg "tools#disassembly: compile error"
+                return 
+            endif
+        endif
+        silent exec '!objdump -d -C -M sufix ' . executable . ' > ' . path
+        echomsg 'system: ' .'objdump -d -C -M sufix ' . executable . ' > ' . path
+        if v:shell_error
+            echomsg "tools#disassembly: objdump error"
+            return 
+        endif
+    else
+        echomsg &filetype . ' : not impletemted'
+    endif
+    echomsg 'vsp ' . path
+    call execute('vsp ' . path)
+    let src_window_id = win_getid(winnr('#'))
+    call win_gotoid(src_window_id)
+endfunction
+
+command -nargs=0 Disassembly call tools#disassembly()
 " }}}
