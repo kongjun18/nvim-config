@@ -1,99 +1,8 @@
 " (Neo)vim configuration
-" Last Change: 2020-11-11 
+" Last Change: 2020-11-28 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
-
-" functions ---{{{
-" if @dir exists, just exit.
-" if @dir not exists, create it
-function! s:ensure_dir_exist(dir)
-	if !isdirectory(a:dir)
-		call mkdir(a:dir, 'p')
-	endif
-endfunction
-
-" integrate LeaderF and Asynctask
-function! s:lf_task_source(...)
-	let rows = asynctasks#source(&columns * 48 / 100)
-	let source = []
-	for row in rows
-		let name = row[0]
-		let source += [name . '  ' . row[1] . '  : ' . row[2]]
-	endfor
-	return source
-endfunction
-
-
-function! s:lf_task_accept(line, arg)
-	let pos = stridx(a:line, '<')
-	if pos < 0
-		return
-	endif
-	let name = strpart(a:line, 0, pos)
-	let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
-	if name != ''
-		exec "AsyncTask " . name
-	endif
-endfunction
-
-function! s:lf_task_digest(line, mode)
-	let pos = stridx(a:line, '<')
-	if pos < 0
-		return [a:line, 0]
-	endif
-	let name = strpart(a:line, 0, pos)
-	return [name, 0]
-endfunction
-
-function! s:lf_win_init(...)
-	setlocal nonumber
-	setlocal nowrap
-endfunction
-
-
-" Determine whether neovim is lastest
-"
-" This function is hard-coded
-"
-" I write this function to determine whether install nvim-treesitter which
-" requires lastest neovim or not.
-"
-function! s:nvim_is_latest()
-    if !has('nvim')
-        return 0
-    endif
-    redir => l:s
-    silent! version
-    redir END
-    let l:version_verbose =  matchstr(l:s, 'NVIM v\zs[^\n]*')
-    let l:nvim_version = matchstr(l:version_verbose, '\d\.\d\.\d')
-    let l:nvim_version_list = split(l:nvim_version, '\.')
-    if l:nvim_version_list[0] != 0
-        return 0
-    elseif l:nvim_version_list[1] < 5
-        return 0
-    " Because lastest version is 0.5.0, so don't need check last number.
-    endif
-
-    let l:nvim_version_middle = matchstr(l:version_verbose, '\-\zs\d\+\ze\-')
-    let l:len = len(l:nvim_version_middle)
-    if l:len == 2
-        if l:nvim_version_middle < 40
-            return 0
-        endif
-    elseif l:len == 3
-        if l:nvim_version_middle < 812
-            return 0
-        endif
-    else
-        return 0
-    endif
-    return 1
-endfunction
-
-
-" ---}}}
 
 " general settings {{{
 if &compatible
@@ -148,27 +57,24 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrwSettings = 1
 let g:loaded_netrwFileHandlers = 1
-map j gj
-map k gk
-
 
 set path+=include
+set mouse=r
 set foldmethod=marker
 set laststatus=2    " always show status line
 set number
 set showtabline=2
 set noerrorbells    " No beep
-set visualbell      " Visual hint of error
 set undofile        " Persist undo history
 set backup          " Backup files
 set wildignore=*.o,*.obj,*.bin,*.img,*.lock,.git "Ignore files when expanding wildcards
 
-call s:ensure_dir_exist($HOME . '/.vim/backup')
-call s:ensure_dir_exist($HOME . '/.vim/swap')
-call s:ensure_dir_exist($HOME . '/.vim/undo')
-set backupdir=$HOME/.vim/backup//
-set directory=$HOME/.vim/swap//
-set undodir=$HOME/.vim/undo//
+call tools#ensure_dir_exist($HOME . '/.vim/.backup')
+call tools#ensure_dir_exist($HOME . '/.vim/.swap')
+call tools#ensure_dir_exist($HOME . '/.vim/.undo')
+set backupdir=$HOME/.vim/.backup//
+set directory=$HOME/.vim/.swap//
+set undodir=$HOME/.vim/.undo//
 
 set hlsearch    " Highlight matched pattern
 set incsearch   " Show matched pattern when type regex
@@ -176,8 +82,8 @@ set wrapscan    " Search wrap around the end of the file
 set nopaste     " Don't enable paste mode. 
 set ignorecase  " If type lowercase letter, search both lowercase and uppercase.
 set smartcase   " If type uppercase letter, only search uppercase letter.
-" set ttimeoutlen=100
-set timeoutlen=1300 " Spend more time to wait for user to type map
+set ttimeout
+set ttimeoutlen=50
 set encoding=utf-8  " Use utf-8 to encode string
 set termencoding=utf-8 
 set smartindent     " Do smart autoindenting when staring a new line 
@@ -214,7 +120,7 @@ endif
 
 " On Windows, use the Documents as default working directory
 if has('win32')
-	autocmd VimEnter * cd "$HOME\Documents"
+    autocmd VimEnter * cd "$HOME\Documents"
 endif
 
 " Fullscreen
@@ -254,7 +160,9 @@ let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
 
-command ToolEdit :vsp ~/.config/nvim/tools/tools.vim
+for keymap in  globpath(expand('~/.config/nvim'), 'keymap/*.vim', 0, 1)
+    exec "source " . keymap
+endfor
 " }}}
 
 " dein ----{{{
@@ -278,15 +186,14 @@ set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	" Vim enhacement
-	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
 	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
 	call dein#add('tweekmonster/startuptime.vim', {
 				\ 'lazy': 1,
 				\ 'on_cmd': ['StartupTime']
 				\ })                                              " Measure startup time
-	call dein#add('drmikehenry/vim-fixkey')                       " Use ALT in Vim
 	call dein#add('ryanoasis/vim-devicons')                       " Show icons of some file types
 	call dein#add('wincent/terminus')                             " Add some GUI feature for terminal Vim
 	call dein#add('vim-utils/vim-man')                            " Read man page in Vim
@@ -297,7 +204,6 @@ if dein#load_state('~/.config/nvim/plugged')
 	" Text edit
 	call dein#add('wellle/targets.vim')                           " Text objects
 	call dein#add('haya14busa/is.vim')                            " Some enhancement of incsearch
-	call dein#add('matze/vim-move')                               " Move text block in visual mode
 	call dein#add('tommcdo/vim-exchange')                         " Exchange two words or lines
 	call dein#add('SirVer/ultisnips', {
 				\ 'on_if':"has('python3')",
@@ -364,7 +270,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
 
 	" Language-enhancement
-    if s:nvim_is_latest()
+    if tools#nvim_is_latest()
         call dein#add('nvim-treesitter/nvim-treesitter')        " A syntax highlight plugin
         call dein#disable('vim-toml')                           " A syntax file of toml 
         call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
@@ -472,6 +378,7 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ })                                            " Echo parameters of function
 
 	" other
+    call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
 	call dein#add('voldikss/vim-translator')                    " Translator
 	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
 	call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})   " use UNIX command in Vim
@@ -491,7 +398,6 @@ endif
 if dein#check_install()                                         " Install plugins automatically
 	call dein#install()
 endif
-source ~/.config/nvim/tools/tools.vim                           " Some tools written in vimL
 filetype plugin indent on                                       " Use filetype-specific plugins
 syntax on
 
@@ -772,20 +678,13 @@ noremap <C-g> mG:GtagsCursor<CR>zz"}}}
 
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista#renderer#enable_icon = 1
-" let g:vista#renderer#icons = {
-" \   "function": "\uf794",
-" \   "variable": "\uf71b",
-" \  }
-let g:vista#extensions = ['vimwiki']"}}}
+let g:vista#extensions = ['vimwiki']
+noremap [ov :Vista<CR>
+noremap ]ov :Vista!<CR>
+noremap yov :Vista!!<CR>
+"}}}
 
 " -----------}}}
-
-" vim-commentary{{{
-
-autocmd FileType java,c,cpp,rust set commentstring=//\ %s
-" autocmd FileType java,c,cpp,rust set commentstring=/*\ %s\ */
-autocmd FileType asm set commentstring=#\ %s
-"}}}
 
 " indentLine{{{
 
@@ -935,9 +834,9 @@ endif
 " integrate LeaderF and Asynctask
 let g:Lf_Extensions = get(g:, 'Lf_Extensions', {})
 let g:Lf_Extensions.task = {
-			\ 'source': string(function('s:lf_task_source'))[10:-3],
-			\ 'accept': string(function('s:lf_task_accept'))[10:-3],
-			\ 'get_digest': string(function('s:lf_task_digest'))[10:-3],
+			\ 'source': string(function('tools#lf_task_source'))[10:-3],
+			\ 'accept': string(function('tools#lf_task_accept'))[10:-3],
+			\ 'get_digest': string(function('tools#lf_task_digest'))[10:-3],
 			\ 'highlights_def': {
 			\     'Lf_hl_funcScope': '^\S\+',
 			\     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
@@ -963,14 +862,15 @@ let g:asynctasks_term_rows = 20    " 设置纵向切割时，高度为 10
 let g:asynctasks_term_cols = 80    " 设置横向切割时，宽度为 80
 
 " " 编译、运行
-" noremap <F5> :AsyncTask file-build<cr>
 nnoremap  <Leader>fb :AsyncTask file-build<cr>
 nnoremap  <Leader>fr :AsyncTask file-run<cr>
-nnoremap  <leader>pg :AsyncTask cxx_project-configurate<CR>
-nnoremap  <Leader>pb :AsyncTask cxx_project-build<CR>
+nnoremap  <Leader>ft :Asynctask file-test<cr>
+nnoremap  <leader>pg :AsyncTask project-configurate<CR>
+nnoremap  <Leader>pb :AsyncTask project-build<CR>
 nnoremap  <Leader>pr :AsyncTask project-run<CR>
-nnoremap  <Leader>pd :AsyncTask cxx_project-clean<CR>
-nnoremap  <Leader>ft :Asynctask file-test<cr>"}}}
+nnoremap  <Leader>pc :AsyncTask project-clean<CR>
+nnoremap  <Leader>pt :Asynctask project-test<CR>
+"}}}
 
 "              vim-translator{{{
 
@@ -994,9 +894,9 @@ function <SID>PluginClean()
 	let unused_plugin_dir = dein#check_clean()
 	if len(unused_plugin_dir) == 0
 		echomsg "There is no unused plugin"
+        return 
 	endif
 	for dir in unused_plugin_dir
-		echomsg dir
 		try
 			call delete(dir, 'rf')
 		catch /.*/
@@ -1014,10 +914,10 @@ function <SID>PluginRecache()
 		echoerr "Error in <SID>PluginRecache"
     endtry
 endfunction
-nnoremap <Leader>pi :call dein#install()<CR>
-nnoremap <leader>pu :call dein#update()<CR>
-nnoremap <Leader>pc :call <SID>PluginClean()<CR>
-nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
+command! -nargs=0 PlugInstall call dein#install()
+command! -nargs=0 PlugUpdate call dein#update()
+command! -nargs=0 PlugClean call <SID>PluginClean()
+command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
 	" coc.nvim{{{
@@ -1065,7 +965,7 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 		endfunction
 
 		" Symbol renaming.
-		nmap <leader>rn <Plug>(coc-rename)
+		nmap <leader>rv <Plug>(coc-rename)
 
 		" Map function and class text objects
 		" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -1211,8 +1111,8 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 
 	let g:session_autosave = 'no'
 	let g:session_autoload = 'no'
-	call s:ensure_dir_exist($HOME . '/.vim/session')
-	let g:session_directory = "~/.vim/session"
+	call tools#ensure_dir_exist($HOME . '/.vim/.session')
+	let g:session_directory = "~/.vim/.session"
 	"}}}
 
 	" vim-tmux-navigator ---------{{{
@@ -1249,106 +1149,13 @@ nnoremap <Leader>pr :call <SID>PluginRecache()<CR>
 	let g:NERDToggleCheckAllLines = 1
 	" }}}
 
-" window shortcut {{{
-
-nnoremap <Leader>wt <C-w>T<CR>  " 将当前窗口移动为 tab
-
-nnoremap <Leader>wo <C-w>o  " 仅保留当前窗口，关闭其他窗口
-nnoremap <Leader>wc <C-w>c  " 关闭当前窗口
-nnoremap <Leader>wq <C-w>c  " close current window
-nnoremap <Leader>wjc <C-w>j<C-w>c<CR>kh " 关闭下面的窗口
-nnoremap <Leader>wkc <C-w>k<C-w>c<CR>
-nnoremap <Leader>whc <C-w>h<C-w>c<CR>kh
-nnoremap <Leader>wlc <C-w>l<C-w>c<CR>kh
-nnoremap <Leader>wjq <C-w>j<C-w>c<CR>kh " 关闭下面的窗口
-nnoremap <Leader>wkq <C-w>k<C-w>c<CR>
-nnoremap <Leader>whq <C-w>h<C-w>c<CR>kh
-nnoremap <Leader>wlq <C-w>l<C-w>c<CR>kh
-
-nnoremap <leader>wh :hide<CR>   " 隐藏当前窗口
-nnoremap <leader>wjh <C-w>j:hide<CR>3h
-nnoremap <leader>wkh <C-w>k:hide<CR>3h
-nnoremap <leader>whh <C-w>h:hide<CR>3h
-nnoremap <leader>wlh <C-w>l:hide<CR>3h
-
-nnoremap <Leader>wH <C-w>H      " 将当前窗口移动到左边
-nnoremap <Leader>wJ <C-w>J
-nnoremap <Leader>wL <C-w>L
-nnoremap <Leader>wK <C-w>K
-
-nnoremap <Leader>wv <C-w>v      " split current window
-nnoremap <Leader>ws <C-w>s      " vertical split current window
-
-nnoremap H <c-w>h
-nnoremap L <c-w>l
-nnoremap J <c-w>j
-nnoremap K <c-w>k
-
-nnoremap <Leader>w- <C-w>-             " decrease current window height
-nnoremap <Leader>w+ <C-w>+            " increase current window height
-nnoremap <leader>w, <C-w><            " decrease current window widen
-nnoremap <Leader>w. <C-w>>             " increase current window widen
-tnoremap <M-q> <C-\><C-n>       " 内置终端切换为 normal 模式
-nnoremap <M-m> :call tools#scroll_adjacent_window(1)<CR>
-nnoremap <M-p> :call tools#scroll_adjacent_window(0)<CR>
-" }}}
-
-" buffer shortcut{{{
-
-nnoremap <leader>bd :bdelete<CR>
-nnoremap <Leader><Tab> <C-^>
-
-" }}}
-
 " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
 
-" tab shortcut{{{
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
-nnoremap <leader>- gT
-nnoremap <leader>= gt
-
-"}}}
-
-" shortcut of open and source vimrc {{{
-if has('win32')
-	nnoremap <leader>ev :vsplit $HOME/_vimrc<CR>
-	nnoremap <leader>es :source $HOME/_vimrc<CR>
-elseif has('unix')
-	nnoremap <leader>ev :vsplit $HOME/.vimrc<CR>
-	nnoremap <leader>es :source $HOME/.vimrc<CR>
-endif"}}}
-
-" like unimpaired  -----------{{{
-
-" Quickfix mapping{{{
-noremap ]oq :cclose<CR>
-noremap [oq :copen<CR>"}}}
-
-" Vista setting mapping{{{
-noremap [ov :Vista<CR>
-noremap ]ov :Vista!<CR>
-noremap yov :Vista!!<CR>"}}}
-
-" enable/disable paste{{{
-noremap [op :setlocal paste<CR>
-noremap ]op :setlocal nopaste<CR>
-noremap yop :setlocal paste!<CR>"}}}
-
-" -----------}}}
-
 " nvim-treesitter {{{
-if s:nvim_is_latest()
+if tools#nvim_is_latest()
 lua << EOF
     require'nvim-treesitter.configs'.setup {
     ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
