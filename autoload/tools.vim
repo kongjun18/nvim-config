@@ -245,46 +245,6 @@ function! tools#nvim_is_latest()
 endfunction
 "}}}
 
-" Integrate LeaderF and Asynctask {{{
-function! tools#lf_task_source(...)
-tools#let rows = asynctasks#source(&columns * 48 / 100)
-	let source = []
-	for row in rows
-		let name = row[0]
-		let source += [name . '  ' . row[1] . '  : ' . row[2]]
-	endfor
-	return source
-endfunction
-
-
-function! tools#lf_task_accept(line, arg)
-	let pos = stridx(a:line, '<')
-	if pos < 0
-		return
-	endif
-	let name = strpart(a:line, 0, pos)
-	let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
-	if name != ''
-		exec "AsyncTask " . name
-	endif
-endfunction
-
-function! tools#lf_task_digest(line, mode)
-	let pos = stridx(a:line, '<')
-	if pos < 0
-		return [a:line, 0]
-	endif
-	let name = strpart(a:line, 0, pos)
-	return [name, 0]
-endfunction
-
-function! tools#lf_win_init(...)
-	setlocal nonumber
-	setlocal nowrap
-endfunction
-
-"}}}
-
 " Integrate lightline and ale {{{
 function! g:LightlineLinterWarnings() abort
 let l:counts = ale#statusline#Count(bufnr(''))
