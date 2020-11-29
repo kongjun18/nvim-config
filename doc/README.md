@@ -363,3 +363,5 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
    This is bug of `tools#scroll_adjacent_window()`. In insert mode, select code completion by coc.nvim, then scroll window, the cursor will move left. I have no idea why has this bug and how to fix it. I think the culprit could be autocmd related to cursor and window.
 
+6. When I install plugin, dein.vim blocks Vim.
+    it is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
