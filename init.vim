@@ -10,13 +10,13 @@ if &compatible
 endif
 
 let g:YCM_enabled = 0
-let s:grepper = 'grep'
-let s:findder = 'find'
+let g:grepper = 'grep'
+let g:findder = 'find'
 if executable('fd')
-	let s:findder = 'fd'
+	let g:findder = 'fd'
 endif
 if executable('rg')
-	let s:grepper = 'rg'
+	let g:grepper = 'rg'
     set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
 
@@ -264,7 +264,6 @@ if dein#load_state('~/.config/nvim/plugged')
 
 	" Status
 	call dein#add('itchyny/lightline.vim')                      " Status line
-	call dein#add('edkolev/tmuxline.vim')                       " Show tmux status when using tmux
 	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color 
 	call dein#add('itchyny/vim-cursorword')                     " Underline the word of cursor
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
@@ -560,8 +559,8 @@ let g:rainbow_conf = {
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
-let g:Lf_DefaultExternalTool = s:findder
-if s:findder == 'fd'
+let g:Lf_DefaultExternalTool = g:findder
+if g:findder == 'fd'
     let g:Lf_ExternalCommand = 'fd -E _builds --type f "%s"'           " On MacOSX/Linux
 endif
 let g:Lf_PreviewCode = 1
@@ -879,8 +878,7 @@ let g:Lf_Extensions.task = {
 			\     'Lf_hl_funcScope': '^\S\+',
 			\     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
 			\ },
-			\ }
-
+		\ }
 " integrate fugitive and Asyncrun
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 " edit tasks.init
@@ -1122,14 +1120,15 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	let wiki.auto_tags= 1
 	let wiki.nested_syntaxes = {'py': 'python', 'cpp': 'cpp', 'c': 'c', 'rs': 'rust', 'sh': 'bash', 'cmake': 'cmake', 'lua': 'lua'}
 	let g:vimwiki_list = [wiki]
-	nnoremap <Leader>ww :VimwikiIndex<CR>
+	nnoremap <Leader>vi :VimwikiIndex<CR>
+	nnoremap <Leader>vt :VimwikiTOC<CR>
+    nnoremap <Leader>vnl <Plug>VimwikiNextLink
 	" remap gl<Space> and gL<Space>: remove checkbox
 	nmap glt <Plug>VimwikiRemoveSingleCB
 	nmap gLt <Plug>VimwikiRemoveCBInList
 	" remap <C-Space>:
 	nmap zv <Plug>VimwikiToggleListItem
-	" VimwikiToc
-	nnoremap <Leader>vt :VimwikiTOC<CR>"}}}
+    "}}}
 
 	" vim-markdown {{{
 	let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
@@ -1140,8 +1139,9 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	" }}}
 
 	" md paste {{{
+    " all pictures reside on ./images/
 	let g:mdip_imdir_intext = "./images"
-	"设置默认图片名称。当图片名称没有给出时，使用默认图片名称
+    " when user don't provide picture name, use default name
 	nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
 	" --------}}}
 
@@ -1153,29 +1153,13 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	let g:session_directory = "~/.vim/.session"
 	"}}}
 
-	" vim-tmux-navigator ---------{{{
-	" let g:tmux_navigator_no_mappings = 1
-
-	" nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
-	" nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
-	" nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
-	" nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
-	" nnoremap <silent> <M-/> :TmuxNavigatePrevious<cr>
-	" " ------}}}
-
 	" nerdcommmenter ---{{{
 
 	" Add spaces after comment delimiters by default
 	let g:NERDSpaceDelims = 1
 
-	" Use compact syntax for prettified multi-line comments
-	let g:NERDCompactSexyComs = 1
-
-	" Align line-wise comment delimiters flush left instead of following code indentation
-	let g:NERDDefaultAlign = 'left'
-
-	" " Add your own custom formats or override the defaults
-	" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+	" Align line-wise comment delimiters both sides
+    let g:NERDDefaultAlign = 'both'
 
 	" Allow commenting and inverting empty lines (useful when commenting a region)
 	let g:NERDCommentEmptyLines = 1
