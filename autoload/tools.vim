@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2020-11-28 
+" Last Change: 2020-11-29 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -195,10 +195,20 @@ function tools#disassembly()
     else
         echomsg &filetype . ' : not impletemted'
     endif
+
     " echomsg 'vsp ' . path
-    call execute('vsp ' . path)
-    let src_window_id = win_getid(winnr('#'))
-    call win_gotoid(src_window_id)
+    if !bufexists(path) || bufexists(path) && empty(getbufinfo(path)[0].windows)
+        call execute('vsp ' . path)
+        " set autoread
+        " when we disassembly again, the buffer will change automatically 
+        call setbufvar(path, '&autoread', 1)
+        let src_window_id = win_getid(winnr('#'))
+        call win_gotoid(src_window_id)
+    else
+        if !bufloaded(path)
+            call bufload(path)
+        endif
+    endif
 endfunction
 
 command -nargs=0 Disassembly call tools#disassembly()
