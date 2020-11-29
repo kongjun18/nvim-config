@@ -6,6 +6,11 @@ sessions
 undo/
 plugged.plug/
 installer.sh
+.undo
+.session
+.sessions
+.backup
+.swap
 .notags
 .netrwhist
 .nvimlog
