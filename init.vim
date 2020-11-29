@@ -19,6 +19,7 @@ if executable('rg')
 	let g:grepper = 'rg'
     set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
+let g:project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
 
 " Leader
 let mapleader=' '
@@ -597,16 +598,25 @@ nnoremap <leader>lt :Leaderf task<CR>
 "       gutentags ----------------{{{
 
 " for debug
-" let g:gutentags_define_advanced_commands = 1
-" let g:gutentags_trace = 1
+function s:debug_gutentgs()
+    let g:gutentags_define_advanced_commands = 1
+    let g:gutentags_trace = 1
+endfunction
+
+function s:undebug_gutentags()
+    let g:gutentags_define_advanced_commands = 0
+    let g:gutentags_trace = 0
+endfunction
+
+command -nargs=0 DebugGutentags call s:debug_gutentgs()
+command -nargs=0 UndebugGutentags call s:undebug_gutentags()
 
 let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript']
 " 开启拓展支持
 let $GTAGSLABEL = 'native-pygments'
-" let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
 
 " gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
-let g:gutentags_project_root = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
+let g:gutentags_project_root = g:project_root_maker
 
 " 所生成的数据文件的名称
 let g:gutentags_ctags_tagfile = '.tag'
@@ -677,7 +687,6 @@ noremap <C-g> mG:GtagsCursor<CR>zz"}}}
 
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista#renderer#enable_icon = 1
-let g:vista#extensions = ['vimwiki']
 noremap [ov :Vista<CR>
 noremap ]ov :Vista!<CR>
 noremap yov :Vista!!<CR>
@@ -892,7 +901,7 @@ let g:asyncrun_open = 10
 " 任务结束时候响铃提醒
 let g:asyncrun_bell = 1
 " 设置项目根
-let g:asyncrun_rootmarks = ['.root', '.git', '.pro', 'Cargo.toml']
+let g:asyncrun_rootmarks = g:project_root_maker
 
 let g:asynctasks_term_rows = 20    " 设置纵向切割时，高度为 10
 let g:asynctasks_term_cols = 80    " 设置横向切割时，宽度为 80
