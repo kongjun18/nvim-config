@@ -66,16 +66,16 @@ python3 install.py --rust-completer
 ```sh
 .
 ├── after
-| 	└── ftplugin
-|		├── fish.vim
-|		├── jsonc.vim
-|		├── lua.vim
-|		├── markdown.vim
-|		├── qf.vim
-|		├── rust.vim
-|		└── vimwiki.vim
+│ 	└── ftplugin
+│		├── fish.vim
+│		├── jsonc.vim
+│		├── lua.vim
+│		├── markdown.vim
+│		├── qf.vim
+│		├── rust.vim
+│		└── vimwiki.vim
 ├── autoload
-| 	└── tools.vim
+│ 	└── tools.vim
 ├── coc-settings.json
 ├── colors
 │   ├── neodark.vim
