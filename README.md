@@ -1,8 +1,4 @@
 # Vim configuration for C/C++ and Rust development
-Github: https://github.com/kongjun18/nvim-config.git
-
-Gitee: https://github.com/kongjun18/nvim-config.git
-
 The repository is my personal configuration of (Neo)vim based on UNIX.
 
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
