@@ -8,9 +8,9 @@ The repository is my personal configuration of (Neo)vim based on UNIX.
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use (Neo)vim edit almost any files. My (Neo)vim is configured for C/C++, Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
+I use (Neo)vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
 
-Freeture list:
+Feature list:
 
 - build and run project in Vim
 - code completion
@@ -33,7 +33,7 @@ Compulsory:
 - universal ctags:     generate tag file
 
 Optional:
-- Latest **Neovim** with python3 and lua support
+- Latest **Neovim nightly** with Python3 support
 - rg(ripgrep):  a better grep
 - fd:           a faster find
 - gtags:        find reference, included file and so on
@@ -47,14 +47,12 @@ Optional:
 
 
 ## Installation
-Clone it, run sh install.sh in shell and then open (Neo)vim.
+Clone it, run `sh install.sh` in shell and then open (Neo)vim. (Neo)vim will install dein.nvim and other plugins automatically.
 ```sh
 git clone https://github.com/kongjun18/nvim-config.git --depth=1
 cd nvim-config
 sh install.sh
 ```
-(Neo)vim will install dein.nvim and other plugins automatically.
-
 By default, my configuration uses [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint source code. If you want to use [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe) and [ale](https://github.com/dense-analysis/ale), please set `g:YCM_enabled` defined in vimrc to 1. [coc.nvim](https://github.com/neoclide/coc.nvim) is better, so I recommend you to try it. I sustain the version of YCM and ALE simply because I can't install nodejs(10.12+) on my 32-bit xubuntu18.04. 
 
 YCM version only enables C/C++ defaultly. If you want to enable Rust support, go to the path of YouCompleteMe and run install.py.
@@ -317,12 +315,12 @@ tab mappings:
 
 Use [NerdCommemter](https://github.com/preservim/nerdcommenter) to comment/uncomment code.
 
-|  mappings   |                           meaning                            |
-| :---------: | :----------------------------------------------------------: |
-| \<Leader>cc |                        comment lines                         |
-| \<Leader>cu | https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txtuncomment lines |
-| \<Leader>cs |                         sexy comment                         |
-| \<Leader>ca |                     change comment style                     |
+|  mappings   |       meaning        |
+| :---------: | :------------------: |
+| \<Leader>cc |    comment lines     |
+| \<Leader>cu |   uncomment lines    |
+| \<Leader>cs |     sexy comment     |
+| \<Leader>ca | change comment style |
 
 NerdCommenter is the best commenter I have ever seen. It supports fine-grained control and is easy to use. Please read the doc of NerdCommenter.
 
@@ -351,11 +349,11 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
    ```
 
 
-3. When I set paste, something go wrong
+3. When I set paste, something goes wrong
 
    When paste is set, [Ultisnippet](https://github.com/SirVer/ultisnips) goes wrong. So don't use snippets when paste is  set.
 
-4. When I paste text, indent go wrong
+4. When I paste text, indent goes wrong
 
    You should set paste when pasting text. You can type `setlocal paste` or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt) mapping `[op`. If you want to disable paste, just type `]op`.
 
@@ -363,5 +361,5 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
    This is bug of `tools#scroll_adjacent_window()`. In insert mode, select code completion by coc.nvim, then scroll window, the cursor will move left. I have no idea why has this bug and how to fix it. I think the culprit could be autocmd related to cursor and window.
 
-6. When I install plugin, dein.vim blocks Vim.
-    it is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
+6. When I install plugin, Vim goes stuck.
+    It is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
