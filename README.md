@@ -1,4 +1,4 @@
-# My configuration of (Neo)vim
+# Vim configuration for C/C++ and Rust development
 Github: https://github.com/kongjun18/nvim-config.git
 
 Gitee: https://github.com/kongjun18/nvim-config.git
