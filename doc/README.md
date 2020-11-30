@@ -176,7 +176,7 @@ coc.nvim has full capability of LSP(language server protocal). Theoretically, co
 
 ### Dynamic check
 
-use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code completion](#My configuration of (Neo)vim#code completion).
+use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
 
 ![dynamic check](./images/dynamic-check.gif)
 
