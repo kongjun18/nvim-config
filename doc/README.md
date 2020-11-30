@@ -402,3 +402,7 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
 6. When I install plugin, Vim goes stuck.
     It is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
+
+# Thanks
+
+Thanks to every plugin author, they are true vimmers.
