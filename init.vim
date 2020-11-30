@@ -188,8 +188,9 @@ set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
-    call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	" Vim enhacement
+    call dein#add('preservim/nerdtree')                           " File system explorer
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
 	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
 	call dein#add('tweekmonster/startuptime.vim', {
@@ -925,7 +926,7 @@ nnoremap  <Leader>pc :AsyncTask project-clean<CR>
 nnoremap  <Leader>pt :Asynctask project-test<CR>
 "}}}
 
-"              vim-translator{{{
+" vim-translator{{{
 
 let g:translator_default_engines = ['google', 'bing', 'youdao']
 let g:translator_history_enable = 1
@@ -939,7 +940,8 @@ vmap <silent> <Leader>tw <Plug>TranslateWV
 nmap <silent> <Leader>tr <Plug>TranslateR
 vmap <silent> <Leader>tr <Plug>TranslateRV
 " Translate the text in clipboard
-nmap <silent> <Leader>tx <Plug>TranslateX"}}}
+nmap <silent> <Leader>tx <Plug>TranslateX
+"}}}
 
 " plugin shortcut{{{
 
@@ -1188,7 +1190,15 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	let g:NERDToggleCheckAllLines = 1
 	" }}}
 
-" abbreviation{{{
+" nerdtree {{{
+let NERDTreeRespectWildIgnore = 1
+augroup nerdtree
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup END
+"}}}
+    " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
