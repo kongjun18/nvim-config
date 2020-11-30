@@ -154,7 +154,7 @@ I don't want to define mapping for every task, but i integrate [Leaderf](https:/
 
 **note:** For some unknown reasons, If edit Rust file in directory which is not the root of project, run `cargo build` (task `project-build:cargo`) and then jump to file in quickfix, we will jump to empty file. So always edit Rust file in the root of project.
 
-![build-project](./doc/images/build-project.gif)
+![build-project](./images/build-project.gif)
 
 ### Code completion
 
@@ -168,13 +168,13 @@ Task `project-generate` would generate CMake project and place compile_commands.
 
 coc.nvim has full capability of LSP(language server protocal). Theoretically, coc.nvim supports all LSP. If you want to write other language(such as Lua), just find the corresponding LSP and configure coc.nvim.
 
-![code completion](./doc/images/code-completion.gif)
+![code completion](./images/code-completion.gif)
 
 ### Dynamic check
 
 use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
 
-![dynamic check](./doc/images/dynamic-check.gif)
+![dynamic check](./images/dynamic-check.gif)
 
 ### Source code tagging system
 
@@ -215,7 +215,7 @@ Sometimes, gutentags fails to generate gtags or ctags file and produce warning. 
 
 **note**: LSP-based tag system consumes more memory and CPU than static tag system. If you use languages which don't support overloaded function, static tag system is better.
 
-![tag](./doc/images/tag.gif)
+![tag](./images/tag.gif)
 
 ### Scroll adjacent window and quickfix without change focus
 
@@ -236,9 +236,9 @@ Implementation detail see keymap/window.vim and autoload/tools.vim
 
 **Note**: You can use them in insert mode.
 
-![scroll quickfix](./doc/images/scroll-quickfix.gif)
+![scroll quickfix](./images/scroll-quickfix.gif)
 
-![scroll-window](./doc/images/scroll-window.gif)
+![scroll-window](./images/scroll-window.gif)
 
 ### Disassembly current C/C++ file
 
@@ -251,7 +251,7 @@ I have created a command `:Disassembly` for it.
 
 `tools#disassembly()` is implemented synchronously. But up to now, I think its performance is acceptable. Once I think it is tool slow to bear, I will try to rewrite it asynchronously.
 
-![disassembly](./doc/images/disassembly.gif)
+![disassembly](./images/disassembly.gif)
 
 
 
@@ -273,7 +273,7 @@ All mapping prefix by `<Leader>l`.
 | \<Leaderf>lb |                    Find buffer                     |
 | \<Leaderf>lr | Use ripgrep to find pattern in the current project |
 
-![fuzzy find](./doc/images/fuzzy-find.gif)
+![fuzzy find](./images/fuzzy-find.gif)
 
 ### Operate window
 
@@ -334,7 +334,7 @@ tab mappings:
 |   \<Leader>-   | switch to previous tab |
 |   \<Leader>=   |   switch to next tab   |
 
-![window-operation](./doc/images/window-operation.gif)
+![window-operation](./images/window-operation.gif)
 
 ### Comment and uncomment
 
@@ -349,7 +349,7 @@ Use [NerdCommemter](https://github.com/preservim/nerdcommenter) to comment/uncom
 
 NerdCommenter is the best commenter I have ever seen. It supports fine-grained control and is easy to use. Please read the doc of NerdCommenter.
 
-![comment-uncomment](./doc/images/comment-uncomment.gif)
+![comment-uncomment](./images/comment-uncomment.gif)
 
 ### Open document
 
@@ -361,7 +361,7 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 |   gh    |            vertical open vim help             |
 |   gK    | open document in pop up window using coc.nvim |
 
-![open-document](./doc/images/open-docment.gif)
+![open-document](./images/open-docment.gif)
 
 ## Problem and Solution
 
