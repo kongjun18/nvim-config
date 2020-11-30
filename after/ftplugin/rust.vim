@@ -5,6 +5,7 @@
 " License: GPL-3.0
 
 setlocal makeprg=cargo\ $*
+nmap <silent> gi <Plug>(coc-implementation)
 setlocal errorformat=
 			\%-G,
 			\%-Gerror:\ aborting\ %.%#,

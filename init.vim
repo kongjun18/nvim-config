@@ -9,6 +9,7 @@ if &compatible
 	set nocompatible
 endif
 
+let g:only_use_static_tag = 0
 let g:YCM_enabled = 0
 let g:grepper = 'grep'
 let g:findder = 'find'
@@ -594,6 +595,19 @@ nnoremap <leader>lt :Leaderf task<CR>
 "}}}
 
 " tag system ------------{{{
+function! s:use_static_tag() abort
+	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+endfunction
+command -nargs=0 UseStaticTag call <SID>use_static_tag()
+
+nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 
 "       gutentags ----------------{{{
 
@@ -667,17 +681,11 @@ let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
 
-if g:YCM_enabled
+if g:YCM_enabled || g:only_use_static_tag
 	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-	nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-	nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
 endif
+
 " --------------}}}
 
 " gtags(global) {{{
@@ -990,10 +998,10 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 
 
 		" GoTo code navigation.
-		nmap <silent> gd <Plug>(coc-definition)
-		nmap <silent> gy <Plug>(coc-type-definition)
-		nmap <silent> gi <Plug>(coc-implementation)
-		nmap <silent> gr <Plug>(coc-references)
+        if !g:only_use_static_tag
+            nmap <silent> gd <Plug>(coc-definition)
+            nmap <silent> gs <Plug>(coc-references)
+        endif
 
 
 		" Use K to show documentation in preview window.
@@ -1111,8 +1119,8 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	" }}}
 
 	" vim-mam{{{
-	nnoremap <Leader>hm :Vman 2 <C-r><C-w><CR>
-	nnoremap <Leader>hh :vertical help <C-r><C-w><CR>
+	nnoremap gm :Vman 3 <C-r><C-w><CR>
+	nnoremap gh :vertical help <C-r><C-w><CR>
 	"}}}
 
 	" vimspector setting{{{
