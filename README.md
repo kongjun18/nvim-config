@@ -8,7 +8,7 @@ The repository is my personal configuration of (Neo)vim based on UNIX.
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use (Neo)vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
+I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
 
 Feature list:
 
@@ -107,7 +107,7 @@ python3 install.py --rust-completer
 - atoload: Some tools written in VimL.
 - coc-setting.json: Configuration of coc.nvim.
 - colors: Color scheme.
-- init.vim: Configuration file of (Neo)Vim.
+- init.vim: Configuration file of (Neo)vim.
 - keymap: Plugin-independent key mappings.
 - spell: Spell files. They may be no use to you.
 - tools: Some tools such as some gitignore templates.
@@ -134,7 +134,7 @@ Because dein.vim only provides functions, I add some simple commands.
 | PluginUpdate  |                 update all plugins                  |
 | PluginRecache |             recache plugin directories              |
 
-### Build and run project in (Neo)Vim
+### Build and run project in (Neo)vim
 
 Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. All tasks in ~/.config/nvim/tasks.ini. The following table shows some frequently-used tasks.
 
@@ -180,7 +180,32 @@ use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code com
 
 ![dynamic check](./doc/images/dynamic-check.gif)
 
-### Generate tag file automatically
+### Source code tagging system
+
+I use both static analysis tools([global(gtags)](https://www.gnu.org/software/global/) and [universial-ctags](https://github.com/universal-ctags/ctags)) and coc.nvim to index source code.
+
+static analysis tag system like gtags and ctags is powerful, scalable, but not smart enough. Gtags(integrated with [pygment](https://pygments.org/)) supports more than 50 languages and proficient in searching definition, symbol, reference, alignment, calling function, called function, including file. Ctags support more than 200 languages, but only proficient in searching definition. Both gtags and ctags are based on static symbol analysis, if you search overloaded function, you will get many functions with same name and need to select the correct one manually. 
+
+LSP-based tag system like functionalities coc.nvim provides is smart but not powerful enough. coc.nvim only supports reference, definition. I use coc.nvim to find definition and reference, use static tagging system find other things.
+
+Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file. 
+
+|       mapping       |                          meaning                           |
+| :-----------------: | :--------------------------------------------------------: |
+|         gd          |                      go to definition                      |
+|         gs          |                  go to symbol(reference)                   |
+|         gf          |                         go to file                         |
+|         gi          |    go to implementation(Rust) or including file(C/C++)     |
+|         ga          |         go to places where this symbol is assigned         |
+|         gc          |           go to functions calling this function            |
+|         gC          |          go to functions called by this function           |
+|         gt          |             go to places where match this text             |
+|         ge          |        go to places where match this egrep pattern         |
+|       \<C-g>        |    go to definition or reference using gtags directory     |
+| \<Localleader>p(zp) | preview definition of symbol under cursor in pop up window |
+| p(type in quickfix) |                preview tag in pop up window                |
+
+By default, `gd` and `gs` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim. 
 
 I use [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) and [vim-gutentags_plugs](https://github.com/skywind3000/gutentags_plus) to manage tag file.
 
@@ -191,6 +216,10 @@ Sometimes, gutentags fails to generate gtags or ctags file and produce warning. 
 ```vim
 :call tools#rm_gtags(asyncrun#get_root('%'))
 ```
+
+**note**: LSP-based tag system consumes more memory and CPU than static tag system. If you use languages which don't support overloaded function, static tag system is better.
+
+![tag](./doc/images/tag.gif)
 
 ### Scroll adjacent window and quickfix without change focus
 
@@ -326,7 +355,17 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
 ![comment-uncomment](./doc/images/comment-uncomment.gif)
 
+### Open document
 
+[vim-man](https://github.com/vim-utils/vim-man) enables viewing and navigating manual pages in Vim. coc.nvim enables viewing API doc in pop up window.
+
+| mapping |                    meaning                    |
+| :-----: | :-------------------------------------------: |
+|   gm    |          vertical open manual pages           |
+|   gh    |            vertical open vim help             |
+|   gK    | open document in pop up window using coc.nvim |
+
+![open-document](./doc/images/open-docment.gif)
 
 ## Problem and Solution
 

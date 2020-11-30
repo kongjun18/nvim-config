@@ -8,9 +8,9 @@ The repository is my personal configuration of (Neo)vim based on UNIX.
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use (Neo)vim edit almost any files. My (Neo)vim is configured for C/C++, Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
+I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
 
-Freeture list:
+Feature list:
 
 - build and run project in Vim
 - code completion
@@ -33,7 +33,7 @@ Compulsory:
 - universal ctags:     generate tag file
 
 Optional:
-- Latest **Neovim** with python3 and lua support
+- Latest **Neovim nightly** with Python3 support
 - rg(ripgrep):  a better grep
 - fd:           a faster find
 - gtags:        find reference, included file and so on
@@ -47,14 +47,12 @@ Optional:
 
 
 ## Installation
-Clone it, run sh install.sh in shell and then open (Neo)vim.
+Clone it, run `sh install.sh` in shell and then open (Neo)vim. (Neo)vim will install dein.nvim and other plugins automatically.
 ```sh
 git clone https://github.com/kongjun18/nvim-config.git --depth=1
 cd nvim-config
 sh install.sh
 ```
-(Neo)vim will install dein.nvim and other plugins automatically.
-
 By default, my configuration uses [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint source code. If you want to use [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe) and [ale](https://github.com/dense-analysis/ale), please set `g:YCM_enabled` defined in vimrc to 1. [coc.nvim](https://github.com/neoclide/coc.nvim) is better, so I recommend you to try it. I sustain the version of YCM and ALE simply because I can't install nodejs(10.12+) on my 32-bit xubuntu18.04. 
 
 YCM version only enables C/C++ defaultly. If you want to enable Rust support, go to the path of YouCompleteMe and run install.py.
@@ -109,7 +107,7 @@ python3 install.py --rust-completer
 - atoload: Some tools written in VimL.
 - coc-setting.json: Configuration of coc.nvim.
 - colors: Color scheme.
-- init.vim: Configuration file of (Neo)Vim.
+- init.vim: Configuration file of (Neo)vim.
 - keymap: Plugin-independent key mappings.
 - spell: Spell files. They may be no use to you.
 - tools: Some tools such as some gitignore templates.
@@ -136,7 +134,7 @@ Because dein.vim only provides functions, I add some simple commands.
 | PluginUpdate  |                 update all plugins                  |
 | PluginRecache |             recache plugin directories              |
 
-### Build and run project in (Neo)Vim
+### Build and run project in (Neo)vim
 
 Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. All tasks in ~/.config/nvim/tasks.ini. The following table shows some frequently-used tasks.
 
@@ -182,7 +180,32 @@ use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code com
 
 ![dynamic check](./images/dynamic-check.gif)
 
-### Generate tag file automatically
+### Source code tagging system
+
+I use both static analysis tools([global(gtags)](https://www.gnu.org/software/global/) and [universial-ctags](https://github.com/universal-ctags/ctags)) and coc.nvim to index source code.
+
+static analysis tag system like gtags and ctags is powerful, scalable, but not smart enough. Gtags(integrated with [pygment](https://pygments.org/)) supports more than 50 languages and proficient in searching definition, symbol, reference, alignment, calling function, called function, including file. Ctags support more than 200 languages, but only proficient in searching definition. Both gtags and ctags are based on static symbol analysis, if you search overloaded function, you will get many functions with same name and need to select the correct one manually. 
+
+LSP-based tag system like functionalities coc.nvim provides is smart but not powerful enough. coc.nvim only supports reference, definition. I use coc.nvim to find definition and reference, use static tagging system find other things.
+
+Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file. 
+
+|       mapping       |                          meaning                           |
+| :-----------------: | :--------------------------------------------------------: |
+|         gd          |                      go to definition                      |
+|         gs          |                  go to symbol(reference)                   |
+|         gf          |                         go to file                         |
+|         gi          |    go to implementation(Rust) or including file(C/C++)     |
+|         ga          |         go to places where this symbol is assigned         |
+|         gc          |           go to functions calling this function            |
+|         gC          |          go to functions called by this function           |
+|         gt          |             go to places where match this text             |
+|         ge          |        go to places where match this egrep pattern         |
+|       \<C-g>        |    go to definition or reference using gtags directory     |
+| \<Localleader>p(zp) | preview definition of symbol under cursor in pop up window |
+| p(type in quickfix) |                preview tag in pop up window                |
+
+By default, `gd` and `gs` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim. 
 
 I use [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) and [vim-gutentags_plugs](https://github.com/skywind3000/gutentags_plus) to manage tag file.
 
@@ -193,6 +216,10 @@ Sometimes, gutentags fails to generate gtags or ctags file and produce warning. 
 ```vim
 :call tools#rm_gtags(asyncrun#get_root('%'))
 ```
+
+**note**: LSP-based tag system consumes more memory and CPU than static tag system. If you use languages which don't support overloaded function, static tag system is better.
+
+![tag](./images/tag.gif)
 
 ### Scroll adjacent window and quickfix without change focus
 
@@ -317,18 +344,28 @@ tab mappings:
 
 Use [NerdCommemter](https://github.com/preservim/nerdcommenter) to comment/uncomment code.
 
-|  mappings   |                           meaning                            |
-| :---------: | :----------------------------------------------------------: |
-| \<Leader>cc |                        comment lines                         |
-| \<Leader>cu | https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txtuncomment lines |
-| \<Leader>cs |                         sexy comment                         |
-| \<Leader>ca |                     change comment style                     |
+|  mappings   |       meaning        |
+| :---------: | :------------------: |
+| \<Leader>cc |    comment lines     |
+| \<Leader>cu |   uncomment lines    |
+| \<Leader>cs |     sexy comment     |
+| \<Leader>ca | change comment style |
 
 NerdCommenter is the best commenter I have ever seen. It supports fine-grained control and is easy to use. Please read the doc of NerdCommenter.
 
 ![comment-uncomment](./images/comment-uncomment.gif)
 
+### Open document
 
+[vim-man](https://github.com/vim-utils/vim-man) enables viewing and navigating manual pages in Vim. coc.nvim enables viewing API doc in pop up window.
+
+| mapping |                    meaning                    |
+| :-----: | :-------------------------------------------: |
+|   gm    |          vertical open manual pages           |
+|   gh    |            vertical open vim help             |
+|   gK    | open document in pop up window using coc.nvim |
+
+![open-document](./images/open-docment.gif)
 
 ## Problem and Solution
 
@@ -351,11 +388,11 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
    ```
 
 
-3. When I set paste, something go wrong
+3. When I set paste, something goes wrong
 
    When paste is set, [Ultisnippet](https://github.com/SirVer/ultisnips) goes wrong. So don't use snippets when paste is  set.
 
-4. When I paste text, indent go wrong
+4. When I paste text, indent goes wrong
 
    You should set paste when pasting text. You can type `setlocal paste` or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt) mapping `[op`. If you want to disable paste, just type `]op`.
 
@@ -363,5 +400,5 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
    This is bug of `tools#scroll_adjacent_window()`. In insert mode, select code completion by coc.nvim, then scroll window, the cursor will move left. I have no idea why has this bug and how to fix it. I think the culprit could be autocmd related to cursor and window.
 
-6. When I install plugin, dein.vim blocks Vim.
-    it is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
+6. When I install plugin, Vim goes stuck.
+    It is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
