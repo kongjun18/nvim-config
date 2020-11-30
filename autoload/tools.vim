@@ -67,7 +67,7 @@ endfunction
 "
 " @complain neovim don't support win_execute(). What a pity!!!
 function tools#scroll_adjacent_window(dir, mode)
-    function! s:switch_to_insert(old_cursor, tail_cursor)
+    function! s:switch_to_insert(old_cursor, tail_cursor) abort
         if a:old_cursor == a:tail_cursor - 1
             noautocmd wincmd p
             startinsert!
@@ -92,17 +92,19 @@ function tools#scroll_adjacent_window(dir, mode)
         endif
         return 
     endif
-
-    if tabpagewinnr(tabpagenr(), '$') != 2
-        echomsg "More than two adjcent windows"
+    
+    " only one window?
+    if left_winnr == right_winnr
+        echomsg "Only a single window"
         if a:mode == 'i'
             call s:switch_to_insert(old_cursor, tail_cursor)
         endif
         return
     endif
 
-    if left_winnr == right_winnr
-        echomsg "Only a single window"
+    let win_num = tabpagewinnr(tabpagenr(), '$')
+    if  win_num != 2 && !(win_num == 3 && getqflist({'winid': 0}).winid != 0)
+        echomsg "More than two adjcent windows"
         if a:mode == 'i'
             call s:switch_to_insert(old_cursor, tail_cursor)
         endif
