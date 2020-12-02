@@ -18,5 +18,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
-add_executable(QtWidget main.cpp mainwindow.cpp mainwindow.h mainwindow.ui )
+add_executable(QtWidget main.cpp widget.cpp widget.h widget.ui )
 target_link_libraries(QtWidget PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
