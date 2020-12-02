@@ -30,3 +30,7 @@ psub
 i
 i
 vim
+gtags
+pygment
+ctags
+quickfix
