@@ -5,3 +5,4 @@
 " License: GPL-3.0
 
 setlocal nocursorline
+nnoremap <buffer> <silent> q :wincmd q<CR>

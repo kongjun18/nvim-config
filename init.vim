@@ -189,7 +189,14 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
 	" Vim enhacement
-    call dein#add('preservim/nerdtree')                           " File system explorer
+    call dein#add('kshenoy/vim-signature', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \})                        " Show marks
+    call dein#add('preservim/nerdtree', {
+                \ 'lazy': 1,
+                \ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark']
+                \ })                                              " File system explorer
     call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
 	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
@@ -263,7 +270,10 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                                            " Git wrapper of Vim
-	call dein#add('airblade/vim-gitgutter')                     " Show diff status
+    call dein#add('airblade/vim-gitgutter', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufRead'
+                \ })                     " Show diff status
 
 	" Status
 	call dein#add('itchyny/lightline.vim')                      " Status line
@@ -337,7 +347,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('sainnhe/edge') 				               " Defualt color scheme
 
 	" project management
-	call dein#add('Yggdroot/LeaderF')                          " Fuzzy finder
+	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
 	if (g:YCM_enabled)
         " using YCM and ALE
 		call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
@@ -579,10 +589,16 @@ let g:Lf_PreviewResult = {
 			\ 'Rg': 1,
 			\ 'Gtags': 1
 			\}
-" let g:Lf_GtagsAutoGenerate = 0
-" let g:Lf_GtagsGutentags = 1
-" let g:Lf_Gtagslabel = 'native-pygments'
-" let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_CtagsFuncOpts = {
+        \ 'c': ' --c-kinds=fp --exclude=_builds --exclude=doc',
+        \ 'cpp': '--c++-kinds=fp --exclude=_builds --exclude=doc',
+        \ 'rust': ' --rust-kinds=f --exclude=doc',
+        \ }
+" integrate LeaderF, guentags and gtags
+let g:Lf_CacheDirectory = expand('~')
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_GtagsGutentags = 1
+let g:Lf_Gtagslabel = 'native-pygments'
 let g:Lf_RootMarkers = ['.root', '.git', '.pro', 'Cargo.toml']   " 设置项目根目录标记
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>lf"
@@ -610,9 +626,9 @@ nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 
-"       gutentags ----------------{{{
+" gutentags ----------------{{{
 
-" for debug
+" For debug
 function s:debug_gutentgs()
     let g:gutentags_define_advanced_commands = 1
     let g:gutentags_trace = 1
@@ -623,20 +639,24 @@ function s:undebug_gutentags()
     let g:gutentags_trace = 0
 endfunction
 
+" If encounter error, please type :DebugGutentags to enable log.
+" After debug, type :UndebugGutentags to disable log.
 command -nargs=0 DebugGutentags call s:debug_gutentgs()
 command -nargs=0 UndebugGutentags call s:undebug_gutentags()
 
+" Exclude these types
 let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript']
-" 开启拓展支持
+
+" Use pygment to extend gtags
 let $GTAGSLABEL = 'native-pygments'
 
-" gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
+" Set root makers of project
 let g:gutentags_project_root = g:project_root_maker
 
-" 所生成的数据文件的名称
+" All ctags files suffixed with .tag' 
 let g:gutentags_ctags_tagfile = '.tag'
 
-" 同时开启 ctags 和 gtags 支持：
+" Use ctags and gtags
 let g:gutentags_modules = []
 if executable('ctags')
 	let g:gutentags_modules += ['ctags']
@@ -646,32 +666,21 @@ if executable('gtags-cscope') && executable('gtags')
 	let g:gutentags_modules += ['gtags_cscope']
 endif
 
-" 尽量使用universial-ctags，vista.vim不支持exuberant-ctags。
-" CentOS上可以使用snap安装。
-
-" 配置 ctags 的参数，老的 Exuberant-ctags 不能有 --extra=+q，注意
-
+" Please use universal-ctags instead of exuberant-ctags which is not maintained. Vista doesn't
+" support old exuberant-ctags.
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
-let g:gutentags_ctags_extra_args = ['--fields=+niazS']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--exclude=_builds']
 let g:gutentags_ctags_extra_args += ['--exclude=doc']
 let g:gutentags_ctags_extra_args += ['--exclude=plugged']
-
-
-" 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
-" 将自动生成的gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-if has('win32')
-	let g:gutentags_cache_dir = expand("C:Users\\kongjun\\Documents\\.cache\\tags")
-	let g:gutentags_gtags_dbpath ="C:Users\\kongjunDocuments\\.cache\\tags"
-elseif has('unix')
-	let g:gutentags_cache_dir = expand('~/.cache/tags')
-endif
+" Integrate Leaderf and gutentags
+" Put all gtags file in ~/.LfCache/gtags
+let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory . '/.LfCache/gtags')
 
-" 自动加载gtags_cscope数据库
+" Don't load gtags_cscope database automatically
 let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
@@ -847,7 +856,7 @@ else
 endif
 "}}}
 
-"       Asyncrun and Asynctask{{{
+" Asyncrun and Asynctask{{{
 " integrate LeaderF and Asynctask
 function! s:lf_task_source(...)
 	let rows = asynctasks#source(&columns * 48 / 100)
@@ -886,7 +895,6 @@ function! s:lf_win_init(...)
 	setlocal nowrap
 endfunction
 
-
 let g:Lf_Extensions = get(g:, 'Lf_Extensions', {})
 let g:Lf_Extensions.task = {
 			\ 'source': string(function('s:lf_task_source'))[10:-3],
@@ -897,25 +905,19 @@ let g:Lf_Extensions.task = {
 			\     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
 			\ },
 		\ }
-" integrate fugitive and Asyncrun
-command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-" edit tasks.init
+
+" Edit system-wide tasks.ini
 command! TaskEdit vsp ~/.config/nvim/tasks.ini
 
+" Run program in tab
 let g:asynctasks_term_pos = 'tab'
-
-" 自动打开 quickfix window ，高度为 10
+" Set quickfix window height 
 let g:asyncrun_open = 10
-
-" 任务结束时候响铃提醒
+" Bell when task finished
 let g:asyncrun_bell = 1
-" 设置项目根
+" Set root makers of project
 let g:asyncrun_rootmarks = g:project_root_maker
 
-let g:asynctasks_term_rows = 20    " 设置纵向切割时，高度为 10
-let g:asynctasks_term_cols = 80    " 设置横向切割时，宽度为 80
-
-" " 编译、运行
 nnoremap  <Leader>fb :AsyncTask file-build<cr>
 nnoremap  <Leader>fr :AsyncTask file-run<cr>
 nnoremap  <Leader>ft :Asynctask file-test<cr>
@@ -1198,6 +1200,7 @@ augroup nerdtree
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 "}}}
+
     " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
@@ -1219,3 +1222,5 @@ EOF
 endif
 
 " }}}
+
+command -nargs=0 EchoBufferPath :echo expand('%:p')<CR>
