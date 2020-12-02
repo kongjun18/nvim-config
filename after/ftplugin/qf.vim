@@ -6,3 +6,4 @@
 
 setlocal nocursorline
 nnoremap <buffer> <silent> q :wincmd q<CR>
+noremap <silent><buffer> p :call quickui#tools#preview_quickfix()<cr>
