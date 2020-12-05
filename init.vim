@@ -277,6 +277,7 @@ if dein#load_state('~/.config/nvim/plugged')
 
 	" Status
 	call dein#add('itchyny/lightline.vim')                      " Status line
+    call dein#add('lambdalisue/battery.vim')
 	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color 
 	call dein#add('itchyny/vim-cursorword')                     " Underline the word of cursor
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
@@ -377,10 +378,6 @@ if dein#load_state('~/.config/nvim/plugged')
 		call dein#disable('youcompleteme.git')
 		call dein#disable('ale')
 	endif
-	call dein#add('vim-scripts/DoxygenToolkit.vim', {
-				\ 'lazy': 1,
-				\ 'on_ft': ['c', 'cpp', 'python']
-				\ })                                             " Manage Doxygen
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
 	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
@@ -645,7 +642,7 @@ command -nargs=0 DebugGutentags call s:debug_gutentgs()
 command -nargs=0 UndebugGutentags call s:undebug_gutentags()
 
 " Exclude these types
-let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript']
+let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css']
 
 " Use pygment to extend gtags
 let $GTAGSLABEL = 'native-pygments'
@@ -735,8 +732,6 @@ nnoremap <Leader>bf :Autoformat<CR>
 " autopairs{{{
 
 let g:AutoPairsShortcutToggle = ''          " disable shortcut
-" enable fly-mode
-let g:AutoPairsFlyMode = 0                  " disable fly mode
 "}}}
 
 " vim-floaterm{{{
@@ -849,10 +844,6 @@ else
 	nnoremap <localleader>p :call quickui#tools#preview_tag('')<cr>
 	nnoremap <localleader>j :call quickui#preview#scroll(5)<cr>
 	nnoremap <localleader>k :call quickui#preview#scroll(-5)<cr>
-	augroup MyQuickfixPreview
-		au!
-		au FileType qf noremap <silent><buffer> p :call quickui#tools#preview_quickfix()<cr>
-	augroup END
 endif
 "}}}
 
@@ -1057,15 +1048,6 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 	endif
 	" }}}
 
-	" netrw{{{
-
-	let g:netrw_liststyle = 3
-	let g:netrw_banner = 0
-	let g:netrw_winsize = 25
-	let g:netrw_sort_by = 'time'
-	let g:netrw_srot_direction = 'reverse'
-	let g:netrw_browse_split = 2"}}}
-
 	" leetcode{{{
 
 	let g:leetcode_solution_filetype = ['c', 'cpp', 'rust']
@@ -1079,7 +1061,7 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 					\ 'colorscheme': 'edge',
 					\ 'active': {
 					\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
-					\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
+					\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok'], ['battery']]
 					\ },
 					\ 'component_function': {
 					\   'linter_warnings': 'LightlineLinterWarnings',
@@ -1087,7 +1069,8 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 					\   'linter_ok': 'LightlineLinterOK',
 					\   'gutentags': 'gutentags#statusline',
 					\   'gitbranch': 'FugitiveHead',
-					\   'dein': 'dein#get_progress'
+					\   'dein': 'dein#get_progress',
+                    \   'battery': 'battery#component'
 					\ },
 					\ 'component_type': {
 					\   'readonly': 'error',
@@ -1102,13 +1085,14 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 					\ 'colorscheme': 'edge',
 					\ 'active': {
 					\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
-					\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus']]
+					\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
 					\ },
 					\ 'component_function': {
 					\   'gutentags': 'gutentags#statusline',
 					\   'gitbranch': 'FugitiveHead',
 					\   'cocstatus': 'coc#status',
-					\   'dein': 'dein#get_progress'
+					\   'dein': 'dein#get_progress',
+                    \   'battery': 'battery#component'
 					\ },
 					\ 'component_type': {
 					\   'readonly': 'error',
@@ -1117,9 +1101,9 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 		autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 	endif
 	autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
-
-
-
+    let g:battery#update_statusline = 1
+    let g:battery#backend = 'linux'
+    let g:battery#symbol_charging = '⚡'
 	" }}}
 
 	" vim-mam{{{
@@ -1201,6 +1185,11 @@ augroup nerdtree
 augroup END
 "}}}
 
+" gitgutter {{{
+" Disable mappings
+let g:gitgutter_map_keys = 0
+"}}}
+
     " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
@@ -1223,4 +1212,4 @@ endif
 
 " }}}
 
-command -nargs=0 EchoBufferPath :echo expand('%:p')<CR>
+command -nargs=0 EchoBufferPath :echo expand('%:p')
