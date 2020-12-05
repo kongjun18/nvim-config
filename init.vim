@@ -378,6 +378,9 @@ if dein#load_state('~/.config/nvim/plugged')
 		call dein#disable('youcompleteme.git')
 		call dein#disable('ale')
 	endif
+    call dein#add('kkoomen/vim-doge', {
+                    \ 'hook_source_post': ':call doge#install()<CR>'
+                    \ }) " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
 	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
@@ -598,14 +601,14 @@ let g:Lf_GtagsGutentags = 1
 let g:Lf_Gtagslabel = 'native-pygments'
 let g:Lf_RootMarkers = ['.root', '.git', '.pro', 'Cargo.toml']   " 设置项目根目录标记
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
-let g:Lf_ShortcutF = "<Leader>lf"
-let g:Lf_ShortcutB = "<Leader>lb"
-nnoremap <Leader>lp :LeaderfFunction<CR>
-nnoremap <Leader>ll :LeaderfBufTagAll<CR>
-nnoremap <Leader>ld :LeaderfTag<CR>
-nnoremap <leader>lh :LeaderfHelp<CR>
-nnoremap <Leader>lr :Leaderf rg<Space><Right>
-nnoremap <leader>lt :Leaderf task<CR>
+let g:Lf_ShortcutF = "<Leader>f"
+let g:Lf_ShortcutB = "<Leader>bl"
+nnoremap <Leader>p :LeaderfFunction<CR>
+nnoremap <Leader>l :LeaderfBufTagAll<CR>
+nnoremap <Leader>d :LeaderfTag<CR>
+nnoremap <leader>h :LeaderfHelp<CR>
+nnoremap <Leader>rg :Leaderf rg<Space><Right>
+nnoremap <leader>T :Leaderf task<CR>
 "}}}
 
 " tag system ------------{{{
@@ -909,14 +912,12 @@ let g:asyncrun_bell = 1
 " Set root makers of project
 let g:asyncrun_rootmarks = g:project_root_maker
 
-nnoremap  <Leader>fb :AsyncTask file-build<cr>
-nnoremap  <Leader>fr :AsyncTask file-run<cr>
-nnoremap  <Leader>ft :Asynctask file-test<cr>
-nnoremap  <leader>pg :AsyncTask project-configurate<CR>
-nnoremap  <Leader>pb :AsyncTask project-build<CR>
-nnoremap  <Leader>pr :AsyncTask project-run<CR>
-nnoremap  <Leader>pc :AsyncTask project-clean<CR>
-nnoremap  <Leader>pt :Asynctask project-test<CR>
+nnoremap  <Tab>5 :AsyncTask file-build<cr>
+nnoremap  <Tab>6 :AsyncTask file-run<cr>
+nnoremap  <Tab>7 :AsyncTask project-configure<CR>
+nnoremap  <Tab>8 :AsyncTask project-build<CR>
+nnoremap  <Tab>9 :AsyncTask project-run<CR>
+nnoremap  <Tab>0 :AsyncTask project-clean<CR>
 "}}}
 
 " vim-translator{{{
@@ -1188,6 +1189,14 @@ augroup END
 " gitgutter {{{
 " Disable mappings
 let g:gitgutter_map_keys = 0
+"}}}
+
+" doge {{{
+let g:doge_enable_mappings = 0
+let doge_doc_standard_c = 'doxygen_javadoc_banner'
+let doge_doc_standard_cpp = 'doxygen_javadoc_banner'
+let g:doge_mapping_comment_jump_forward = '<C-j>'
+let doge_mapping_comment_jump_backward = '<C-k'
 "}}}
 
     " abbreviation{{{
