@@ -134,15 +134,15 @@ Because dein.vim only provides functions, I add some simple commands.
 
 Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. All tasks in ~/.config/nvim/tasks.ini. The following table shows some frequently-used tasks.
 
-|                  task                   |  mapping   |                       meaning                        |
-| :-------------------------------------: | :--------: | :--------------------------------------------------: |
-|               file-build                | <Leader>fb |                  build current file                  |
-|                file-run                 | <Leader>fr |                   run current file                   |
-|                asm-build                |    None    |         build current AT&T x86 assembly file         |
-|              project-build              | <Leader>pb |             build current C/C++ project              |
-|               project-run               | <Leader>pr | run executable with the same name of current project |
-|              project-clean              | <Leader>pc |                clean current project                 |
-| generate-compile-database-from-makefile |    None    |              generate compile database               |
+|                  task                   | mapping |                       meaning                        |
+| :-------------------------------------: | :-----: | :--------------------------------------------------: |
+|               file-build                | <Tab>5  |                  build current file                  |
+|                file-run                 | <Tab>6  |                   run current file                   |
+|                asm-build                |  None   |         build current AT&T x86 assembly file         |
+|              project-build              | <Tab>7  |             build current C/C++ project              |
+|               project-run               | <Tab>8  | run executable with the same name of current project |
+|              project-clean              | <Tab>9  |                clean current project                 |
+| generate-compile-database-from-makefile |  None   |              generate compile database               |
 
 Project-related tasks are defined for C/C++ project based on CMake. But  I also defined some [profiles](https://github.com/skywind3000/asynctasks.vim#task-with-different-profiles) to support diffrent tool chains(such as Makefile). If my tasks don't meet your demand, please modify it.
 
@@ -261,17 +261,15 @@ Use [LeaderF](https://github.com/Yggdroot/LeaderF) to fuzzy find everything.
 
 If there are [ripgrep](https://github.com/BurntSushi/ripgrep/) and [fd](https://github.com/sharkdp/fd), use them as low-level tools of LeaderF. Otherwise, use grep and find.
 
-All mapping prefix by `<Leader>l`.
-
 |   mapping    |                      meaning                       |
 | :----------: | :------------------------------------------------: |
-| \<Leaderf>lf |         Find files in the current project          |
-| \<Leaderf>lt |           Find available Asynctask task            |
-| \<Leaderf>ld |  Find symbol in the current project(using ctags)   |
-| \<LeaderF>lp |        Find function in the current buffer         |
-| \<LeaderF>ll |         Find symbol in the current buffer          |
-| \<Leaderf>lb |                    Find buffer                     |
-| \<Leaderf>lr | Use ripgrep to find pattern in the current project |
+| \<Leaderf>f  |         Find files in the current project          |
+| \<Leaderf>T  |           Find available Asynctask task            |
+| \<Leaderf>d  |  Find symbol in the current project(using ctags)   |
+| \<LeaderF>p  |        Find function in the current buffer         |
+| \<LeaderF>l  |         Find symbol in the current buffer          |
+| \<Leaderf>bl |                    Find buffer                     |
+| \<Leaderf>rg | Use ripgrep to find pattern in the current project |
 
 ![fuzzy find](./images/fuzzy-find.gif)
 
