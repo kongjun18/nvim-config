@@ -5,10 +5,10 @@
 " License: GPL-3.0
 
 " guard {{{
-if exists('loaded_tools_vim') || &cp || version < 700
-    finish
-endif
-let loaded_tools_vim = 1
+" if exists('loaded_tools_vim') || &cp || version < 700
+"     finish
+" endif
+" let loaded_tools_vim = 1
 " }}}
 
 " create_gitignore() -- Create gitignore template {{{
@@ -242,7 +242,8 @@ command -nargs=0 Disassembly call tools#disassembly()
 
 " nvim_is_latest() -- Determine whether neovim is lastest {{{
 "
-" This function is hard-coded
+" This function is hard-coded. Only check neovim is whether 0.5.0 or not because neovim installed in different ways has
+" different version output. 
 "
 " I write this function to determine whether install nvim-treesitter which
 " requires lastest neovim or not.
@@ -254,8 +255,8 @@ function! tools#nvim_is_latest()
     redir => l:s
     silent! version
     redir END
-    let l:version_verbose =  matchstr(l:s, 'NVIM v\zs[^\n]*')
-    let l:nvim_version = matchstr(l:version_verbose, '\d\.\d\.\d')
+    let l:version_message =  matchstr(l:s, 'NVIM v\zs[^\n]*')
+    let l:nvim_version = matchstr(l:version_message, '\d\.\d\.\d')
     let l:nvim_version_list = split(l:nvim_version, '\.')
     if l:nvim_version_list[0] != 0
         return 0
@@ -264,19 +265,6 @@ function! tools#nvim_is_latest()
         " Because lastest version is 0.5.0, so don't need check last number.
     endif
 
-    let l:nvim_version_middle = matchstr(l:version_verbose, '\-\zs\d\+\ze\-')
-    let l:len = len(l:nvim_version_middle)
-    if l:len == 2
-        if l:nvim_version_middle < 40
-            return 0
-        endif
-    elseif l:len == 3
-        if l:nvim_version_middle < 812
-            return 0
-        endif
-    else
-        return 0
-    endif
     return 1
 endfunction
 "}}}
