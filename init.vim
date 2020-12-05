@@ -161,7 +161,7 @@ let g:python_host_skip_check=1
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
-
+ 
 for keymap in  globpath(expand('~/.config/nvim'), 'keymap/*.vim', 0, 1)
     exec "source " . keymap
 endfor
@@ -189,6 +189,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
 	" Vim enhacement
+    " call dein#add('mg979/vim-visual-multi')
     call dein#add('kshenoy/vim-signature', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
@@ -380,7 +381,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	endif
     call dein#add('kkoomen/vim-doge', {
                     \ 'hook_source_post': ':call doge#install()<CR>'
-                    \ }) " Document code
+                    \ })                                         " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
 	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
@@ -574,7 +575,7 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
 let g:Lf_DefaultExternalTool = g:findder
 if g:findder == 'fd'
-    let g:Lf_ExternalCommand = 'fd -E _builds --type f "%s"'           " On MacOSX/Linux
+    let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'           " On MacOSX/Linux
 endif
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
@@ -589,11 +590,10 @@ let g:Lf_PreviewResult = {
 			\ 'Rg': 1,
 			\ 'Gtags': 1
 			\}
-let g:Lf_CtagsFuncOpts = {
-        \ 'c': ' --c-kinds=fp --exclude=_builds --exclude=doc',
-        \ 'cpp': '--c++-kinds=fp --exclude=_builds --exclude=doc',
-        \ 'rust': ' --rust-kinds=f --exclude=doc',
-        \ }
+let g:Lf_WildIgnore = {
+        \ 'dir': ['_builds', 'target', 'doc'],
+        \ 'file': ['*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
+        \}
 " integrate LeaderF, guentags and gtags
 let g:Lf_CacheDirectory = expand('~')
 let g:Lf_GtagsAutoGenerate = 0
