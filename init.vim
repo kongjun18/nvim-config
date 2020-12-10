@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2020-11-28 
+" Last Change: 2020-11-28
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -18,7 +18,7 @@ if executable('fd')
 endif
 if executable('rg')
 	let g:grepper = 'rg'
-    set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
+	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
 let g:project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
 
@@ -81,14 +81,14 @@ set undodir=$HOME/.vim/.undo//
 set hlsearch    " Highlight matched pattern
 set incsearch   " Show matched pattern when type regex
 set wrapscan    " Search wrap around the end of the file
-set nopaste     " Don't enable paste mode. 
+set nopaste     " Don't enable paste mode.
 set ignorecase  " If type lowercase letter, search both lowercase and uppercase.
 set smartcase   " If type uppercase letter, only search uppercase letter.
 set ttimeout
 set ttimeoutlen=50
 set encoding=utf-8  " Use utf-8 to encode string
-set termencoding=utf-8 
-set smartindent     " Do smart autoindenting when staring a new line 
+set termencoding=utf-8
+set smartindent     " Do smart autoindenting when staring a new line
 set cursorline      " Show current line
 set nowrap          " Don't wrap long line
 set linebreak       " Don't wrap lone line in the boundary of word
@@ -113,16 +113,16 @@ endif
 
 " suppress the output of external program
 "
-" I use fish shell, so give it extra attention  
+" I use fish shell, so give it extra attention
 if &shell =~? 'fish'
-	set shellpipe=&>\ %s        
+	set shellpipe=&>\ %s
 else
-	set shellpipe=>\ %s\ 2>&1   
+	set shellpipe=>\ %s\ 2>&1
 endif
 
 " On Windows, use the Documents as default working directory
 if has('win32')
-    autocmd VimEnter * cd "$HOME\Documents"
+	autocmd VimEnter * cd "$HOME\Documents"
 endif
 
 " Fullscreen
@@ -161,18 +161,18 @@ let g:python_host_skip_check=1
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
- 
+
 for keymap in  globpath(expand('~/.config/nvim'), 'keymap/*.vim', 0, 1)
-    exec "source " . keymap
+	exec "source " . keymap
 endfor
 " }}}
 
 " dein ----{{{
 if has('unix')
-    if empty(glob('~/.config/nvim/plugged'))
-            silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
-            autocmd VimEnter * call dein#install()
-    endif
+	if empty(glob('~/.config/nvim/plugged'))
+		silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
+		autocmd VimEnter * call dein#install()
+	endif
 endif
 
 " Substitute wget or curl with axel which is a multi-threaded downloader
@@ -189,16 +189,16 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#begin('~/.config/nvim/plugged')
 	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
 	" Vim enhacement
-    " call dein#add('mg979/vim-visual-multi')
-    call dein#add('kshenoy/vim-signature', {
-                \ 'lazy': 1,
-                \ 'on_event': 'BufReadPost'
-                \})                        " Show marks
-    call dein#add('preservim/nerdtree', {
-                \ 'lazy': 1,
-                \ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark']
-                \ })                                              " File system explorer
-    call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
+	" call dein#add('mg979/vim-visual-multi')
+	call dein#add('kshenoy/vim-signature', {
+				\ 'lazy': 1,
+				\ 'on_event': 'BufReadPost'
+				\})                        " Show marks
+	call dein#add('preservim/nerdtree', {
+				\ 'lazy': 1,
+				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark']
+				\ })                                              " File system explorer
+	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
 	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
 	call dein#add('tweekmonster/startuptime.vim', {
@@ -231,17 +231,17 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ })                                              " Some shortcuts should be built in Vim
 	call dein#add('junegunn/vim-easy-align')                      " Align code
 	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'}) " Indent indication
-    call dein#add('Chiel92/vim-autoformat')                        
+	call dein#add('Chiel92/vim-autoformat')
 	call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " A fork of machakann/vim-sandwich, using vim-surround mapping
 	call dein#add('machakann/vim-highlightedyank')                " Highlight yanked area
 	" call dein#add('vim-scripts/fcitx.vim', {
 	"             \ 'lazy': 1,
 	"             \ 'on_event': 'InsertEnter'
 	"             \ })
-    call dein#add('lilydjwg/fcitx.vim', {
-                  \ 'lazy': 1,
-                  \ 'on_event': 'InsertEnter'
-                  \ })
+	call dein#add('lilydjwg/fcitx.vim', {
+				\ 'lazy': 1,
+				\ 'on_event': 'InsertEnter'
+				\ })
 	" Leetcode
 	call dein#add('ianding1/leetcode.vim', {
 				\ 'lazy': 1,
@@ -256,7 +256,7 @@ if dein#load_state('~/.config/nvim/plugged')
 
 	" Tag system
 	call dein#add('vim-scripts/gtags.vim')                      " Integrate gtags(GNU Global) and Vim
-	call dein#add('liuchengxu/vista.vim')                       " Show tags in sidebar 
+	call dein#add('liuchengxu/vista.vim')                       " Show tags in sidebar
 	call dein#add('ludovicchabant/vim-gutentags')               " Generate tags automatically
 	call dein#add('skywind3000/gutentags_plus')                 " Switch cscope automatically
 
@@ -271,55 +271,60 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                                            " Git wrapper of Vim
-    call dein#add('airblade/vim-gitgutter', {
-                \ 'lazy': 1,
-                \ 'on_event': 'BufRead'
-                \ })                     " Show diff status
+	call dein#add('airblade/vim-gitgutter', {
+				\ 'lazy': 1,
+				\ 'on_event': 'BufRead'
+				\ })                     " Show diff status
 
 	" Status
 	call dein#add('itchyny/lightline.vim')                      " Status line
-    call dein#add('lambdalisue/battery.vim')
-	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color 
+	call dein#add('lambdalisue/battery.vim')
+	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color
 	call dein#add('itchyny/vim-cursorword')                     " Underline the word of cursor
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
 
 	" Language-enhancement
-    if tools#nvim_is_latest()
-        call dein#add('nvim-treesitter/nvim-treesitter')        " A syntax highlight plugin
-        call dein#disable('vim-toml')                           " A syntax file of toml 
-        call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
-    else
-        call dein#add('wsdjeg/vim-lua', {    
-                    \ 'lazy': 1,
-                    \ 'on_ft': 'lua'
-                    \ })                                        " A syntax file of Lua
-        call dein#add('elzr/vim-json', {
-                    \ 'lazy': 1,
-                    \ 'on_ft': 'json'
-                    \ })                                        " A syntax file of json
-        call dein#add('cespare/vim-toml', {
-                    \ 'lazy': 1,
-                    \ 'on_ft': 'toml'
-                    \ })
-        call dein#add('octol/vim-cpp-enhanced-highlight', {
-                    \ 'lazy': 1,
-                    \ 'on_ft': ['c', 'cpp']
-                    \ })
-        call dein#disable('nvim-treesitter')
-    endif
+	if tools#nvim_is_latest()
+		call dein#add('nvim-treesitter/nvim-treesitter', {
+					\ 'hook_source_post': ':TSUpdate',
+					\ })        " A syntax highlight plugin
+		call dein#add('nvim-treesitter/nvim-treesitter-textobjects', {
+					\ 'depends': 'nvim-treesitter'
+					\ })
+		call dein#disable('vim-toml')                           " A syntax file of toml
+		call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
+	else
+		call dein#add('wsdjeg/vim-lua', {
+					\ 'lazy': 1,
+					\ 'on_ft': 'lua'
+					\ })                                        " A syntax file of Lua
+		call dein#add('elzr/vim-json', {
+					\ 'lazy': 1,
+					\ 'on_ft': 'json'
+					\ })                                        " A syntax file of json
+		call dein#add('cespare/vim-toml', {
+					\ 'lazy': 1,
+					\ 'on_ft': 'toml'
+					\ })
+		call dein#add('octol/vim-cpp-enhanced-highlight', {
+					\ 'lazy': 1,
+					\ 'on_ft': ['c', 'cpp']
+					\ })
+		call dein#disable('nvim-treesitter')
+	endif
 	call dein#add('Townk/vim-qt', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'cpp'
-				\ })                                           " A syntax file of Qt 
+				\ })                                           " A syntax file of Qt
 	call dein#add('dag/vim-fish', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'fish'
 				\ })                                           " A syntax file of fish shell
 	" Writing
-    call dein#add('plasticboy/vim-markdown', {
-                \ 'lazy': 1,
-                \ 'on_ft': 'markdown'
-                \ })                                           " Enhance the support of markdown
+	call dein#add('plasticboy/vim-markdown', {
+				\ 'lazy': 1,
+				\ 'on_ft': 'markdown'
+				\ })                                           " Enhance the support of markdown
 	call dein#add('iamcco/markdown-preview.nvim', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
@@ -327,7 +332,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('mzlogin/vim-markdown-toc', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
-				\ })                                           " Generate TOC of markdown 
+				\ })                                           " Generate TOC of markdown
 	call dein#add('ferrine/md-img-paste.vim', {
 				\ 'lazy': 1,
 				\ 'on_ft': 'markdown'
@@ -346,12 +351,12 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('KeitaNakamura/neodark.vim')
 	call dein#add('laggardkernel/vim-one')
 	call dein#add('morhetz/gruvbox')
-	call dein#add('sainnhe/edge') 				               " Defualt color scheme
+	call dein#add('sainnhe/edge')							   " Defualt color scheme
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
 	if (g:YCM_enabled)
-        " using YCM and ALE
+		" using YCM and ALE
 		call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
 		call dein#add('dense-analysis/ale', {
 					\ 'lazy': 1,
@@ -359,29 +364,29 @@ if dein#load_state('~/.config/nvim/plugged')
 					\ 'depends': 'lightline.vim'
 					\ })
 		call dein#disable('coc.nvim')
-        call dein#disable('coc-clangd')
-        call dein#disable('coc-rust-analyzer')
+		call dein#disable('coc-clangd')
+		call dein#disable('coc-rust-analyzer')
 	else
-        " using coc.nvim
+		" using coc.nvim
 		call dein#add('neoclide/coc.nvim', {
 					\ 'rev': 'release',
 					\ 'lazy': 1,
 					\ 'on_event': 'BufReadPost'
 					\ })
-        call dein#add('clangd/coc-clangd', {
-                    \ 'build': 'yarn install --frozen-lockfile',
-                    \ 'depends': 'coc.nvim'
-                    \ })
-        call dein#add('fannheyward/coc-rust-analyzer', {
-                    \ 'build': 'yarn install --frozen-lockfile',
-                    \ 'depends': 'coc.nvim'
-                    \ })
+		call dein#add('clangd/coc-clangd', {
+					\ 'build': 'yarn install --frozen-lockfile',
+					\ 'depends': 'coc.nvim'
+					\ })
+		call dein#add('fannheyward/coc-rust-analyzer', {
+					\ 'build': 'yarn install --frozen-lockfile',
+					\ 'depends': 'coc.nvim'
+					\ })
 		call dein#disable('youcompleteme.git')
 		call dein#disable('ale')
 	endif
-    call dein#add('kkoomen/vim-doge', {
-                    \ 'hook_source_post': ':call doge#install()<CR>'
-                    \ })                                         " Document code
+	call dein#add('kkoomen/vim-doge', {
+				\ 'hook_source_post': ':call doge#install()<CR>'
+				\ })                                         " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
 	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
@@ -391,7 +396,7 @@ if dein#load_state('~/.config/nvim/plugged')
 				\ })                                            " Echo parameters of function
 
 	" other
-    call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
+	call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
 	call dein#add('voldikss/vim-translator')                    " Translator
 	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
 	call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})   " use UNIX command in Vim
@@ -453,7 +458,7 @@ if g:YCM_enabled
 				\ }
 
 	let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
-    let g:ycm_clangd_binary_path = exepath('clangd')
+	let g:ycm_clangd_binary_path = exepath('clangd')
 	" 禁止自动添加头文件
 	" 详细的补全建议
 	let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
@@ -575,7 +580,7 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
 let g:Lf_DefaultExternalTool = g:findder
 if g:findder == 'fd'
-    let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'           " On MacOSX/Linux
+	let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'           " On MacOSX/Linux
 endif
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
@@ -591,9 +596,9 @@ let g:Lf_PreviewResult = {
 			\ 'Gtags': 1
 			\}
 let g:Lf_WildIgnore = {
-        \ 'dir': ['_builds', 'target', 'doc'],
-        \ 'file': ['*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
-        \}
+			\ 'dir': ['_builds', 'target', 'doc'],
+			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
+			\}
 " integrate LeaderF, guentags and gtags
 let g:Lf_CacheDirectory = expand('~')
 let g:Lf_GtagsAutoGenerate = 0
@@ -603,7 +608,7 @@ let g:Lf_RootMarkers = ['.root', '.git', '.pro', 'Cargo.toml']   " 设置项目�
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>f"
 let g:Lf_ShortcutB = "<Leader>bl"
-nnoremap <Leader>p :LeaderfFunction<CR>
+nnoremap <Leader>p :LeaderfFunctionAll<CR>
 nnoremap <Leader>l :LeaderfBufTagAll<CR>
 nnoremap <Leader>d :LeaderfTag<CR>
 nnoremap <leader>h :LeaderfHelp<CR>
@@ -630,13 +635,13 @@ nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 
 " For debug
 function s:debug_gutentgs()
-    let g:gutentags_define_advanced_commands = 1
-    let g:gutentags_trace = 1
+	let g:gutentags_define_advanced_commands = 1
+	let g:gutentags_trace = 1
 endfunction
 
 function s:undebug_gutentags()
-    let g:gutentags_define_advanced_commands = 0
-    let g:gutentags_trace = 0
+	let g:gutentags_define_advanced_commands = 0
+	let g:gutentags_trace = 0
 endfunction
 
 " If encounter error, please type :DebugGutentags to enable log.
@@ -653,7 +658,7 @@ let $GTAGSLABEL = 'native-pygments'
 " Set root makers of project
 let g:gutentags_project_root = g:project_root_maker
 
-" All ctags files suffixed with .tag' 
+" All ctags files suffixed with .tag'
 let g:gutentags_ctags_tagfile = '.tag'
 
 " Use ctags and gtags
@@ -898,14 +903,14 @@ let g:Lf_Extensions.task = {
 			\     'Lf_hl_funcScope': '^\S\+',
 			\     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
 			\ },
-		\ }
+			\ }
 
 " Edit system-wide tasks.ini
 command! TaskEdit vsp ~/.config/nvim/tasks.ini
 
 " Run program in tab
 let g:asynctasks_term_pos = 'tab'
-" Set quickfix window height 
+" Set quickfix window height
 let g:asyncrun_open = 10
 " Bell when task finished
 let g:asyncrun_bell = 1
@@ -943,7 +948,7 @@ function <SID>PluginClean()
 	let unused_plugin_dir = dein#check_clean()
 	if len(unused_plugin_dir) == 0
 		echomsg "There is no unused plugin"
-        return 
+		return
 	endif
 	for dir in unused_plugin_dir
 		try
@@ -961,7 +966,7 @@ function <SID>PluginRecache()
 		call dein#recache_runtimepath()
 	catch /.*/
 		echoerr "Error in <SID>PluginRecache"
-    endtry
+	endtry
 endfunction
 command! -nargs=0 PlugInstall call dein#install()
 command! -nargs=0 PlugUpdate call dein#update()
@@ -969,220 +974,220 @@ command! -nargs=0 PlugClean call <SID>PluginClean()
 command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
-	" coc.nvim{{{
-	if !g:YCM_enabled
-		hi! CocErrorSign guifg=#d1666a
-		let g:coc_status_error_sign = "✖ "
-		let g:coc_status_warning_sign = "‼ "
+" coc.nvim{{{
+if !g:YCM_enabled
+	hi! CocErrorSign guifg=#d1666a
+	let g:coc_status_error_sign = "✖ "
+	let g:coc_status_warning_sign = "‼ "
 
-		" Use tab for trigger completion with characters ahead and navigate.
-		" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-		" other plugin before putting this into your config.
-		inoremap <silent><expr> <TAB>
-					\ pumvisible() ? "\<C-n>" :
-					\ <SID>check_back_space() ? "\<TAB>" :
-					\ coc#refresh()
-		inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+	" Use tab for trigger completion with characters ahead and navigate.
+	" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+	" other plugin before putting this into your config.
+	inoremap <silent><expr> <TAB>
+				\ pumvisible() ? "\<C-n>" :
+				\ <SID>check_back_space() ? "\<TAB>" :
+				\ coc#refresh()
+	inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-		function! s:check_back_space() abort
-			let col = col('.') - 1
-			return !col || getline('.')[col - 1]  =~# '\s'
-		endfunction
+	function! s:check_back_space() abort
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]  =~# '\s'
+	endfunction
 
-		nmap <silent> gN <Plug>(coc-diagnostic-prev)
-		nmap <silent> gn <Plug>(coc-diagnostic-next)
-
-
-		" GoTo code navigation.
-        if !g:only_use_static_tag
-            nmap <silent> gd <Plug>(coc-definition)
-            nmap <silent> gs <Plug>(coc-references)
-        endif
+	nmap <silent> gN <Plug>(coc-diagnostic-prev)
+	nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 
-		" Use K to show documentation in preview window.
-		nnoremap <silent> gK :call <SID>show_documentation()<CR>
-
-		function! s:show_documentation()
-			if (index(['vim','help'], &filetype) >= 0)
-				execute 'h '.expand('<cword>')
-			elseif (coc#rpc#ready())
-				call CocActionAsync('doHover')
-			else
-				execute '!' . &keywordprg . " " . expand('<cword>')
-			endif
-		endfunction
-
-		" Symbol renaming.
-		nmap <leader>rv <Plug>(coc-rename)
-
-		" Map function and class text objects
-		" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-		xmap if <Plug>(coc-funcobj-i)
-		omap if <Plug>(coc-funcobj-i)
-		xmap af <Plug>(coc-funcobj-a)
-		omap af <Plug>(coc-funcobj-a)
-		xmap ic <Plug>(coc-classobj-i)
-		omap ic <Plug>(coc-classobj-i)
-		xmap ac <Plug>(coc-classobj-a)
-		omap ac <Plug>(coc-classobj-a)
+	" GoTo code navigation.
+	if !g:only_use_static_tag
+		nmap <silent> gd <Plug>(coc-definition)
+		nmap <silent> gs <Plug>(coc-references)
+	endif
 
 
-		" Remap <C-f> and <C-b> for scroll float windows/popups.
-		" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
-		nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-		nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-		inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-		inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+	" Use K to show documentation in preview window.
+	nnoremap <silent> gK :call <SID>show_documentation()<CR>
 
-		" NeoVim-only mapping for visual mode scroll
-		" Useful on signatureHelp after jump placeholder of snippet expansion
-		if has('nvim')
-			vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
-			vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
+	function! s:show_documentation()
+		if (index(['vim','help'], &filetype) >= 0)
+			execute 'h '.expand('<cword>')
+		elseif (coc#rpc#ready())
+			call CocActionAsync('doHover')
+		else
+			execute '!' . &keywordprg . " " . expand('<cword>')
 		endif
+	endfunction
 
-		" Add `:Fold` command to fold current buffer.
-		command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+	" Symbol renaming.
+	nmap <leader>rv <Plug>(coc-rename)
 
-		autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+	" Map function and class text objects
+	" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+	xmap if <Plug>(coc-funcobj-i)
+	omap if <Plug>(coc-funcobj-i)
+	xmap af <Plug>(coc-funcobj-a)
+	omap af <Plug>(coc-funcobj-a)
+	xmap ic <Plug>(coc-classobj-i)
+	omap ic <Plug>(coc-classobj-i)
+	xmap ac <Plug>(coc-classobj-a)
+	omap ac <Plug>(coc-classobj-a)
+
+
+	" Remap <C-f> and <C-b> for scroll float windows/popups.
+	" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+	nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+	nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+	inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+	inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+	" NeoVim-only mapping for visual mode scroll
+	" Useful on signatureHelp after jump placeholder of snippet expansion
+	if has('nvim')
+		vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
+		vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
 	endif
-	" }}}
 
-	" leetcode{{{
+	" Add `:Fold` command to fold current buffer.
+	command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
-	let g:leetcode_solution_filetype = ['c', 'cpp', 'rust']
-	let g:leetcode_browser = 'firefox'
-	let g:leetcode_china = 1
-	"}}}
+	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+endif
+" }}}
 
-	"  lightline -{{{
-	if g:YCM_enabled
-		let g:lightline = {
-					\ 'colorscheme': 'edge',
-					\ 'active': {
-					\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
-					\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok'], ['battery']]
-					\ },
-					\ 'component_function': {
-					\   'linter_warnings': 'LightlineLinterWarnings',
-					\   'linter_errors': 'LightlineLinterErrors',
-					\   'linter_ok': 'LightlineLinterOK',
-					\   'gutentags': 'gutentags#statusline',
-					\   'gitbranch': 'FugitiveHead',
-					\   'dein': 'dein#get_progress',
-                    \   'battery': 'battery#component'
-					\ },
-					\ 'component_type': {
-					\   'readonly': 'error',
-					\   'linter_warnings': 'warning',
-					\   'linter_errors': 'error',
-					\   'linter_ok': 'ok'
-					\ },
-					\ }
-		autocmd User ALELint call lightline#update()
-	else
-		let g:lightline = {
-					\ 'colorscheme': 'edge',
-					\ 'active': {
-					\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
-					\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
-					\ },
-					\ 'component_function': {
-					\   'gutentags': 'gutentags#statusline',
-					\   'gitbranch': 'FugitiveHead',
-					\   'cocstatus': 'coc#status',
-					\   'dein': 'dein#get_progress',
-                    \   'battery': 'battery#component'
-					\ },
-					\ 'component_type': {
-					\   'readonly': 'error',
-					\ },
-					\ }
-		autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-	endif
-	autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
-    let g:battery#update_statusline = 1
-    let g:battery#backend = 'linux'
-    let g:battery#symbol_charging = '⚡'
-	" }}}
+" leetcode{{{
 
-	" vim-mam{{{
-	nnoremap gm :Vman 3 <C-r><C-w><CR>
-	nnoremap gh :vertical help <C-r><C-w><CR>
-	"}}}
+let g:leetcode_solution_filetype = ['c', 'cpp', 'rust']
+let g:leetcode_browser = 'firefox'
+let g:leetcode_china = 1
+"}}}
 
-	" vimspector setting{{{
-	let g:vimspector_enable_mappings = 'HUMAN'
-	"}}}
+"  lightline -{{{
+if g:YCM_enabled
+	let g:lightline = {
+				\ 'colorscheme': 'edge',
+				\ 'active': {
+				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
+				\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok'], ['battery']]
+				\ },
+				\ 'component_function': {
+				\   'linter_warnings': 'LightlineLinterWarnings',
+				\   'linter_errors': 'LightlineLinterErrors',
+				\   'linter_ok': 'LightlineLinterOK',
+				\   'gutentags': 'gutentags#statusline',
+				\   'gitbranch': 'FugitiveHead',
+				\   'dein': 'dein#get_progress',
+				\   'battery': 'battery#component'
+				\ },
+				\ 'component_type': {
+				\   'readonly': 'error',
+				\   'linter_warnings': 'warning',
+				\   'linter_errors': 'error',
+				\   'linter_ok': 'ok'
+				\ },
+				\ }
+	autocmd User ALELint call lightline#update()
+else
+	let g:lightline = {
+				\ 'colorscheme': 'edge',
+				\ 'active': {
+				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
+				\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
+				\ },
+				\ 'component_function': {
+				\   'gutentags': 'gutentags#statusline',
+				\   'gitbranch': 'FugitiveHead',
+				\   'cocstatus': 'coc#status',
+				\   'dein': 'dein#get_progress',
+				\   'battery': 'battery#component'
+				\ },
+				\ 'component_type': {
+				\   'readonly': 'error',
+				\ },
+				\ }
+	autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+endif
+autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
+let g:battery#update_statusline = 1
+let g:battery#backend = 'linux'
+let g:battery#symbol_charging = '⚡'
+" }}}
 
-	" vimwiki{{{
+" vim-mam{{{
+nnoremap gm :Vman 3 <C-r><C-w><CR>
+nnoremap gh :vertical help <C-r><C-w><CR>
+"}}}
 
-	let g:vimwiki_use_mouse = 1
-	let wiki = {}
-	let wiki.path =  '~/.vimwiki'
-	let wiki.path_html= '~/.vimwiki/html'
-	let wiki.html_header= '~/.vimwiki/tepmlate/header.tpl'
-	let wiki.auto_tags= 1
-	let wiki.nested_syntaxes = {'py': 'python', 'cpp': 'cpp', 'c': 'c', 'rs': 'rust', 'sh': 'bash', 'cmake': 'cmake', 'lua': 'lua'}
-	let g:vimwiki_list = [wiki]
-	nnoremap <Leader>vi :VimwikiIndex<CR>
-	nnoremap <Leader>vt :VimwikiTOC<CR>
-    nnoremap <Leader>vnl <Plug>VimwikiNextLink
-	" remap gl<Space> and gL<Space>: remove checkbox
-	nmap glt <Plug>VimwikiRemoveSingleCB
-	nmap gLt <Plug>VimwikiRemoveCBInList
-	" remap <C-Space>:
-	nmap zv <Plug>VimwikiToggleListItem
-    "}}}
+" vimspector setting{{{
+let g:vimspector_enable_mappings = 'HUMAN'
+"}}}
 
-	" vim-markdown {{{
-	let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
-    let g:vim_markdown_folding_disabled = 1
-    let g:vim_markdown_math = 1
-    let g:vim_markdown_strikethrough = 1
+" vimwiki{{{
 
-	" }}}
+let g:vimwiki_use_mouse = 1
+let wiki = {}
+let wiki.path =  '~/.vimwiki'
+let wiki.path_html= '~/.vimwiki/html'
+let wiki.html_header= '~/.vimwiki/tepmlate/header.tpl'
+let wiki.auto_tags= 1
+let wiki.nested_syntaxes = {'py': 'python', 'cpp': 'cpp', 'c': 'c', 'rs': 'rust', 'sh': 'bash', 'cmake': 'cmake', 'lua': 'lua'}
+let g:vimwiki_list = [wiki]
+nnoremap <Leader>vi :VimwikiIndex<CR>
+nnoremap <Leader>vt :VimwikiTOC<CR>
+nnoremap <Leader>vnl <Plug>VimwikiNextLink
+" remap gl<Space> and gL<Space>: remove checkbox
+nmap glt <Plug>VimwikiRemoveSingleCB
+nmap gLt <Plug>VimwikiRemoveCBInList
+" remap <C-Space>:
+nmap zv <Plug>VimwikiToggleListItem
+"}}}
 
-	" md paste {{{
-    " all pictures reside on ./images/
-	let g:mdip_imdir_intext = "./images"
-    " when user don't provide picture name, use default name
-	nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
-	" --------}}}
+" vim-markdown {{{
+let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_math = 1
+let g:vim_markdown_strikethrough = 1
 
-	" vim-session{{{
+" }}}
 
-	let g:session_autosave = 'no'
-	let g:session_autoload = 'no'
-	call tools#ensure_dir_exist($HOME . '/.vim/.session')
-	let g:session_directory = "~/.vim/.session"
-	"}}}
+" md paste {{{
+" all pictures reside on ./images/
+let g:mdip_imdir_intext = "./images"
+" when user don't provide picture name, use default name
+nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
+" --------}}}
 
-	" nerdcommmenter ---{{{
+" vim-session{{{
 
-	" Add spaces after comment delimiters by default
-	let g:NERDSpaceDelims = 1
+let g:session_autosave = 'no'
+let g:session_autoload = 'no'
+call tools#ensure_dir_exist($HOME . '/.vim/.session')
+let g:session_directory = "~/.vim/.session"
+"}}}
 
-	" Align line-wise comment delimiters both sides
-    let g:NERDDefaultAlign = 'both'
+" nerdcommmenter ---{{{
 
-	" Allow commenting and inverting empty lines (useful when commenting a region)
-	let g:NERDCommentEmptyLines = 1
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
 
-	" Enable trimming of trailing whitespace when uncommenting
-	let g:NERDTrimTrailingWhitespace = 1
+" Align line-wise comment delimiters both sides
+let g:NERDDefaultAlign = 'both'
 
-	" Enable NERDCommenterToggle to check all selected lines is commented or not
-	let g:NERDToggleCheckAllLines = 1
-	" }}}
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+" }}}
 
 " nerdtree {{{
 let NERDTreeRespectWildIgnore = 1
 augroup nerdtree
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+	autocmd StdinReadPre * let s:std_in=1
+	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 "}}}
 
@@ -1199,23 +1204,37 @@ let g:doge_mapping_comment_jump_forward = '<C-j>'
 let doge_mapping_comment_jump_backward = '<C-k'
 "}}}
 
-    " abbreviation{{{
+" abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
 
 " nvim-treesitter {{{
 if tools#nvim_is_latest()
-lua << EOF
-    require'nvim-treesitter.configs'.setup {
-    ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
-    highlight = {
-    enable = true,
-    },
-    indent = {
-    enable = flase,
-    }
-    }
+	lua << EOF
+	require'nvim-treesitter.configs'.setup {
+		ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
+		highlight = {
+			enable = true,
+		},
+		indent = {
+			enable = flase,
+		},
+		fold = {
+			enable = false,
+		},
+		textobjects = {
+			select = {
+				enable = true,
+			},
+			keymaps = {
+				["af"] = "@function.outer",
+				["if"] = "@function.inner",
+				["ac"] = "@class.outer",
+				["ic"] = "@class.inner",
+			},
+		},
+	}
 EOF
 endif
 
