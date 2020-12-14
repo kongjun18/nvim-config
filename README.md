@@ -136,12 +136,12 @@ Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. A
 
 |                  task                   | mapping |                       meaning                        |
 | :-------------------------------------: | :-----: | :--------------------------------------------------: |
-|               file-build                | <Tab>5  |                  build current file                  |
-|                file-run                 | <Tab>6  |                   run current file                   |
+|               file-build                | \<Tab>5  |                  build current file                  |
+|                file-run                 | \<Tab>6  |                   run current file                   |
 |                asm-build                |  None   |         build current AT&T x86 assembly file         |
-|              project-build              | <Tab>7  |             build current C/C++ project              |
-|               project-run               | <Tab>8  | run executable with the same name of current project |
-|              project-clean              | <Tab>9  |                clean current project                 |
+|              project-build              | \<Tab>7  |             build current C/C++ project              |
+|               project-run               | \<Tab>8  | run executable with the same name of current project |
+|              project-clean              | \<Tab>9  |                clean current project                 |
 | generate-compile-database-from-makefile |  None   |              generate compile database               |
 
 Project-related tasks are defined for C/C++ project based on CMake. But  I also defined some [profiles](https://github.com/skywind3000/asynctasks.vim#task-with-different-profiles) to support diffrent tool chains(such as Makefile). If my tasks don't meet your demand, please modify it.
