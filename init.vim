@@ -364,7 +364,6 @@ if dein#load_state('~/.config/nvim/plugged')
 					\ 'depends': 'lightline.vim'
 					\ })
 		call dein#disable('coc.nvim')
-		call dein#disable('coc-clangd')
 		call dein#disable('coc-rust-analyzer')
 	else
 		" using coc.nvim
@@ -372,10 +371,6 @@ if dein#load_state('~/.config/nvim/plugged')
 					\ 'rev': 'release',
 					\ 'lazy': 1,
 					\ 'on_event': 'BufReadPost'
-					\ })
-		call dein#add('clangd/coc-clangd', {
-					\ 'build': 'yarn install --frozen-lockfile',
-					\ 'depends': 'coc.nvim'
 					\ })
 		call dein#add('fannheyward/coc-rust-analyzer', {
 					\ 'build': 'yarn install --frozen-lockfile',
@@ -727,9 +722,9 @@ let g:indentLine_char_list = ['|', '¦', '┆', '┊']"}}}
 
 " use clang-format as default formatter
 " use mozilla style as default C/C++ style
-let g:formatdef_my_custom_c = '"clang-format --style=\"{BasedOnStyle: mozilla, IndentWidth: 4}\""'
-let g:formatters_c = ['my_custom_c']
-let g:formatters_cpp = ['my_custom_c']
+" let g:formatdef_my_custom_c = '"clang-format --style=\"{BasedOnStyle: mozilla, IndentWidth: 4}\""'
+" let g:formatters_c = ['my_custom_c']
+" let g:formatters_cpp = ['my_custom_c']
 
 " use lua-format as default lua formatter
 let g:formatdef_my_custom_lua = 'lua-format -i'
@@ -1000,8 +995,9 @@ if !g:YCM_enabled
 
 	" GoTo code navigation.
 	if !g:only_use_static_tag
-		nmap <silent> gd <Plug>(coc-definition)
-		nmap <silent> gs <Plug>(coc-references)
+		nmap <silent> gd <Plug>(coc-definition)zz
+		nmap <silent> gs <Plug>(coc-references)zz
+        nmap <silent> gt <Plug>(coc-type-definition)
 	endif
 
 
@@ -1241,3 +1237,7 @@ endif
 " }}}
 
 command -nargs=0 EchoBufferPath :echo expand('%:p')
+command -nargs=1 -complete=customlist,ListQtType CreateQt :call tools#create_qt_project('<args>', getcwd()) | :e main.cpp | :silent CocRestart
+function ListQtType(A, L, P)
+    return ["QMainWindow", "QWidget", "QDialog"]
+endfunction
