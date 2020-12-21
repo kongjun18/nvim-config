@@ -20,7 +20,7 @@ Feature list:
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.4+ with python3 support
 - Node 10.12:          for coc.nvim
-- clangd:              C++ LSP
+- ccls:              C++ LSP
 - rust-analyzer:       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
@@ -186,22 +186,22 @@ LSP-based tag system like functionalities coc.nvim provides is smart but not pow
 
 Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file. 
 
-|       mapping       |                          meaning                           |
-| :-----------------: | :--------------------------------------------------------: |
-|         gd          |                      go to definition                      |
-|         gs          |                  go to symbol(reference)                   |
-|         gf          |                         go to file                         |
-|         gi          |    go to implementation(Rust) or including file(C/C++)     |
-|         ga          |         go to places where this symbol is assigned         |
-|         gc          |           go to functions calling this function            |
-|         gC          |          go to functions called by this function           |
-|         gt          |             go to places where match this text             |
-|         ge          |        go to places where match this egrep pattern         |
-|       \<C-g>        |    go to definition or reference using gtags directory     |
-| \<Localleader>p(zp) | preview definition of symbol under cursor in pop up window |
-| p(type in quickfix) |                preview tag in pop up window                |
+|       mapping       |                           meaning                            |
+| :-----------------: | :----------------------------------------------------------: |
+|         gd          |                       go to definition                       |
+|         gs          |                   go to symbol(reference)                    |
+|         gf          |                          go to file                          |
+|         gi          |     go to implementation(Rust) or including file(C/C++)      |
+|         ga          |          go to places where this symbol is assigned          |
+|         gc          |            go to functions calling this function             |
+|         gC          |           go to functions called by this function            |
+|         gt          | go to places where match this text(gtags) or go to type definition(coc.nvim) |
+|         ge          |         go to places where match this egrep pattern          |
+|       \<C-g>        |     go to definition or reference using gtags directory      |
+| \<Localleader>p(zp) |  preview definition of symbol under cursor in pop up window  |
+| p(type in quickfix) |                 preview tag in pop up window                 |
 
-By default, `gd` and `gs` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim. 
+By default, `gd`,  `gs` , `gt`, `gc` and `gC` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim. 
 
 I use [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) and [vim-gutentags_plugs](https://github.com/skywind3000/gutentags_plus) to manage tag file.
 

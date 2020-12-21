@@ -998,6 +998,8 @@ if !g:YCM_enabled
 		nmap <silent> gd <Plug>(coc-definition)zz
 		nmap <silent> gs <Plug>(coc-references)zz
         nmap <silent> gt <Plug>(coc-type-definition)
+        nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+        nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 	endif
 
 
