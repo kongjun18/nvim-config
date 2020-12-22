@@ -1,5 +1,5 @@
 {
-    "coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
+	"coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",
@@ -9,28 +9,41 @@
 				"buildDirectory": "_build"
 			}
 		},
-        "lua": {
-            "cwd": "/usr/local/src/lua-language-server",
-            "command": "/usr/local/src/lua-language-server/bin/Linux/lua-language-server",
-            "args": ["-E", "-e", "LANG=en", "/usr/local/src/lua-language-server/main.lua"],
-            "filetypes": ["lua"],
-            "rootPatterns": [".git/", ".root"],
-            "settings": {
-                "Lua": {
-                    "runtime": {
-                        "version": "Lua 5.1"
-                    },
-                    "diagnostics": {
-                        "enable": true
-                    }
-                }
-            }
-        },
-    },
-    "diagnostic.errorSign": "✖",
-    "diagnostic.warningSign": "‼",
+		"lua": {
+			"cwd": "/usr/local/src/lua-language-server",
+			"command": "/usr/local/src/lua-language-server/bin/Linux/lua-language-server",
+			"args": ["-E", "-e", "LANG=en", "/usr/local/src/lua-language-server/main.lua"],
+			"filetypes": ["lua"],
+			"rootPatterns": [".git/", ".root"],
+			"settings": {
+				"Lua": {
+					"runtime": {
+						"version": "Lua 5.1"
+					},
+					"diagnostics": {
+						"enable": true
+					}
+				}
+			}
+		},
+		"ccls": {
+			"command": "ccls",
+			"filetypes": ["c", "cc", "cpp", "c++"],
+			"rootPatterns": [".ccls", "compile_commands.json", ".git/", ".root"],
+			"initializationOptions": {
+				"cache": {
+					"directory": ".cache/ccls"
+				},
+				"client": {
+					"snippetSupport": true
+				}
+			}
+		}
+	},
+	"diagnostic.errorSign": "✖",
+	"diagnostic.warningSign": "‼",
 
-    "suggest.enablePreview": true,
-    "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"],
+	"suggest.enablePreview": true,
+	// "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"],
 
 }
