@@ -37,7 +37,7 @@ Optional:
 - clang-format: format C/C++ code
 - cppcheck:     additional linter for C/C++
 - shellcheck:   linter for sh and bash
-- compiledb:    generate compile database for Makefile
+- bear:    generate compile database for Makefile
 - axel:         a multi-threaded downloader 
 
 
@@ -162,7 +162,7 @@ Use [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint code. 
 
 Use \<Tab> to select suggestions. \<C-n> select next suggestions and \<C-p> select previous one.
 
-For C/C++, You should generate [compile database](https://www.jetbrains.com/help/clion/compilation-database.html)(compile_command.json) and place it at the root of C/C++ project. If you use CMake, just put `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` in your CMakeLists.txt. If you use Makefile, you can use compiledb(insntall from pip) or bear to generate compile_command.json at the root.
+For C/C++, You should generate [compile database](https://www.jetbrains.com/help/clion/compilation-database.html)(compile_command.json) and place it at the root of C/C++ project. If you use CMake, just put `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` in your CMakeLists.txt. If you use Makefile, you can use compiledb or bear to generate compile_command.json at the root.
 
 Task `project-generate` would generate CMake project and place compile_commands.json to the root. `generate-compile-database-from-makefile` use compiledb to generate Makefile.
 
