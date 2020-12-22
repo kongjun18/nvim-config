@@ -1,14 +1,22 @@
 " Some tools for Vim
-" Last Change: 2020-11-29
+" Last Change: 2020-12-22 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
 " guard {{{
-" if exists('loaded_tools_vim') || &cp || version < 700
-"     finish
-" endif
-" let loaded_tools_vim = 1
+if exists('g:loaded_tools_vim') || &cp || version < 700
+    finish
+endif
+let g:loaded_tools_vim = 1
+if !exists('g:loaded_general_vim')
+    if has('unix')
+	    source ~/.config/nvim/autoload/general.vim
+    else
+        source ~/vimfiles/autoload/general.vim
+    endif
+endif
+
 " }}}
 
 " create_gitignore() -- Create gitignore template {{{
@@ -181,6 +189,14 @@ function tools#create_qt_project(type, to)
         echoerr "Please input correct argument"
     endif
     call system("cp " . "$HOME/.config/nvim/tools/Qt/" . a:type . "/* " . a:to)
+    call writefile("", ".root");
+    silent !cmake -S. -B_builds
+    call system("ln -s _builds/compile_commands.json .")
+    if !v:shell_error
+        echomsg "create_qt_project(): successfull"
+    else
+        echomsg "create_qt_project(): failed to copy templates"
+    endif
 endfunction
 " }}}
 

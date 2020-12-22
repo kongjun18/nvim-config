@@ -24,8 +24,7 @@ Compulsory:
 - rust-analyzer:       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
-- gcc, make and CMake: build YouCompleteMe
-- Python3.6+:          for YouCompleteMe, Ultisnips and other plugins
+- Python3.6+:          for [Ultisnips](https://github.com/SirVer/ultisnips), [LeaderF](https://github.com/Yggdroot/LeaderF) and other plugins
 - universal ctags:     generate tag file
 
 Optional:
@@ -49,17 +48,10 @@ git clone https://github.com/kongjun18/nvim-config.git --depth=1
 cd nvim-config
 sh install.sh
 ```
-By default, my configuration uses [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint source code. If you want to use [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe) and [ale](https://github.com/dense-analysis/ale), please set `g:YCM_enabled` defined in vimrc to 1. [coc.nvim](https://github.com/neoclide/coc.nvim) is better, so I recommend you to try it. I sustain the version of YCM and ALE simply because I can't install nodejs(10.12+) on my 32-bit xubuntu18.04. 
+By default, my configuration uses [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint source code. If you want to use [ale](https://githto ub.com/dense-analysis/ale) to lint code, please set `g:ALE_enabled`(defined in autoload/general.vim) to 1.
 
-YCM version only enables C/C++ defaultly. If you want to enable Rust support, go to the path of YouCompleteMe and run install.py.
-
-```sh
-cd ~/.config/nvim/plugged/repos/gitee.com/mirrors/youcompleteme
-python3 install.py --rust-completer
-```
 ## Structure of configuration
-
-```sh
+```
 .
 ├── after
 │ 	└── ftplugin
@@ -71,11 +63,14 @@ python3 install.py --rust-completer
 │		├── rust.vim
 │		└── vimwiki.vim
 ├── autoload
-│ 	└── tools.vim
+│ 	├── tools.vim
+|   ├── general.vim
+|   └── edge.vim
 ├── coc-settings.json
 ├── colors
 │   ├── neodark.vim
-│   └── one.vim
+│   ├── one.vim
+|   └── edge.vim
 ├── init.vim
 ├── install.sh
 ├── keymap
@@ -106,7 +101,9 @@ python3 install.py --rust-completer
 - init.vim: Configuration file of (Neo)vim.
 - keymap: Plugin-independent key mappings.
 - spell: Spell files. They may be no use to you.
-- tools: Some tools such as some gitignore templates.
+- autoload/tools.vim : Some tools such as gitignore templates.
+- autoload/general.vim: General setting
+- autoload/edge.vim and colors/edge.vim: Edge color scheme 
 - UltiSnips: Snippets. 
 
 ## Usage
@@ -363,30 +360,11 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
 ## Problem and Solution
 
-1. YouCompleteMe warnning: "requires Vim compiled with Python (3.6.0+) support."
+1. When I set paste, something goes wrong
 
-   Please add Python3(3.6.0+) support for Vim or Neovim. If you use Vim, please recompile it. If you use Neovim, please install pynvim via pip.
+   When paste is set, [Ultisnippet](https://github.com/SirVer/ultisnips) and coc.nvim go wrong. So only set paste when pasting text.
 
-   ```sh
-   pip3 install pynvim
-   ```
-
-2. YouCompleteMe warnning: "No module named 'ycmd'"
-
-   It is because you have not compile YCM.
-   Please go to the directory YCM resides and run:
-
-   ```sh
-   git submodule update --init --recursive
-   python3 install.py --clangd-completer
-   ```
-
-
-3. When I set paste, something goes wrong
-
-   When paste is set, [Ultisnippet](https://github.com/SirVer/ultisnips) goes wrong. So don't use snippets when paste is  set.
-
-4. When I paste text, indent goes wrong
+2. When I paste text, indent goes wrong
 
    You should set paste when pasting text. You can type `setlocal paste` or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt) mapping `[op`. If you want to disable paste, just type `]op`.
 
@@ -396,8 +374,9 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
 6. When I install plugin, Vim goes stuck.
 
-    It is not a problem. Both dein.vim and Vim work normally. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
+    dein.vim will block vim when installing plugins. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
 
 # Thanks
 
 Thanks to every plugin author, they are true vimmers.
+

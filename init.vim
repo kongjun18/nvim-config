@@ -4,190 +4,38 @@
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
-" general settings {{{
-if &compatible
-	set nocompatible
-endif
-
-let g:only_use_static_tag = 0
-let g:YCM_enabled = 0
-let g:grepper = 'grep'
-let g:findder = 'find'
-if executable('fd')
-	let g:findder = 'fd'
-endif
-if executable('rg')
-	let g:grepper = 'rg'
-	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
-endif
-let g:project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
-
-" Leader
-let mapleader=' '
-let maplocalleader='z'
-
-" Disable standard plugins except of matchit
-let g:loaded_gzip = 1
-let g:loaded_tar = 1
-let g:loaded_tarPlugin = 1
-let g:loaded_zip = 1
-let g:loaded_zipPlugin = 1
-let g:loaded_getscript = 1
-let g:loaded_getscriptPlugin = 1
-let g:loaded_vimball = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-let g:loaded_rrhelper = 1
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
-let g:loaded_gzip = 1
-let g:loaded_tar = 1
-let g:loaded_tarPlugin = 1
-let g:loaded_zip = 1
-let g:loaded_zipPlugin = 1
-let g:loaded_getscript = 1
-let g:loaded_getscriptPlugin = 1
-let g:loaded_vimball = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-let g:loaded_rrhelper = 1
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
-
-set path+=include
-set mouse=r
-set foldmethod=marker
-set laststatus=2    " always show status line
-set number
-set showtabline=2
-set noerrorbells    " No beep
-set undofile        " Persist undo history
-set backup          " Backup files
-set wildignore=*.o,*.obj,*.bin,*.img,*.lock,.git "Ignore files when expanding wildcards
-
-call tools#ensure_dir_exist($HOME . '/.vim/.backup')
-call tools#ensure_dir_exist($HOME . '/.vim/.swap')
-call tools#ensure_dir_exist($HOME . '/.vim/.undo')
-set backupdir=$HOME/.vim/.backup//
-set directory=$HOME/.vim/.swap//
-set undodir=$HOME/.vim/.undo//
-
-set hlsearch    " Highlight matched pattern
-set incsearch   " Show matched pattern when type regex
-set wrapscan    " Search wrap around the end of the file
-set nopaste     " Don't enable paste mode.
-set ignorecase  " If type lowercase letter, search both lowercase and uppercase.
-set smartcase   " If type uppercase letter, only search uppercase letter.
-set ttimeout
-set ttimeoutlen=50
-set encoding=utf-8  " Use utf-8 to encode string
-set termencoding=utf-8
-set smartindent     " Do smart autoindenting when staring a new line
-set cursorline      " Show current line
-set nowrap          " Don't wrap long line
-set linebreak       " Don't wrap lone line in the boundary of word
-set showmatch       " Highlight matched pair and bracket when insert it
-set expandtab       " Transform tab to space
-set tabstop=4       " One tap counts for 4 spaces
-set shiftwidth=4    " Use 4 spaces for each step of (auto)indent
-set noshowmode      " Don't use show current edit mode. I use lightline.
-set showcmd         " Show command in the last line of the screen.
-set noautochdir     " Don't change working directory automatically. I always launch Vim at the root of the project .
-set wildmenu        " Enhance command completion
-set wildmode=full   "
-set shortmess+=c    " Don't give ins-completion-menu messages
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-	set signcolumn=number
-else
-	set signcolumn=yes
-endif
-
-" suppress the output of external program
-"
-" I use fish shell, so give it extra attention
-if &shell =~? 'fish'
-	set shellpipe=&>\ %s
-else
-	set shellpipe=>\ %s\ 2>&1
-endif
-
-" On Windows, use the Documents as default working directory
-if has('win32')
-	autocmd VimEnter * cd "$HOME\Documents"
-endif
-
-" Fullscreen
-autocmd GUIEnter * simalt ~x
-" Delete tool bar, menu bar and scroll bar
-set guioptions-=m
-set guioptions-=T
-set guioptions-=L
-set guioptions-=R
-set guioptions-=r
-set guioptions-=l
-
-" Set GUI font
-if has('win32')
-	set guifont=Source_Code_Pro:h9:cANSI:qDRAFT
-elseif has('unix')
-	set guifont="Source Code Pro 10"
-endif
-
-" Turn on true color
-if has('nvim')
-	" Enable true color
-	set termguicolors
-elseif has('termguicolors')
-	" Fix bug for Vim
-	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-	set termguicolors
-else
-	" 8-bit color
-	set t_Co=256
-endif
-
-" Skip python search to accelerate startup time
-let g:python_host_skip_check=1
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_skip_check=1
-let g:python3_host_prog = '/usr/bin/python3'
-
-for keymap in  globpath(expand('~/.config/nvim'), 'keymap/*.vim', 0, 1)
-	exec "source " . keymap
-endfor
-" }}}
-
 " dein ----{{{
 if has('unix')
-	if empty(glob('~/.config/nvim/plugged'))
+	source ~/.config/nvim/autoload/general.vim
+else
+	source ~/vimfiles/autoload/general.vim
+endif
+
+if !filereadable(g:plugin_dir)
+    if g:is_unix
 		silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
 		autocmd VimEnter * call dein#install()
-	endif
+    else
+        :echomsg "Don't support windows"
+    endif
 endif
 
 " Substitute wget or curl with axel which is a multi-threaded downloader
 if executable('axel')
-	let g:dein#download_command = 'axel -n 4 -o'
+	let g:dein#download_command = 'axel -n 8 -o'
 endif
 
 " Don't clone deeply
 let g:dein#types#git#clone_depth = 1
-" Don't show progress in message. I use lightline to show grogress.
-let g:dein#install_progress_type = 'none'
-set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
-if dein#load_state('~/.config/nvim/plugged')
-	call dein#begin('~/.config/nvim/plugged')
-	call dein#add('~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim')
+let g:dein#install_message_type = 'none'
+if g:is_unix
+    set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
+else
+    set runtimepath+=~/vimfiles/nvim/plugged/repos/github.com/Shougo/dein.vim
+endif
+if dein#load_state(g:plugin_dir)
+    call dein#begin(g:plugin_dir)
+    call dein#add(g:dein_file)
 	" Vim enhacement
 	" call dein#add('mg979/vim-visual-multi')
 	call dein#add('kshenoy/vim-signature', {
@@ -355,16 +203,13 @@ if dein#load_state('~/.config/nvim/plugged')
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
-	if (g:YCM_enabled)
-		" using YCM and ALE
-		call dein#add('https://gitee.com/mirrors/youcompleteme.git', {'build': 'python3 install.py --clangd-completer'})                          " code completion for C/C++, Java and Rust.
+	if (g:ALE_enabled)
+		" using ALE instead of coc.nvim to lint code
 		call dein#add('dense-analysis/ale', {
 					\ 'lazy': 1,
 					\ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
 					\ 'depends': 'lightline.vim'
 					\ })
-		call dein#disable('coc.nvim')
-		call dein#disable('coc-rust-analyzer')
 	else
 		" using coc.nvim
 		call dein#add('neoclide/coc.nvim', {
@@ -376,7 +221,6 @@ if dein#load_state('~/.config/nvim/plugged')
 					\ 'build': 'yarn install --frozen-lockfile',
 					\ 'depends': 'coc.nvim'
 					\ })
-		call dein#disable('youcompleteme.git')
 		call dein#disable('ale')
 	endif
 	call dein#add('kkoomen/vim-doge', {
@@ -394,7 +238,7 @@ if dein#load_state('~/.config/nvim/plugged')
 	call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
 	call dein#add('voldikss/vim-translator')                    " Translator
 	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
-	call dein#add('tpope/vim-eunuch', {'on_if': has('unix')})   " use UNIX command in Vim
+	call dein#add('tpope/vim-eunuch', {'on_if': g:is_unix})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
@@ -419,51 +263,13 @@ syntax on
 " color scheme {{{
 set background=dark
 colorscheme edge
-" gruvbox
-let g:gruvbox_contrast_dark = 'soft'
 " edge
 let g:edge_style = 'neon'
 let g:edge_better_performance = 1
 " }}}
 
-"YouCompleteMe setting{{{
-if g:YCM_enabled
-	let g:ycm_auto_trigger = 1
-	let g:ycm_add_preview_to_completeopt = 0
-	let g:ycm_show_diagnostics_ui = 0
-	let g:ycm_server_log_level = 'info'
-	let g:ycm_min_num_identifier_candidate_chars = 2
-	let g:ycm_collect_identifiers_from_comments_and_strings = 1
-	let g:ycm_complete_in_strings=1
-	let g:ycm_key_invoke_completion = '<c-z>'
-	set completeopt=menu,menuone
-
-	noremap <c-z> <NOP>
-
-	let g:ycm_semantic_triggers =  {
-				\ 'c,cpp,rust,java,bash': ['re!\w{2}'],
-				\ 'lua': ['re!\w{2}'],
-				\ }
-
-	let g:ycm_filetype_whitelist = {
-				\ "c":1,
-				\ "cpp":1,
-				\ "rust":1,
-				\ "java":1,
-				\ }
-
-	let g:ycm_rust_src_path = '/home/kongjun/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
-	let g:ycm_clangd_binary_path = exepath('clangd')
-	" 禁止自动添加头文件
-	" 详细的补全建议
-	let g:ycm_clangd_args = [ '--header-insertion=never', '--completion-style=detailed']
-
-	let g:ycm_confirm_extra_conf = 0
-endif
-"}}}
-
 " ale {{{
-if g:YCM_enabled
+if g:ALE_enabled
 	let g:ale_enabled = 0
 	let g:ale_c_parse_compile_commands = 1
 	let g:ale_lint_on_text_changed = 'normal'
@@ -591,7 +397,7 @@ let g:Lf_PreviewResult = {
 			\ 'Gtags': 1
 			\}
 let g:Lf_WildIgnore = {
-			\ 'dir': ['_builds', 'target', 'doc'],
+			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
 			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
 			\}
 " integrate LeaderF, guentags and gtags
@@ -618,12 +424,9 @@ function! s:use_static_tag() abort
 endfunction
 command -nargs=0 UseStaticTag call <SID>use_static_tag()
 
-nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 
 " gutentags ----------------{{{
@@ -672,6 +475,7 @@ let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--exclude=_builds']
+let g:gutentags_ctags_extra_args += ['--exclude=.cache']
 let g:gutentags_ctags_extra_args += ['--exclude=doc']
 let g:gutentags_ctags_extra_args += ['--exclude=plugged']
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
@@ -691,9 +495,12 @@ let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
 
-if g:YCM_enabled || g:only_use_static_tag
+if g:only_use_static_tag
 	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
 	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+    nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+    nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+    nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 endif
 
 " --------------}}}
@@ -970,7 +777,7 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
 " coc.nvim{{{
-if !g:YCM_enabled
+if !g:ALE_enabled
 	hi! CocErrorSign guifg=#d1666a
 	let g:coc_status_error_sign = "✖ "
 	let g:coc_status_warning_sign = "‼ "
@@ -1060,11 +867,11 @@ let g:leetcode_china = 1
 "}}}
 
 "  lightline -{{{
-if g:YCM_enabled
+if g:ALE_enabled
 	let g:lightline = {
 				\ 'colorscheme': 'edge',
 				\ 'active': {
-				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
+				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
 				\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok'], ['battery']]
 				\ },
 				\ 'component_function': {
@@ -1073,7 +880,6 @@ if g:YCM_enabled
 				\   'linter_ok': 'LightlineLinterOK',
 				\   'gutentags': 'gutentags#statusline',
 				\   'gitbranch': 'FugitiveHead',
-				\   'dein': 'dein#get_progress',
 				\   'battery': 'battery#component'
 				\ },
 				\ 'component_type': {
@@ -1088,14 +894,13 @@ else
 	let g:lightline = {
 				\ 'colorscheme': 'edge',
 				\ 'active': {
-				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags', 'dein']],
+				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
 				\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
 				\ },
 				\ 'component_function': {
 				\   'gutentags': 'gutentags#statusline',
 				\   'gitbranch': 'FugitiveHead',
 				\   'cocstatus': 'coc#status',
-				\   'dein': 'dein#get_progress',
 				\   'battery': 'battery#component'
 				\ },
 				\ 'component_type': {
@@ -1158,8 +963,6 @@ nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
 
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
-call tools#ensure_dir_exist($HOME . '/.vim/.session')
-let g:session_directory = "~/.vim/.session"
 "}}}
 
 " nerdcommmenter ---{{{
