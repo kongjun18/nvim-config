@@ -14,19 +14,19 @@ let g:loaded_general_vim = 1
 if has('unix')
     let g:is_unix = 1
     let g:is_windows = 0
-    let g:vimrc = "~/.config/nvim/init.vim"
-    let g:vimfiles = "~/.config/nvim"
-    let g:plugin_dir = "~/.config/nvim/plugged"
-    let g:backup_dir = "~/.config/nvim/.backup"
-    let g:swap_dir = "~/.config/nvim/.swap"
-    let g:undo_dir = "~/.config/nvim/.undo"
-    let g:session_dir = "~/.config/nvim/.session"
+    let g:vimrc = $HOME . "/.config/nvim/init.vim"
+    let g:vimfiles = $HOME . "/.config/nvim"
+    let g:plugin_dir = $HOME . "/.config/nvim/plugged"
+    let g:backup_dir = $HOME . "/.config/nvim/.backup"
+    let g:swap_dir = $HOME . "/.config/nvim/.swap"
+    let g:undo_dir = $HOME . "/.config/nvim/.undo"
+    let g:session_dir = $HOME . "/.config/nvim/.session"
 elseif has('win32')
     let g:is_windows = 1
     let g:is_unix = 0
-    let g:vimrc = "~/_vimrc"
-    let g:vimfiles = "~/vimfiles"
-    let g:plugin_dir = "~/vimfiles/plugged"
+    let g:vimrc = $HOME . "/_vimrc"
+    let g:vimfiles = $HOME . "/vimfiles"
+    let g:plugin_dir = $HOME . "/vimfiles/plugged"
 endif
 let g:dein_file = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 let g:only_use_static_tag = 0
