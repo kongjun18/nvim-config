@@ -21,14 +21,19 @@ if has('unix')
     let g:swap_dir = $HOME . "/.config/nvim/.swap"
     let g:undo_dir = $HOME . "/.config/nvim/.undo"
     let g:session_dir = $HOME . "/.config/nvim/.session"
+    let g:dein_file = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 elseif has('win32')
     let g:is_windows = 1
     let g:is_unix = 0
-    let g:vimrc = $HOME . "/_vimrc"
-    let g:vimfiles = $HOME . "/vimfiles"
-    let g:plugin_dir = $HOME . "/vimfiles/plugged"
+    let g:vimrc = $HOME . "\\_vimrc"
+    let g:vimfiles = $HOME . "\\vimfiles"
+    let g:plugin_dir = $HOME . "\\vimfiles\\plugged"
+    let g:backup_dir = $HOME . "\\vimfiles\\.backup"
+    let g:swap_dir = $HOME . "\\vimfiles\\.swap"
+    let g:undo_dir = $HOME . "\\vimfiles\\.undo"
+    let g:session_dir = $HOME . "\\vimfiles\\.session"
+    let g:dein_file = g:plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
 endif
-let g:dein_file = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 let g:only_use_static_tag = 0
 let g:ALE_enabled = 0
 let g:grepper = 'grep'
@@ -156,12 +161,7 @@ set guioptions-=R
 set guioptions-=r
 set guioptions-=l
 
-" Set GUI font
-if g:is_windows
-	set guifont=Source_Code_Pro:h9:cANSI:qDRAFT
-elseif g:is_unix
-	set guifont="Source Code Pro 10"
-endif
+set guifont=Source_Code_Pro:h12:cANSI:qDRAFT
 
 " Turn on true color
 if has('nvim')
@@ -185,7 +185,13 @@ if g:is_unix
     let g:python3_host_prog = '/usr/bin/python3'
 endif
 
-for keymap in  globpath(expand('~/.config/nvim'), 'keymap/*.vim', 0, 1)
-	exec "source " . keymap
+" Sourece keymap setting 
+for keymap in  globpath(g:vimfiles, 'keymap/*.vim', 0, 1)
+    exec "source " . keymap
 endfor
-" }}}
+
+" Automatically change working directory to Documents
+if g:is_windows
+    autocmd VimEnter * cd ~/Documents
+endif
+"}}}

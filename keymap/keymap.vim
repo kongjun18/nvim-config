@@ -9,12 +9,12 @@ map k gk
 map <C-o> <C-o>zz
 map <C-i> <C-i>zz
 
-if has('win32')
-	nnoremap <leader>ev :vsplit $HOME/_vimrc<CR>
-	nnoremap <leader>es :source $HOME/_vimrc<CR>
-elseif has('unix')
+if g:is_unix
 	nnoremap <leader>ev :vsplit $HOME/.vimrc<CR>
 	nnoremap <leader>es :source $HOME/.vimrc<CR>
+else
+	nnoremap <leader>ev :vsplit $HOME/_vimrc<CR>
+	nnoremap <leader>es :source $HOME/_vimrc<CR>
 endif
 
 
