@@ -12,12 +12,12 @@ map <C-i> <C-i>zz
 if g:is_unix
 	nnoremap <leader>ev :vsplit $HOME/.vimrc<CR>
 	nnoremap <leader>es :source $HOME/.vimrc<CR>
+    command ToolEdit :vsp ~/.config/nvim/autoload/tools.vim
 else
 	nnoremap <leader>ev :vsplit $HOME/_vimrc<CR>
 	nnoremap <leader>es :source $HOME/_vimrc<CR>
+    command ToolEdit :vsp ~/vimfiles/autoload/tools.vim
 endif
 
-
-command ToolEdit :vsp ~/.config/nvim/autoload/tools.vim
 nnoremap <Leader>et :ToolEdit<CR>
 
