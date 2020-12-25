@@ -6,6 +6,10 @@
 
 map j gj
 map k gk
+map <C-f> <C-f>zz
+map <C-b> <C-b>zz
+map <C-d> <C-d>zz
+map <C-u> <C-u>zz
 map <C-o> <C-o>zz
 map <C-i> <C-i>zz
 
