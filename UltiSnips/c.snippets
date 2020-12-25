@@ -72,7 +72,7 @@ snippet guard "Include header once only guard"
 if not snip.c:
 	import random, string
 	name = re.sub(r'[^A-Za-z0-9]+','_', snip.fn).upper()
-	snip.rv = ('%s' % (name)).upper()
+	snip.rv = ('__%s__' % (name)).upper()
 else:
 	snip.rv = snip.c`}
 #define $1
