@@ -1041,6 +1041,7 @@ endif
 
 " }}}
 
+command -nargs=0 W :w | A
 command -nargs=0 EchoBufferPath :echo expand('%:p')
 command -nargs=1 -complete=customlist,ListQtType CreateQt :call tools#create_qt_project('<args>', getcwd()) | :e main.cpp | :silent CocRestart
 function ListQtType(A, L, P)
