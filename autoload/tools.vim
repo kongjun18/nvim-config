@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2020-12-22 
+" Last Change: 2020-12-26
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -9,13 +9,6 @@ if exists('g:loaded_tools_vim') || &cp || version < 700
     finish
 endif
 let g:loaded_tools_vim = 1
-if !exists('g:loaded_general_vim')
-    if has('unix')
-	    source ~/.config/nvim/autoload/general.vim
-    else
-        source ~/vimfiles/autoload/general.vim
-    endif
-endif
 
 " }}}
 

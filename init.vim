@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2020-11-28
+" Last Change: 2020-12-26
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -8,10 +8,10 @@
 if has('unix')
 	source ~/.config/nvim/autoload/general.vim
 else
-	source ~/vimfiles/autoload/general.vim
+    source ~/vimfiles/autoload/general.vim
 endif
 
-if !filereadable(g:plugin_dir)
+if !isdirectory(g:plugin_dir)
     if g:is_unix
 		silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
 		autocmd VimEnter * call dein#install()
@@ -31,7 +31,7 @@ let g:dein#install_message_type = 'none'
 if g:is_unix
     set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 else
-    set runtimepath+=~/vimfiles/nvim/plugged/repos/github.com/Shougo/dein.vim
+    set runtimepath+=~/vimfiles/plugged/repos/github.com/Shougo/dein.vim
 endif
 if dein#load_state(g:plugin_dir)
     call dein#begin(g:plugin_dir)
@@ -378,7 +378,7 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
 let g:Lf_DefaultExternalTool = g:findder
 if g:findder == 'fd'
-	let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'           " On MacOSX/Linux
+	let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'   
 endif
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
@@ -908,7 +908,6 @@ else
 endif
 autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
 let g:battery#update_statusline = 1
-let g:battery#backend = 'linux'
 let g:battery#symbol_charging = '⚡'
 " }}}
 
