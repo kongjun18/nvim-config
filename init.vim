@@ -115,10 +115,7 @@ if dein#load_state(g:plugin_dir)
 				\ })                                            " Debug adaptor of Vim
 
 	" Git
-	call dein#add('tpope/vim-fugitive', {
-				\ 'lazy': 1,
-				\ 'on_event': 'BufReadPost'
-				\ })                                            " Git wrapper of Vim
+	call dein#add('tpope/vim-fugitive')
 	call dein#add('airblade/vim-gitgutter', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufRead'
@@ -802,8 +799,8 @@ if !g:ALE_enabled
 
 	" GoTo code navigation.
 	if !g:only_use_static_tag
-		nmap <silent> gd <Plug>(coc-definition)zz
-		nmap <silent> gs <Plug>(coc-references)zz
+		nmap <silent> gd <Plug>(coc-definition)
+		nmap <silent> gs <Plug>(coc-references)
         nmap <silent> gt <Plug>(coc-type-definition)
         nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
         nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
