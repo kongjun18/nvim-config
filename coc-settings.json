@@ -1,5 +1,6 @@
 {
 	"coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
+    "coc.preferences.jumpCommand": "drop",
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",
