@@ -20,7 +20,7 @@ Feature list:
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.4+ with python3 support
 - Node 10.12:          for coc.nvim
-- ccls:              C++ LSP
+- ccls:                C++ LSP
 - rust-analyzer:       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
@@ -29,15 +29,15 @@ Compulsory:
 
 Optional:
 - Latest **Neovim nightly** with Python3 support
-- rg(ripgrep):  a better grep
-- fd:           a faster find
-- gtags:        find reference, included file and so on
-- pygments:     extend gtags' functionality
-- clang-format: format C/C++ code
-- cppcheck:     additional linter for C/C++
-- shellcheck:   linter for sh and bash
-- bear:    generate compile database for Makefile
-- axel:         a multi-threaded downloader 
+- rg(ripgrep):         a better grep
+- fd:                  a faster find
+- gtags:               find reference, included file and so on
+- pygments:            extend gtags' functionality
+- clang-format:        format C/C++ code
+- clang-tidy, clazy:   C++ linter
+- shellcheck:          linter for sh and bash
+- bear:                generate compile database for Makefile
+- axel:                a multi-threaded downloader 
 
 
 
@@ -48,7 +48,6 @@ git clone https://github.com/kongjun18/nvim-config.git --depth=1
 cd nvim-config
 sh install.sh
 ```
-By default, my configuration uses [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint source code. If you want to use [ale](https://githto ub.com/dense-analysis/ale) to lint code, please set `g:ALE_enabled`(defined in autoload/general.vim) to 1.
 
 ## Structure of configuration
 ```
@@ -169,7 +168,9 @@ coc.nvim has full capability of LSP(language server protocal). Theoretically, co
 
 ### Dynamic check
 
-use [coc.nvim](https://github.com/neoclide/coc.nvim) to lint code. See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
+I integrate [coc.nvim](https://github.com/neoclide/coc.nvim) and [ALE](https://github.com/dense-analysis/ale) to lint code. You can modify ALE configuration to add more linters.
+
+See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
 
 ![dynamic check](./images/dynamic-check.gif)
 
