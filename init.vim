@@ -3,10 +3,13 @@
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
+
+" guard {{{
 if exists('loaded_init_vim') || &cp || version < 700
     finish
 endif
 let loaded_init_vim = 1
+" }}}
 
 " dein ----{{{
 if has('unix')
@@ -309,10 +312,7 @@ hi! clear SpellRare
 hi! SpellBad gui=undercurl guisp=red
 hi! SpellRare gui=undercurl guisp=magenta
 hi! SpellCap gui=undercurl guisp=blue
-function! MyOnBattery()
-    return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
-endfunction
-if MyOnBattery()
+if !battery#is_charging()
     let g:ale_completion_delay = 500
     let g:ale_echo_delay = 20
     let g:ale_lint_delay = 500
