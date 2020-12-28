@@ -1,8 +1,12 @@
 " (Neo)vim configuration
-" Last Change: 2020-12-26
+" Last Change: 2020-12-28
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
+if exists('loaded_init_vim') || &cp || version < 700
+    finish
+endif
+let loaded_init_vim = 1
 
 " dein ----{{{
 if has('unix')
