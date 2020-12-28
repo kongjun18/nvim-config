@@ -35,7 +35,6 @@ elseif has('win32')
     let g:dein_file = g:plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
 endif
 let g:only_use_static_tag = 0
-let g:ALE_enabled = 0
 let g:grepper = 'grep'
 let g:findder = 'find'
 if executable('fd')

@@ -1,6 +1,7 @@
 {
 	"coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
     "coc.preferences.jumpCommand": "drop",
+    "diagnostic.displayByAle": true,
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",
@@ -41,10 +42,7 @@
 			}
 		}
 	},
-	"diagnostic.errorSign": "✖",
-	"diagnostic.warningSign": "‼",
-
 	"suggest.enablePreview": true,
-	// "clangd.arguments": ["--clang-tidy", "--completion-style=detailed"],
+
 
 }

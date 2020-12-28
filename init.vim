@@ -204,26 +204,21 @@ if dein#load_state(g:plugin_dir)
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
-	if (g:ALE_enabled)
-		" using ALE instead of coc.nvim to lint code
-		call dein#add('dense-analysis/ale', {
-					\ 'lazy': 1,
-					\ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
-					\ 'depends': 'lightline.vim'
-					\ })
-	else
-		" using coc.nvim
-		call dein#add('neoclide/coc.nvim', {
-					\ 'rev': 'release',
-					\ 'lazy': 1,
-					\ 'on_event': 'BufReadPost'
-					\ })
-		call dein#add('fannheyward/coc-rust-analyzer', {
-					\ 'build': 'yarn install --frozen-lockfile',
-					\ 'depends': 'coc.nvim'
-					\ })
-		call dein#disable('ale')
-	endif
+    call dein#add('dense-analysis/ale', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
+                \ 'depends': 'lightline.vim'
+                \ })
+    " using coc.nvim
+    call dein#add('neoclide/coc.nvim', {
+                \ 'rev': 'release',
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
+    call dein#add('fannheyward/coc-rust-analyzer', {
+                \ 'build': 'yarn install --frozen-lockfile',
+                \ 'depends': 'coc.nvim'
+                \ })
 	call dein#add('kkoomen/vim-doge', {
 				\ 'hook_source_post': ':call doge#install()<CR>'
 				\ })                                         " Document code
@@ -270,69 +265,58 @@ let g:edge_better_performance = 1
 " }}}
 
 " ale {{{
-if g:ALE_enabled
-	let g:ale_enabled = 0
-	let g:ale_c_parse_compile_commands = 1
-	let g:ale_lint_on_text_changed = 'normal'
-	let g:ale_lint_on_insert_leave = 1
-	let g:ale_lint_on_save = 1
+let g:ale_disable_lsp = 1                           " Integrate with coc.nvim
+let g:ale_enabled = 1
+let g:ale_c_parse_compile_commands = 1              " Use compile database
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_save = 1
 
-	let g:ale_linters_explicit = 1
-	let g:ale_linters = {
-				\ 'asm': ['gcc'],
-				\ 'c': ['gcc', 'cppcheck'],
-				\ 'cpp': ['gcc', 'cppcheck'],
-				\ 'rust': ['cargo', 'rls'],
-				\ 'sh': ['shellcheck', 'sh'],
-				\ 'fish': ['fish']
-				\}
-	" let g:ale_c_cc_executable='gcc'
-	" let g:ale_cpp_cc_executable='g++'
-	" " "  -Wall will open option -Wconversion.
-	" " "  -Wextra will open option -Wsign-compare
-	" " "  -Wconversion open -Wsign-conversion defaultly.
-	" let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
-	" " "  -Wconversion don't open -Wsign-conversion for C++
-	" " "  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
-	" let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
-	"
-	" let g:ale_c_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c11'
-	" let g:ale_cpp_cppcheck_options = '--enable=all --suppress=missingIncludeSystem --std=c++2a'
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+            \ 'asm': ['gcc'],
+            \ 'c': ['gcc', 'clangtidy', 'clazy'],
+            \ 'cpp': ['gcc', 'clangtidy', 'clazy'],
+            \ 'sh': ['shellcheck'],
+            \ 'fish': ['fish']
+            \}
+let g:ale_c_cc_executable='gcc'
+let g:ale_cpp_cc_executable='g++'
+"  -Wall will open option -Wconversion.
+"  -Wextra will open option -Wsign-compare
+"  -Wconversion open -Wsign-conversion defaultly.
+let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
+"  -Wconversion don't open -Wsign-conversion for C++
+"  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
+let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
 
-	" 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
-	let g:ale_set_quickfix = 0
-	let g:ale_set_loclist = 1
-	let g:ale_open_list = 0
+" 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
+let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 1
+let g:ale_open_list = 0
 
-	" 使用 compile_commands.json，在项目目录中查找
+" Key mapping
+nnoremap gn :ALENext<CR>
+nnoremap gN :ALEPrevious<CR>
 
-	" key-mapping
-	nnoremap gn :ALENext<CR>
-	nnoremap gN :ALEPrevious<CR>
-
-
-	" 修改错误标志
-	let g:ale_sign_error = "✖"
-	let g:ale_sign_warning = "‼"
-	" ➤
-	let g:ale_sign_info = "ℹ"
-	hi! clear SpellBad
-	hi! clear SpellCap
-	hi! clear SpellRare
-	hi! SpellBad gui=undercurl guisp=red
-	hi! SpellRare gui=undercurl guisp=magenta
-	hi! SpellCap gui=undercurl guisp=blue
-	function! MyOnBattery()
-		return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
-	endfunction
-	if MyOnBattery()
-		let g:ale_completion_delay = 500
-		let g:ale_echo_delay = 20
-		let g:ale_lint_delay = 500
-	endif
+" Modify sign symbol
+let g:ale_sign_error = "✖"
+let g:ale_sign_warning = "‼"
+let g:ale_sign_info = "ℹ"
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! SpellBad gui=undercurl guisp=red
+hi! SpellRare gui=undercurl guisp=magenta
+hi! SpellCap gui=undercurl guisp=blue
+function! MyOnBattery()
+    return !filereadable('/sys/class/power_supply/AC/online') || readfile('/sys/class/power_supply/AC/online') == ['0']
+endfunction
+if MyOnBattery()
+    let g:ale_completion_delay = 500
+    let g:ale_echo_delay = 20
+    let g:ale_lint_delay = 500
 endif
-
-
 " }}}
 
 " echodoc setting{{{
@@ -778,86 +762,84 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
 " coc.nvim{{{
-if !g:ALE_enabled
-	hi! CocErrorSign guifg=#d1666a
-	let g:coc_status_error_sign = "✖ "
-	let g:coc_status_warning_sign = "‼ "
+" hi! CocErrorSign guifg=#d1666a
+" let g:coc_status_error_sign = "✖ "
+" let g:coc_status_warning_sign = "‼ "
 
-	" Use tab for trigger completion with characters ahead and navigate.
-	" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-	" other plugin before putting this into your config.
-	inoremap <silent><expr> <TAB>
-				\ pumvisible() ? "\<C-n>" :
-				\ <SID>check_back_space() ? "\<TAB>" :
-				\ coc#refresh()
-	inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-	function! s:check_back_space() abort
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~# '\s'
-	endfunction
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-	nmap <silent> gN <Plug>(coc-diagnostic-prev)
-	nmap <silent> gn <Plug>(coc-diagnostic-next)
-
-
-	" GoTo code navigation.
-	if !g:only_use_static_tag
-		nmap <silent> gd <Plug>(coc-definition)
-		nmap <silent> gs <Plug>(coc-references)
-        nmap <silent> gt <Plug>(coc-type-definition)
-        nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
-        nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
-	endif
+" nmap <silent> gN <Plug>(coc-diagnostic-prev)
+" nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 
-	" Use K to show documentation in preview window.
-	nnoremap <silent> gK :call <SID>show_documentation()<CR>
-
-	function! s:show_documentation()
-		if (index(['vim','help'], &filetype) >= 0)
-			execute 'h '.expand('<cword>')
-		elseif (coc#rpc#ready())
-			call CocActionAsync('doHover')
-		else
-			execute '!' . &keywordprg . " " . expand('<cword>')
-		endif
-	endfunction
-
-	" Symbol renaming.
-	nmap <leader>rv <Plug>(coc-rename)
-
-	" Map function and class text objects
-	" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-	xmap if <Plug>(coc-funcobj-i)
-	omap if <Plug>(coc-funcobj-i)
-	xmap af <Plug>(coc-funcobj-a)
-	omap af <Plug>(coc-funcobj-a)
-	xmap ic <Plug>(coc-classobj-i)
-	omap ic <Plug>(coc-classobj-i)
-	xmap ac <Plug>(coc-classobj-a)
-	omap ac <Plug>(coc-classobj-a)
-
-
-	" Remap <C-f> and <C-b> for scroll float windows/popups.
-	" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
-	nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-	nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-	inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-	inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-
-	" NeoVim-only mapping for visual mode scroll
-	" Useful on signatureHelp after jump placeholder of snippet expansion
-	if has('nvim')
-		vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
-		vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
-	endif
-
-	" Add `:Fold` command to fold current buffer.
-	command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" GoTo code navigation.
+if !g:only_use_static_tag
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gs <Plug>(coc-references)
+    nmap <silent> gt <Plug>(coc-type-definition)
+    nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+    nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 endif
+
+
+" Use K to show documentation in preview window.
+nnoremap <silent> gK :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rv <Plug>(coc-rename)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+" NeoVim-only mapping for visual mode scroll
+" Useful on signatureHelp after jump placeholder of snippet expansion
+if has('nvim')
+    vnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#nvim_scroll(1, 1) : "\<C-f>"
+    vnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#nvim_scroll(0, 1) : "\<C-b>"
+endif
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " }}}
 
 " leetcode{{{
@@ -868,7 +850,6 @@ let g:leetcode_china = 1
 "}}}
 
 "  lightline -{{{
-if g:ALE_enabled
 	let g:lightline = {
 				\ 'colorscheme': 'edge',
 				\ 'active': {
@@ -890,30 +871,14 @@ if g:ALE_enabled
 				\   'linter_ok': 'ok'
 				\ },
 				\ }
-	autocmd User ALELint call lightline#update()
-else
-	let g:lightline = {
-				\ 'colorscheme': 'edge',
-				\ 'active': {
-				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
-				\   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
-				\ },
-				\ 'component_function': {
-				\   'gutentags': 'gutentags#statusline',
-				\   'gitbranch': 'FugitiveHead',
-				\   'cocstatus': 'coc#status',
-				\   'battery': 'battery#component'
-				\ },
-				\ 'component_type': {
-				\   'readonly': 'error',
-				\ },
-				\ }
-	autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-endif
+autocmd User ALELint call lightline#update()
 autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
+" }}}
+
+" vim-battery {{{
 let g:battery#update_statusline = 1
 let g:battery#symbol_charging = '⚡'
-" }}}
+"}}}
 
 " vim-mam{{{
 nnoremap gm :Vman 3 <C-r><C-w><CR>
