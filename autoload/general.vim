@@ -102,6 +102,7 @@ set laststatus=2    " always show status line
 set number
 set showtabline=2
 set noerrorbells    " No beep
+set vb t_vb=        
 set undofile        " Persist undo history
 set backup          " Backup files
 set wildignore=*.o,*.obj,*.bin,*.img,*.lock,.git "Ignore files when expanding wildcards
@@ -144,24 +145,6 @@ endif
 if g:is_unix && &shell =~? 'fish'
 	set shellpipe=&>\ %s
 endif
-
-" On Windows, use the Documents as default working directory
-if g:is_windows
-	autocmd VimEnter * cd "$HOME\Documents"
-endif
-
-" Fullscreen
-autocmd GUIEnter * simalt ~x
-
-" Delete tool bar, menu bar and scroll bar
-set guioptions-=m
-set guioptions-=T
-set guioptions-=L
-set guioptions-=R
-set guioptions-=r
-set guioptions-=l
-
-set guifont=Source_Code_Pro:h12:cANSI:qDRAFT
 
 " Turn on true color
 if has('nvim')
