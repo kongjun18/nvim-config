@@ -34,3 +34,9 @@ gtags
 pygment
 ctags
 quickfix
+constexpr
+const
+fn
+Dref
+fmt
+DrefMut
