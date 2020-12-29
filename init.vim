@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2020-12-28
+" Last Change: 2020-12-29 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -693,7 +693,7 @@ let g:Lf_Extensions.task = {
 			\ }
 
 " Edit system-wide tasks.ini
-command! TaskEdit vsp ~/.config/nvim/tasks.ini
+command! TaskEdit exec 'vsp ' . g:vimfiles . '/tasks.ini'
 
 " Run program in tab
 let g:asynctasks_term_pos = 'tab'
