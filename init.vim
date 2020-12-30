@@ -278,20 +278,11 @@ let g:ale_lint_on_save = 1
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
             \ 'asm': ['gcc'],
-            \ 'c': ['gcc', 'clangtidy', 'clazy'],
-            \ 'cpp': ['gcc', 'clangtidy', 'clazy'],
+            \ 'c': ['clangtidy'],
+            \ 'cpp': ['clangtidy'],
             \ 'sh': ['shellcheck'],
             \ 'fish': ['fish']
             \}
-let g:ale_c_cc_executable='gcc'
-let g:ale_cpp_cc_executable='g++'
-"  -Wall will open option -Wconversion.
-"  -Wextra will open option -Wsign-compare
-"  -Wconversion open -Wsign-conversion defaultly.
-let g:ale_c_cc_options = '-Wall -Wextra -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=gnu11'
-"  -Wconversion don't open -Wsign-conversion for C++
-"  I use ISO C++, so open -pedantic-errors to find behaviors which break the standard.
-let g:ale_cpp_cc_options = '-pedantic-errors -Wall -Wextra -Wsign-conversion -Wfloat-equal -Winline -Wduplicated-branches -Wduplicated-cond -Wunused -std=c++20'
 
 " 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
 let g:ale_set_quickfix = 0
@@ -761,10 +752,6 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
 " coc.nvim{{{
-" hi! CocErrorSign guifg=#d1666a
-" let g:coc_status_error_sign = "✖ "
-" let g:coc_status_warning_sign = "‼ "
-
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -779,10 +766,6 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" nmap <silent> gN <Plug>(coc-diagnostic-prev)
-" nmap <silent> gn <Plug>(coc-diagnostic-next)
-
-
 " GoTo code navigation.
 if !g:only_use_static_tag
     nmap <silent> gd <Plug>(coc-definition)
@@ -791,7 +774,6 @@ if !g:only_use_static_tag
     nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
     nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 endif
-
 
 " Use K to show documentation in preview window.
 nnoremap <silent> gK :call <SID>show_documentation()<CR>
