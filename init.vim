@@ -654,7 +654,6 @@ function! s:lf_task_source(...)
 	return source
 endfunction
 
-
 function! s:lf_task_accept(line, arg)
 	let pos = stridx(a:line, '<')
 	if pos < 0
@@ -955,6 +954,15 @@ augroup nerdtree
 	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
+"}}}
+
+" vim-fugitive {{{
+" Integrate vim-fugitive and asyncrun.vim, which makes Gpull and Gfetch
+" asynchronously
+"
+" This command will cause vim-dispatch and all other make wrapper plugins go
+" wrong 
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 "}}}
 
 " gitgutter {{{
