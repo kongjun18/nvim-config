@@ -13,15 +13,9 @@ map <C-u> <C-u>zz
 map <C-o> <C-o>zz
 map <C-i> <C-i>zz
 
-if g:is_unix
-	nnoremap <leader>ev :vsplit $HOME/.vimrc<CR>
-	nnoremap <leader>es :source $HOME/.vimrc<CR>
-    command ToolEdit :vsp ~/.config/nvim/autoload/tools.vim
-else
-	nnoremap <leader>ev :vsplit $HOME/_vimrc<CR>
-	nnoremap <leader>es :source $HOME/_vimrc<CR>
-    command ToolEdit :vsp ~/vimfiles/autoload/tools.vim
-endif
+nnoremap <leader>ev :exec 'vsplit ' . g:vimfiles . '/init.vim'<CR>
+nnoremap <leader>es :exec 'source ' . g:vimfiles . '/init.vim'<CR>
+command ToolEdit :exec 'vsp ' . g:vimfiles . '/autoload/tools.vim'
 
 nnoremap <Leader>et :ToolEdit<CR>
 
