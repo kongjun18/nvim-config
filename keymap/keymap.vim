@@ -4,8 +4,8 @@
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
-map j gj
-map k gk
+noremap j gj
+noremap k gk
 map <C-f> <C-f>zz
 map <C-b> <C-b>zz
 map <C-d> <C-d>zz
