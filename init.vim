@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2020-12-29 
+" Last Change: 2020-12-30
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -882,7 +882,7 @@ let g:battery#symbol_charging = '⚡'
 
 " vim-mam{{{
 nnoremap gm :Vman 3 <C-r><C-w><CR>
-nnoremap gh :vertical help <C-r><C-w><CR>
+nnoremap gk :vertical help <C-r><C-w><CR>
 "}}}
 
 " vimspector setting{{{
@@ -960,6 +960,11 @@ augroup END
 " gitgutter {{{
 " Disable mappings
 let g:gitgutter_map_keys = 0
+nmap ghp <Plug>(GitGutterPreviewHunk)
+nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
+nmap [c <Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
 "}}}
 
 " doge {{{
