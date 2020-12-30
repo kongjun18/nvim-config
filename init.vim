@@ -207,12 +207,6 @@ if dein#load_state(g:plugin_dir)
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
-    call dein#add('dense-analysis/ale', {
-                \ 'lazy': 1,
-                \ 'on_ft': ['c', 'cpp', 'rust', 'python', 'asm', 'sh', 'fish', 'bash'],
-                \ 'depends': 'lightline.vim'
-                \ })
-    " using coc.nvim
     call dein#add('neoclide/coc.nvim', {
                 \ 'rev': 'release',
                 \ 'lazy': 1,
@@ -265,49 +259,6 @@ colorscheme edge
 " edge
 let g:edge_style = 'neon'
 let g:edge_better_performance = 1
-" }}}
-
-" ale {{{
-let g:ale_disable_lsp = 1                           " Integrate with coc.nvim
-let g:ale_enabled = 1
-let g:ale_c_parse_compile_commands = 1              " Use compile database
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_save = 1
-
-let g:ale_linters_explicit = 1
-let g:ale_linters = {
-            \ 'asm': ['gcc'],
-            \ 'c': ['clangtidy'],
-            \ 'cpp': ['clangtidy'],
-            \ 'sh': ['shellcheck'],
-            \ 'fish': ['fish']
-            \}
-
-" 使用 quickfix 会与 gtags-scope 重叠，所以使用 location list
-let g:ale_set_quickfix = 0
-let g:ale_set_loclist = 1
-let g:ale_open_list = 0
-
-" Key mapping
-nnoremap gn :ALENext<CR>
-nnoremap gN :ALEPrevious<CR>
-
-" Modify sign symbol
-let g:ale_sign_error = "✖"
-let g:ale_sign_warning = "‼"
-let g:ale_sign_info = "ℹ"
-hi! clear SpellBad
-hi! clear SpellCap
-hi! clear SpellRare
-hi! SpellBad gui=undercurl guisp=red
-hi! SpellRare gui=undercurl guisp=magenta
-hi! SpellCap gui=undercurl guisp=blue
-if !battery#is_charging()
-    let g:ale_completion_delay = 500
-    let g:ale_echo_delay = 20
-    let g:ale_lint_delay = 500
-endif
 " }}}
 
 " echodoc setting{{{
@@ -752,6 +703,10 @@ command! -nargs=0 PlugRecache call <SID>PluginRecache()
 " }}}
 
 " coc.nvim{{{
+hi! CocErrorSign guifg=#d1666a
+let g:coc_status_error_sign = "✖ "
+let g:coc_status_warning_sign = "‼ "
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -766,6 +721,9 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+nmap <silent> gN <Plug>(coc-diagnostic-prev)
+nmap <silent> gn <Plug>(coc-diagnostic-next)
+
 " GoTo code navigation.
 if !g:only_use_static_tag
     nmap <silent> gd <Plug>(coc-definition)
@@ -774,6 +732,7 @@ if !g:only_use_static_tag
     nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
     nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 endif
+
 
 " Use K to show documentation in preview window.
 nnoremap <silent> gK :call <SID>show_documentation()<CR>
@@ -831,28 +790,23 @@ let g:leetcode_china = 1
 "}}}
 
 "  lightline -{{{
-	let g:lightline = {
-				\ 'colorscheme': 'edge',
-				\ 'active': {
-				\   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
-				\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok'], ['battery']]
-				\ },
-				\ 'component_function': {
-				\   'linter_warnings': 'LightlineLinterWarnings',
-				\   'linter_errors': 'LightlineLinterErrors',
-				\   'linter_ok': 'LightlineLinterOK',
-				\   'gutentags': 'gutentags#statusline',
-				\   'gitbranch': 'FugitiveHead',
-				\   'battery': 'battery#component'
-				\ },
-				\ 'component_type': {
-				\   'readonly': 'error',
-				\   'linter_warnings': 'warning',
-				\   'linter_errors': 'error',
-				\   'linter_ok': 'ok'
-				\ },
-				\ }
-autocmd User ALELint call lightline#update()
+let g:lightline = {
+            \ 'colorscheme': 'edge',
+            \ 'active': {
+            \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
+            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
+            \ },
+            \ 'component_function': {
+            \   'gutentags': 'gutentags#statusline',
+            \   'gitbranch': 'FugitiveHead',
+            \   'cocstatus': 'coc#status',
+            \   'battery': 'battery#component'
+            \ },
+            \ 'component_type': {
+            \   'readonly': 'error',
+            \ },
+            \ }
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
 " }}}
 
