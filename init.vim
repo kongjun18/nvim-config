@@ -200,10 +200,8 @@ if dein#load_state(g:plugin_dir)
 				\ })                                           " Ease the development of vimscript
 
 	" Color scheme
-	call dein#add('KeitaNakamura/neodark.vim')
-	call dein#add('laggardkernel/vim-one')
-	call dein#add('morhetz/gruvbox')
 	call dein#add('sainnhe/edge')							   " Defualt color scheme
+    call dein#add('cormacrelf/vim-colors-github')
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
@@ -254,11 +252,16 @@ syntax on
 " }}}
 
 " color scheme {{{
-set background=dark
-colorscheme edge
-" edge
-let g:edge_style = 'neon'
-let g:edge_better_performance = 1
+if strftime("%H") <= 15
+    let g:github_colors_soft = 1
+    set background=light
+    colorscheme github
+else
+    let g:edge_style = 'neon'
+    let g:edge_better_performance = 1
+    set background=dark
+    colorscheme edge
+endif
 " }}}
 
 " echodoc setting{{{
