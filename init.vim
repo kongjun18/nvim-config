@@ -172,27 +172,6 @@ if dein#load_state(g:plugin_dir)
 				\ 'lazy': 1,
 				\ 'on_ft': 'fish'
 				\ })                                           " A syntax file of fish shell
-	" Writing
-	call dein#add('plasticboy/vim-markdown', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'markdown'
-				\ })                                           " Enhance the support of markdown
-	call dein#add('iamcco/markdown-preview.nvim', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'markdown'
-				\ })                                           " Preview markdown in the browser
-	call dein#add('mzlogin/vim-markdown-toc', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'markdown'
-				\ })                                           " Generate TOC of markdown
-	call dein#add('ferrine/md-img-paste.vim', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'markdown'
-				\ })                                           " Paste image in Vim
-	call dein#add('reedes/vim-wordy', {
-				\ 'lazy': 1,
-				\ 'on_ft': ['markdown', 'vimwiki', 'text']
-				\ })                                           " English check
 	" VimL
 	call dein#add('tpope/vim-scriptease', {
 				\ 'lazy': 1,
@@ -850,21 +829,6 @@ nmap gLt <Plug>VimwikiRemoveCBInList
 " remap <C-Space>:
 nmap zv <Plug>VimwikiToggleListItem
 "}}}
-
-" vim-markdown {{{
-let g:markdown_fenced_languages = ['c', 'cpp', 'rust', 'python', 'sh', 'bash', 'fish']
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_math = 1
-let g:vim_markdown_strikethrough = 1
-
-" }}}
-
-" md paste {{{
-" all pictures reside on ./images/
-let g:mdip_imdir_intext = "./images"
-" when user don't provide picture name, use default name
-nmap <buffer><silent> <Leader>mp :call mdip#MarkdownClipboardImage()<CR>
-" --------}}}
 
 " vim-session{{{
 
