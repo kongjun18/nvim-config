@@ -14,4 +14,7 @@ installer.sh
 .notags
 .netrwhist
 .nvimlog
+.cache
 
+" edge.vim
+after/ftplugin/

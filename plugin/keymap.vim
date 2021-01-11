@@ -1,26 +1,29 @@
-" Mapping about window
-" Last Change: 2020-11-29
+" Key mappings
+" Last Change: 2021-01-11
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
-function s:close_window(direction) abort
-    let win_view = winsaveview()
-    let win_id = win_getid()
-    exec 'wincmd ' . a:direction
-    wincmd c
-    call win_gotoid(win_id)
-    call winrestview(win_view)
-endfunction
+noremap j gj
+noremap k gk
+map <C-f> <C-f>zz
+map <C-b> <C-b>zz
+map <C-d> <C-d>zz
+map <C-u> <C-u>zz
+map <C-o> <C-o>zz
+map <C-i> <C-i>zz
 
-function s:hide_window(direction) abort
-    let win_view = winsaveview()
-    let win_id = win_getid()
-    exec 'wincmd ' . a:direction
-    hide
-    call win_gotoid(win_id)
-    call winrestview(win_view)
-endfunction
+nnoremap <silent> <leader>ev :exec 'vsplit ' . general#vimfiles . '/init.vim'<CR>
+nnoremap <silent> <leader>es :exec 'source ' . general#vimfiles . '/init.vim'<CR>
+nnoremap <Leader>et :ToolEdit<CR>
+
+noremap ]oq :cclose<CR>
+noremap [oq :copen<CR>"}}}
+
+noremap [op :setlocal paste<CR>
+noremap ]op :setlocal nopaste<CR>
+noremap yop :setlocal paste!<CR>"}}}
+
 
 nnoremap <Leader>wo <C-w>o
 nnoremap <Leader>wq <C-w>c
@@ -80,3 +83,21 @@ nnoremap <leader>9 9gt
 nnoremap <leader>- gT
 " switch to the next tab
 nnoremap <leader>= gt
+
+function s:close_window(direction) abort
+    let win_view = winsaveview()
+    let win_id = win_getid()
+    exec 'wincmd ' . a:direction
+    wincmd c
+    call win_gotoid(win_id)
+    call winrestview(win_view)
+endfunction
+
+function s:hide_window(direction) abort
+    let win_view = winsaveview()
+    let win_id = win_getid()
+    exec 'wincmd ' . a:direction
+    hide
+    call win_gotoid(win_id)
+    call winrestview(win_view)
+endfunction

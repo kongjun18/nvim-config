@@ -6,54 +6,54 @@
 
 set nocompatible
 
-if exists('g:loaded_general_vim') || &cp || version < 700
+if exists('general#loaded_general_vim') || &cp || version < 700
     finish
 endif
-let g:loaded_general_vim = 1
+let general#loaded_general_vim = 1
 
 if has('unix')
-    let g:is_unix = 1
-    let g:is_windows = 0
-    let g:vimrc = $HOME . "/.config/nvim/init.vim"
-    let g:vimfiles = $HOME . "/.config/nvim"
-    let g:plugin_dir = $HOME . "/.config/nvim/plugged"
-    let g:backup_dir = $HOME . "/.config/nvim/.backup"
-    let g:swap_dir = $HOME . "/.config/nvim/.swap"
-    let g:undo_dir = $HOME . "/.config/nvim/.undo"
-    let g:session_dir = $HOME . "/.config/nvim/.session"
-    let g:dein_file = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
+    let general#is_unix = 1
+    let general#is_windows = 0
+    let general#vimrc = $HOME . "/.config/nvim/init.vim"
+    let general#vimfiles = $HOME . "/.config/nvim"
+    let general#plugin_dir = $HOME . "/.config/nvim/plugged"
+    let general#backup_dir = $HOME . "/.config/nvim/.backup"
+    let general#swap_dir = $HOME . "/.config/nvim/.swap"
+    let general#undo_dir = $HOME . "/.config/nvim/.undo"
+    let general#session_dir = $HOME . "/.config/nvim/.session"
+    let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
 elseif has('win32')
-    let g:is_windows = 1
-    let g:is_unix = 0
-    let g:vimrc = $HOME . "\\_vimrc"
-    let g:vimfiles = $HOME . "\\vimfiles"
-    let g:plugin_dir = $HOME . "\\vimfiles\\plugged"
-    let g:backup_dir = $HOME . "\\vimfiles\\.backup"
-    let g:swap_dir = $HOME . "\\vimfiles\\.swap"
-    let g:undo_dir = $HOME . "\\vimfiles\\.undo"
-    let g:session_dir = $HOME . "\\vimfiles\\.session"
-    let g:dein_file = g:plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
+    let general#is_windows = 1
+    let general#is_unix = 0
+    let general#vimrc = $HOME . "\\_vimrc"
+    let general#vimfiles = $HOME . "\\vimfiles"
+    let general#plugin_dir = $HOME . "\\vimfiles\\plugged"
+    let general#backup_dir = $HOME . "\\vimfiles\\.backup"
+    let general#swap_dir = $HOME . "\\vimfiles\\.swap"
+    let general#undo_dir = $HOME . "\\vimfiles\\.undo"
+    let general#session_dir = $HOME . "\\vimfiles\\.session"
+    let general#dein_file = general#plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
 endif
-let g:only_use_static_tag = 0
-let g:grepper = 'grep'
-let g:findder = 'find'
+let general#only_use_static_tag = 0
+let general#grepper = 'grep'
+let general#findder = 'find'
 if executable('fd')
-	let g:findder = 'fd'
+	let general#findder = 'fd'
 endif
 if executable('rg')
-	let g:grepper = 'rg'
+	let general#grepper = 'rg'
 	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
-let g:project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
+let general#project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
 
-call tools#ensure_dir_exist(g:backup_dir)
-call tools#ensure_dir_exist(g:swap_dir)
-call tools#ensure_dir_exist(g:undo_dir)
-call tools#ensure_dir_exist(g:session_dir)
-let &backupdir = g:backup_dir . '/'
-let &directory = g:swap_dir . '/'
-let &undodir = g:undo_dir . '/'
-let g:session_directory = g:session_dir
+call tools#ensure_dir_exist(general#backup_dir)
+call tools#ensure_dir_exist(general#swap_dir)
+call tools#ensure_dir_exist(general#undo_dir)
+call tools#ensure_dir_exist(general#session_dir)
+let &backupdir = general#backup_dir . '/'
+let &directory = general#swap_dir . '/'
+let &undodir = general#undo_dir . '/'
+let g:session_directory = general#session_dir
 
 " Leader
 let mapleader=' '
@@ -141,7 +141,7 @@ endif
 " suppress the output of external program
 "
 " I use fish shell, so give it extra attention
-if g:is_unix && &shell =~? 'fish'
+if general#is_unix && &shell =~? 'fish'
 	set shellpipe=&>\ %s
 endif
 
@@ -160,20 +160,15 @@ else
 endif
 
 " Skip python search to accelerate startup time
-if g:is_unix
+if general#is_unix
     let g:python_host_skip_check=1
     let g:python_host_prog = '/usr/bin/python'
     let g:python3_host_skip_check=1
     let g:python3_host_prog = '/usr/bin/python3'
 endif
 
-" Sourece keymap setting 
-for keymap in  globpath(g:vimfiles, 'keymap/*.vim', 0, 1)
-    exec "source " . keymap
-endfor
-
 " Automatically change working directory to Documents
-if g:is_windows
+if general#is_windows
     autocmd VimEnter * cd ~/Documents
 endif
 "}}}

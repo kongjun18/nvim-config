@@ -91,9 +91,9 @@ function tools#scroll_adjacent_window(dir, mode)
         if a:mode == 'i'
             call s:switch_to_insert(old_cursor, tail_cursor)
         endif
-        return 
+        return
     endif
-    
+
     " only one window?
     if left_winnr == right_winnr
         echomsg "Only a single window"
@@ -252,7 +252,7 @@ command -nargs=0 Disassembly call tools#disassembly()
 " nvim_is_latest() -- Determine whether neovim is lastest {{{
 "
 " This function is hard-coded. Only check neovim is whether 0.5.0 or not because neovim installed in different ways has
-" different version output. 
+" different version output.
 "
 " I write this function to determine whether install nvim-treesitter which
 " requires lastest neovim or not.
@@ -300,3 +300,55 @@ function! g:LightlineLinterOK() abort
     return l:counts.total == 0 ? '✓' : ''
 endfunction
 " }}}
+
+" Debug gutentags {{{
+function tools#debug_gutentgs()
+    let g:gutentags_define_advanced_commands = 1
+    let g:gutentags_trace = 1
+endfunction
+
+function tools#undebug_gutentags()
+    let g:gutentags_define_advanced_commands = 0
+    let g:gutentags_trace = 0
+endfunction
+" }}}
+
+" Use static tag system {{{
+function tools#use_static_tag() abort
+    nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+    nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+endfunction
+"}}}
+
+" Plugin operations {{{
+function tools#plugin_clean()
+	let unused_plugin_dir = dein#check_clean()
+	if len(unused_plugin_dir) == 0
+		echomsg "There is no unused plugin"
+		return
+	endif
+	for dir in unused_plugin_dir
+		try
+			call delete(dir, 'rf')
+		catch /.*/
+			echoerr "remove unused plugin directory failed"
+		endtry
+		echomsg "removed unused plugin directory"
+	endfor
+endfunction
+
+function tools#plugin_recache()
+	try
+		call dein#clear_state()
+		call dein#recache_runtimepath()
+	catch /.*/
+		echoerr "Error in tools#PluginRecache"
+	endtry
+endfunction
+
+function tools#plugin_reinstall(list)
+    if type(a:list) == type([])
+        call call('dein#reinstall', a:list)
+    endif
+endfunction
+"}}}

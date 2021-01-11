@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2020-12-30
+" Last Change: 2021-01-11 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -12,14 +12,8 @@ let loaded_init_vim = 1
 " }}}
 
 " dein ----{{{
-if has('unix')
-	source ~/.config/nvim/autoload/general.vim
-else
-    source ~/vimfiles/autoload/general.vim
-endif
-
-if !isdirectory(g:plugin_dir)
-    if g:is_unix
+if !isdirectory(general#plugin_dir)
+    if general#is_unix
 		silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
 		autocmd VimEnter * call dein#install()
     else
@@ -35,16 +29,15 @@ endif
 " Don't clone deeply
 let g:dein#types#git#clone_depth = 1
 let g:dein#install_message_type = 'none'
-if g:is_unix
+if general#is_unix
     set runtimepath+=~/.config/nvim/plugged/repos/github.com/Shougo/dein.vim
 else
     set runtimepath+=~/vimfiles/plugged/repos/github.com/Shougo/dein.vim
 endif
-if dein#load_state(g:plugin_dir)
-    call dein#begin(g:plugin_dir)
-    call dein#add(g:dein_file)
+if dein#load_state(general#plugin_dir)
+    call dein#begin(general#plugin_dir)
+    call dein#add(general#dein_file)
 	" Vim enhacement
-	" call dein#add('mg979/vim-visual-multi')
 	call dein#add('kshenoy/vim-signature', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
@@ -68,31 +61,50 @@ if dein#load_state(g:plugin_dir)
 	call dein#add('xolox/vim-session')                            " Save Vim session without pain
 
 	" Text edit
-	call dein#add('wellle/targets.vim')                           " Text objects
-	call dein#add('haya14busa/is.vim')                            " Some enhancement of incsearch
-	call dein#add('tommcdo/vim-exchange')                         " Exchange two words or lines
+    call dein#add('wellle/targets.vim', {
+                \ 'lazy': 1,
+                \ 'on_event': ['BufReadPost']
+                \ })                           " Text objects
+    call dein#add('haya14busa/is.vim', {
+                \ 'lazy': 1,
+                \ 'on_event': ['BufReadPost']
+                \ })                            " Some enhancement of incsearch
+    call dein#add('tommcdo/vim-exchange', {
+                \ 'lazy': 1,
+                \ 'on_ev': 'BufReadPost'
+                \ })                         " Exchange two words or lines
 	call dein#add('SirVer/ultisnips', {
 				\ 'on_if':"has('python3')",
+                \ 'lazy': 1,
 				\ 'on_event': 'TextChangedI'
 				\ })                                              " Code snippets engine
 	call dein#add('preservim/nerdcommenter', {
+                \ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })
-	call dein#add('jiangmiao/auto-pairs')                         " Pairs matching/completion
-	call dein#add('tpope/vim-repeat')                             " Repeat modification made by vim-commentary, vim-surround
+    call dein#add('jiangmiao/auto-pairs', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })                         " Pairs matching/completion
+    call dein#add('tpope/vim-repeat', {
+                \ 'lazy': 1,
+                \ 'on_ev': 'BufReadPost'
+                \ })                             " Repeat modification made by vim-commentary, vim-surround
 	call dein#add('tpope/vim-unimpaired', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                                              " Some shortcuts should be built in Vim
-	call dein#add('junegunn/vim-easy-align')                      " Align code
+    call dein#add('junegunn/vim-easy-align', {
+                \ 'lazy': 1,
+                \ 'on_ev': 'BufReadPost'
+                \ })                      " Align code
 	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'}) " Indent indication
-	call dein#add('Chiel92/vim-autoformat')
-	call dein#add('https://gitee.com/kongjun18/vim-sandwich.git') " A fork of machakann/vim-sandwich, using vim-surround mapping
+    call dein#add('Chiel92/vim-autoformat', {
+                \ 'lazy': 1,
+                \ 'on_ev': 'BufReadPost'
+                \ })
+	call dein#add('machakann/vim-sandwich') 
 	call dein#add('machakann/vim-highlightedyank')                " Highlight yanked area
-	" call dein#add('vim-scripts/fcitx.vim', {
-	"             \ 'lazy': 1,
-	"             \ 'on_event': 'InsertEnter'
-	"             \ })
 	call dein#add('lilydjwg/fcitx.vim', {
 				\ 'lazy': 1,
 				\ 'on_event': 'InsertEnter'
@@ -138,10 +150,15 @@ if dein#load_state(g:plugin_dir)
 	" Language-enhancement
 	if tools#nvim_is_latest()
 		call dein#add('nvim-treesitter/nvim-treesitter', {
+                    \ 'lazy': 1,
 					\ 'hook_source_post': ':TSUpdate',
+                    \ 'rev': '3c07232',
+                    \ 'on_cmd': ['BufReadPost']
 					\ })        " A syntax highlight plugin
 		call dein#add('nvim-treesitter/nvim-treesitter-textobjects', {
-					\ 'depends': 'nvim-treesitter'
+                    \ 'lazy' : 1,
+					\ 'depends': 'nvim-treesitter',
+                    \ 'on_cmd': ['BufReadPost']
 					\ })
 		call dein#disable('vim-toml')                           " A syntax file of toml
 		call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
@@ -190,8 +207,10 @@ if dein#load_state(g:plugin_dir)
                 \ 'on_event': 'BufReadPost'
                 \ })
     call dein#add('fannheyward/coc-rust-analyzer', {
+                \ 'lazy': 1,
                 \ 'build': 'yarn install --frozen-lockfile',
-                \ 'depends': 'coc.nvim'
+                \ 'depends': 'coc.nvim',
+                \ 'on_ft': 'rust'
                 \ })
 	call dein#add('kkoomen/vim-doge', {
 				\ 'hook_source_post': ':call doge#install()<CR>'
@@ -201,14 +220,14 @@ if dein#load_state(g:plugin_dir)
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
 	call dein#add('Shougo/echodoc.vim', {
 				\ 'lazy': 1,
-				\ 'on_ft': ['c', 'cpp', 'python', 'rust']
+				\ 'on_ft': ['c', 'cpp', 'python', 'rust', 'vim']
 				\ })                                            " Echo parameters of function
 
 	" other
 	call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
 	call dein#add('voldikss/vim-translator')                    " Translator
 	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
-	call dein#add('tpope/vim-eunuch', {'on_if': g:is_unix})   " use UNIX command in Vim
+	call dein#add('tpope/vim-eunuch', {'on_if': general#is_unix})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
@@ -288,8 +307,8 @@ let g:rainbow_conf = {
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
-let g:Lf_DefaultExternalTool = g:findder
-if g:findder == 'fd'
+let g:Lf_DefaultExternalTool = general#findder
+if general#findder == 'fd'
 	let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'   
 endif
 let g:Lf_PreviewCode = 1
@@ -327,35 +346,12 @@ nnoremap <leader>T :Leaderf task<CR>
 "}}}
 
 " tag system ------------{{{
-function! s:use_static_tag() abort
-	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
-endfunction
-command -nargs=0 UseStaticTag call <SID>use_static_tag()
-
 nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
 
 " gutentags ----------------{{{
-
-" For debug
-function s:debug_gutentgs()
-	let g:gutentags_define_advanced_commands = 1
-	let g:gutentags_trace = 1
-endfunction
-
-function s:undebug_gutentags()
-	let g:gutentags_define_advanced_commands = 0
-	let g:gutentags_trace = 0
-endfunction
-
-" If encounter error, please type :DebugGutentags to enable log.
-" After debug, type :UndebugGutentags to disable log.
-command -nargs=0 DebugGutentags call s:debug_gutentgs()
-command -nargs=0 UndebugGutentags call s:undebug_gutentags()
-
 " Exclude these types
 let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css']
 
@@ -363,7 +359,7 @@ let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'v
 let $GTAGSLABEL = 'native-pygments'
 
 " Set root makers of project
-let g:gutentags_project_root = g:project_root_maker
+let g:gutentags_project_root = general#project_root_maker
 
 " All ctags files suffixed with .tag'
 let g:gutentags_ctags_tagfile = '.tag'
@@ -404,7 +400,7 @@ let g:gutentags_plus_switch = 0
 let g:gutentags_plus_nomap = 1
 
 
-if g:only_use_static_tag
+if general#only_use_static_tag
 	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
 	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
     nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
@@ -629,7 +625,7 @@ let g:asyncrun_open = 10
 " Bell when task finished
 let g:asyncrun_bell = 1
 " Set root makers of project
-let g:asyncrun_rootmarks = g:project_root_maker
+let g:asyncrun_rootmarks = general#project_root_maker
 
 nnoremap  <Tab>5 :AsyncTask file-build<cr>
 nnoremap  <Tab>6 :AsyncTask file-run<cr>
@@ -711,7 +707,7 @@ nmap <silent> gN <Plug>(coc-diagnostic-prev)
 nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-if !g:only_use_static_tag
+if !general#only_use_static_tag
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gs <Plug>(coc-references)
     nmap <silent> gt <Plug>(coc-type-definition)
@@ -893,6 +889,10 @@ let g:doge_mapping_comment_jump_forward = '<C-j>'
 let doge_mapping_comment_jump_backward = '<C-k'
 "}}}
 
+" vim-sandwich {{{
+runtime macros/sandwich/keymap/surround.vim
+" }}}
+
 " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
@@ -900,38 +900,27 @@ iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 
 " nvim-treesitter {{{
 if tools#nvim_is_latest()
-	lua << EOF
-	require'nvim-treesitter.configs'.setup {
-		ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
-		highlight = {
-			enable = true,
-		},
-		indent = {
-			enable = flase,
-		},
-		fold = {
-			enable = false,
-		},
-		textobjects = {
-			select = {
-				enable = true,
-			},
-			keymaps = {
-				["af"] = "@function.outer",
-				["if"] = "@function.inner",
-				["ac"] = "@class.outer",
-				["ic"] = "@class.inner",
-			},
-		},
-	}
+lua << EOF
+    require'nvim-treesitter.configs'.setup {
+        ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
+        highlight = {
+            enable = true,
+        },
+        indent = {
+            enable = flase,
+        },
+        textobjects = {
+            select = {
+                enable = true,
+            },
+            keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+            },
+        },
+    }
 EOF
 endif
-
 " }}}
-
-command -nargs=0 W :w | A
-command -nargs=0 EchoBufferPath :echo expand('%:p')
-command -nargs=1 -complete=customlist,ListQtType CreateQt :call tools#create_qt_project('<args>', getcwd()) | :e main.cpp | :silent CocRestart
-function ListQtType(A, L, P)
-    return ["QMainWindow", "QWidget", "QDialog"]
-endfunction
