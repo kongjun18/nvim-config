@@ -34,6 +34,7 @@ elseif has('win32')
     let general#session_dir = $HOME . "\\vimfiles\\.session"
     let general#dein_file = general#plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
 endif
+let general#nvim_is_latest = tools#nvim_is_latest()
 let general#only_use_static_tag = 0
 let general#grepper = 'grep'
 let general#findder = 'find'

@@ -200,7 +200,7 @@ if dein#load_state(general#plugin_dir)
 	" project management
 	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
     call dein#add('neoclide/coc.nvim', {
-                \ 'rev': 'release',
+                \ 'merge': 0,
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
                 \ })
@@ -209,6 +209,12 @@ if dein#load_state(general#plugin_dir)
                 \ 'build': 'yarn install --frozen-lockfile',
                 \ 'depends': 'coc.nvim',
                 \ 'on_ft': 'rust'
+                \ })
+    call dein#add('iamcco/coc-vimlsp', {
+                \ 'lazy': 1,
+                \ 'build': 'yarn install --frozen-lockfile',
+                \ 'depends': 'coc.nvim',
+                \ 'on_ft': 'vim'
                 \ })
 	call dein#add('kkoomen/vim-doge', {
 				\ 'hook_source_post': ':call doge#install()<CR>'
@@ -729,6 +735,7 @@ endfunction
 
 " Symbol renaming.
 nmap <leader>rv <Plug>(coc-rename)
+nmap <Leader>rf <Plug>(coc-refactor)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
