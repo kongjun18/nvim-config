@@ -44,7 +44,7 @@ if dein#load_state(general#plugin_dir)
 				\})                        " Show marks
 	call dein#add('preservim/nerdtree', {
 				\ 'lazy': 1,
-				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark']
+				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDToggle']
 				\ })                                              " File system explorer
 	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
@@ -848,6 +848,7 @@ augroup nerdtree
 	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
+nnoremap <silent> <Leader>tt :NERDTreeToggle<CR>
 "}}}
 
 " vim-fugitive {{{
@@ -888,6 +889,7 @@ iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 
 " nvim-treesitter {{{
 if general#nvim_is_latest
+    call dein#source('nvim-treesitter')
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust'},
@@ -895,7 +897,7 @@ require'nvim-treesitter.configs'.setup {
     enable = true, 
   },
   indent = {
-      enable = true,
+    enable = true,
   }
 }
 EOF
