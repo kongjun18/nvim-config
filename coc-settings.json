@@ -38,7 +38,8 @@
 				},
 				"client": {
 					"snippetSupport": true
-				}
+				},
+                "highlight": {"lsRanges": true } 
 			}
 		}
 	},

@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-11 
+" Last Change: 2021-01-12
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -149,47 +149,44 @@ if dein#load_state(general#plugin_dir)
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
 
 	" Language-enhancement
-	if tools#nvim_is_latest()
-		call dein#add('nvim-treesitter/nvim-treesitter', {
+    call dein#add('dag/vim-fish', {
+                \ 'lazy': 1,
+                \ 'on_ft': 'fish',
+                \ 'on_event': 'BufRead'
+                \ })                                           " A syntax file of fish shell
+    if general#nvim_is_latest
+        call dein#add('nvim-treesitter/nvim-treesitter', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp', 'lua', 'json', 'python', 'rust', 'bash', 'toml'],
+                \ 'on_event': 'BufRead'
+                \ })
+    else
+        call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
-					\ 'hook_source_post': ':TSUpdate',
-                    \ 'rev': '3c07232',
-                    \ 'on_cmd': ['BufReadPost']
-					\ })        " A syntax highlight plugin
-		call dein#add('nvim-treesitter/nvim-treesitter-textobjects', {
-                    \ 'lazy' : 1,
-					\ 'depends': 'nvim-treesitter',
-                    \ 'on_cmd': ['BufReadPost']
-					\ })
-		call dein#disable('vim-toml')                           " A syntax file of toml
-		call dein#disable('vim-cpp-enhanced-hightlight')        " A syntax highlight plugin of C/C++
-	else
-		call dein#add('wsdjeg/vim-lua', {
-					\ 'lazy': 1,
-					\ 'on_ft': 'lua'
-					\ })                                        " A syntax file of Lua
-		call dein#add('elzr/vim-json', {
-					\ 'lazy': 1,
-					\ 'on_ft': 'json'
-					\ })                                        " A syntax file of json
-		call dein#add('cespare/vim-toml', {
-					\ 'lazy': 1,
-					\ 'on_ft': 'toml'
-					\ })
-		call dein#add('octol/vim-cpp-enhanced-highlight', {
-					\ 'lazy': 1,
-					\ 'on_ft': ['c', 'cpp']
-					\ })
-		call dein#disable('nvim-treesitter')
-	endif
-	call dein#add('Townk/vim-qt', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'cpp'
-				\ })                                           " A syntax file of Qt
-	call dein#add('dag/vim-fish', {
-				\ 'lazy': 1,
-				\ 'on_ft': 'fish'
-				\ })                                           " A syntax file of fish shell
+                    \ 'on_ft': ['c', 'cpp'],
+                    \ 'on_event': 'BufRead'
+                    \ })
+        call dein#add('wsdjeg/vim-lua', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': 'lua',
+                    \ 'on_event': 'BufRead'
+                    \ })                                        " A syntax file of Lua
+        call dein#add('elzr/vim-json', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': 'json',
+                    \ 'on_event': 'BufRead'
+                    \ })                                        " A syntax file of json
+        call dein#add('cespare/vim-toml', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': 'toml',
+                    \ 'on_event': 'BufRead'
+                    \ })
+        call dein#add('Townk/vim-qt', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': 'cpp',
+                    \ 'on_event': 'BufRead'
+                    \ })                                           " A syntax file of Qt
+    endif
 	" VimL
 	call dein#add('tpope/vim-scriptease', {
 				\ 'lazy': 1,
@@ -900,28 +897,17 @@ iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
 
 " nvim-treesitter {{{
-if tools#nvim_is_latest()
-lua << EOF
-    require'nvim-treesitter.configs'.setup {
-        ensure_installed = {"c", "cpp", "rust", "bash", "toml", "json", "yaml", "lua"},
-        highlight = {
-            enable = true,
-        },
-        indent = {
-            enable = flase,
-        },
-        textobjects = {
-            select = {
-                enable = true,
-            },
-            keymaps = {
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-            },
-        },
-    }
+if general#nvim_is_latest
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust'},
+  highlight = {
+    enable = true, 
+  },
+  indent = {
+      enable = true,
+  }
+}
 EOF
 endif
-" }}}
+"}}}
