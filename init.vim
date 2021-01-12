@@ -135,6 +135,7 @@ if dein#load_state(general#plugin_dir)
 
 	" Git
 	call dein#add('tpope/vim-fugitive')
+    call dein#add('junegunn/gv.vim')
 	call dein#add('airblade/vim-gitgutter', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufRead'
