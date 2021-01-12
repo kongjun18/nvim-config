@@ -264,16 +264,6 @@ let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = "floating"
 highlight link EchoDocFloat Pmenu"}}}
 
-"cpp-enhanced-highlight setting{{{
-
-let g:cpp_class_scope_highlight=1
-let g:cpp_member_variable_highlight=1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
-let c_no_curly_error=1
-
-"}}}
-
 "rainbow{{{
 let g:rainbow_active = 1 "0 if you want to enable it later via :rainbowtoggle
 let g:rainbow_conf = {
