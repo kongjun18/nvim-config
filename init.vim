@@ -152,39 +152,32 @@ if dein#load_state(general#plugin_dir)
     call dein#add('dag/vim-fish', {
                 \ 'lazy': 1,
                 \ 'on_ft': 'fish',
-                \ 'on_event': 'BufRead'
                 \ })                                           " A syntax file of fish shell
     if general#nvim_is_latest
         call dein#add('nvim-treesitter/nvim-treesitter', {
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp', 'lua', 'json', 'python', 'rust', 'bash', 'toml'],
-                \ 'on_event': 'BufRead'
                 \ })
     else
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
                     \ 'on_ft': ['c', 'cpp'],
-                    \ 'on_event': 'BufRead'
                     \ })
         call dein#add('wsdjeg/vim-lua', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'lua',
-                    \ 'on_event': 'BufRead'
                     \ })                                        " A syntax file of Lua
         call dein#add('elzr/vim-json', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'json',
-                    \ 'on_event': 'BufRead'
                     \ })                                        " A syntax file of json
         call dein#add('cespare/vim-toml', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'toml',
-                    \ 'on_event': 'BufRead'
                     \ })
         call dein#add('Townk/vim-qt', {
                     \ 'lazy': 1,
                     \ 'on_ft': 'cpp',
-                    \ 'on_event': 'BufRead'
                     \ })                                           " A syntax file of Qt
     endif
 	" VimL
