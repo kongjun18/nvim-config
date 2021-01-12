@@ -1,10 +1,10 @@
 # Vim configuration for C/C++ and Rust development
-This repository is my personal configuration of (Neo)vim based on UNIX.
+This repository is my personal configuration of (Neo)vim.
 
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions and FreeBSD.
+I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions, Windows and FreeBSD.
 
 Feature list:
 
@@ -17,31 +17,35 @@ Feature list:
 - operate window, buffer and tab at ease
 
 ## Requirement
+
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.4+ with python3 support
 - Node 10.12:          for coc.nvim
-- ccls:                C++ LSP
-- rust-analyzer:       Rust LSP
+- [ccls](https://github.com/MaskRay/ccls):                C++ LSP
+- [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer):       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
 - Python3.6+:          for [Ultisnips](https://github.com/SirVer/ultisnips), [LeaderF](https://github.com/Yggdroot/LeaderF) and other plugins
-- universal ctags:     generate tag file
+- [universal ctags](https://github.com/universal-ctags/ctags):     generate tag file
 
 Optional:
 - Latest **Neovim nightly** with Python3 support
-- rg(ripgrep):         a better grep
-- fd:                  a faster find
-- gtags:               find reference, included file and so on
-- pygments:            extend gtags' functionality
-- clang-format:        format C/C++ code
+- [rg(ripgrep)](https://github.com/BurntSushi/ripgrep):         a better grep
+- [fd](https://github.com/sharkdp/fd):                  a faster find
+- [gtags](https://www.gnu.org/software/global/):               find reference, included file and so on
+- [pygments](https://pygments.org):            extend gtags' functionality
+- clanghttps://github.com/rizsotto/Bear-format:        format C/C++ code
 - clang-tidy, clazy:   C++ linter
 - shellcheck:          linter for sh and bash
-- bear:                generate compile database for Makefile
+- [bear](https://github.com/rizsotto/Bear):                generate compile database for Makefile
 - axel:                a multi-threaded downloader 
 
 
 
 ## Installation
+
+### UNIX
+
 Clone it, run `sh install.sh` in shell and then open (Neo)vim. (Neo)vim will install dein.nvim and other plugins automatically.
 ```sh
 git clone https://github.com/kongjun18/nvim-config.git --depth=1
@@ -49,7 +53,12 @@ cd nvim-config
 sh install.sh
 ```
 
+### Windows
+
+I am not familiar with shell and neovim on Windows platform. Thus, there is no installation script and support for neovim. If you work on Windows, please use GVim and create vimfiles and _vimrc yourself.
+
 ## Structure of configuration
+
 ```
 .
 ├── after
@@ -63,19 +72,16 @@ sh install.sh
 │		└── vimwiki.vim
 ├── autoload
 │ 	├── tools.vim
-|   ├── general.vim
-|   └── edge.vim
+|   └──general.vim
 ├── coc-settings.json
 ├── colors
-│   ├── neodark.vim
-│   ├── one.vim
+|   ├── github.vim
 |   └── edge.vim
 ├── init.vim
 ├── install.sh
-├── keymap
-│   ├── keymap.vim
-│   ├── unimparied.vim
-│   └── window.vim
+├── plugin
+│   ├── command.vim
+│   └── keymap.vim
 ├── LICENSE
 ├── plugged
 ├── README.md
@@ -94,15 +100,15 @@ sh install.sh
 ```
 
 - after/ftplugin: Filetype-specific setting.
-- atoload: Some tools written in VimL.
+- autoload: Some tools written in VimL.
 - coc-setting.json: Configuration of coc.nvim.
 - colors: Color scheme.
 - init.vim: Configuration file of (Neo)vim.
-- keymap: Plugin-independent key mappings.
+- plugin/keymap.vim: Plugin-independent key mappings.
+- plugin/command.vim: commands
 - spell: Spell files. They may be no use to you.
 - autoload/tools.vim : Some tools such as gitignore templates.
-- autoload/general.vim: General setting
-- autoload/edge.vim and colors/edge.vim: Edge color scheme 
+- autoload/general.vim: General settings 
 - UltiSnips: Snippets. 
 
 ## Usage
@@ -119,7 +125,7 @@ I manage plagins using [dein.vim](https://github.com/Shougo/dein.vim). It is fas
 
 Because dein.vim only provides functions, I add some simple commands.
 
-|    command    |                       meaning                       |
+|    command    |                     description                     |
 | :-----------: | :-------------------------------------------------: |
 |  PluginClean  |               clean not-used plugins                |
 | PluginInstall | install plugins added by dein.vim but not installed |
@@ -130,7 +136,7 @@ Because dein.vim only provides functions, I add some simple commands.
 
 Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. All tasks in ~/.config/nvim/tasks.ini. The following table shows some frequently-used tasks.
 
-|                  task                   | mapping |                       meaning                        |
+|                  task                   | mapping |                       description                    |
 | :-------------------------------------: | :-----: | :--------------------------------------------------: |
 |               file-build                | \<Tab>5  |                  build current file                  |
 |                file-run                 | \<Tab>6  |                   run current file                   |
@@ -184,7 +190,7 @@ LSP-based tag system like functionalities coc.nvim provides is smart but not pow
 
 Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file. 
 
-|       mapping       |                           meaning                            |
+|       mapping       |                         description                          |
 | :-----------------: | :----------------------------------------------------------: |
 |         gd          |                       go to definition                       |
 |         gs          |                   go to symbol(reference)                    |
@@ -223,7 +229,7 @@ Sometimes I vertical split window. One window is used to write code, one window 
 
 Quickfix is too small to read error one eye. I used to move to quickfix and scroll it frequently before I write `tools#scroll_quickfix()`. It is a life-changer for me.
 
-| mapping |             meaning             |
+| mapping |           description           |
 | :-----: | :-----------------------------: |
 |  ALT+P  |  scroll up the adjacent window  |
 |  ALT+M  | scroll down the adjacent window |
@@ -259,7 +265,7 @@ Use [LeaderF](https://github.com/Yggdroot/LeaderF) to fuzzy find everything.
 
 If there are [ripgrep](https://github.com/BurntSushi/ripgrep/) and [fd](https://github.com/sharkdp/fd), use them as low-level tools of LeaderF. Otherwise, use grep and find.
 
-|   mapping    |                      meaning                       |
+|   mapping    |                    description                     |
 | :----------: | :------------------------------------------------: |
 | \<Leaderf>f  |         Find files in the current project          |
 | \<Leaderf>T  |           Find available Asynctask task            |
@@ -279,7 +285,7 @@ All mappings are defined in keymap/window.vim. I substitute CTRL+W with \<Leader
 
 move, close window:
 
-|   mapping    |           meaning            |
+|   mapping    |         description          |
 | :----------: | :--------------------------: |
 | \<Leader>wo  | only sustain current window  |
 | \<Leader>wq  |     quit current window      |
@@ -303,7 +309,7 @@ move, close window:
 
 resize, split window:
 
-|   mapping   |            meaning             |
+|   mapping   |          description           |
 | :---------: | :----------------------------: |
 | \<Leader>wv | vertical split current window  |
 | \<Leader>ws |      split current window      |
@@ -317,14 +323,14 @@ resize, split window:
 
 buffer mappings:
 
-|     mapping     |           meaning            |
+|     mapping     |         description          |
 | :-------------: | :--------------------------: |
 |   \<Leader>bd   |    delete current buffer     |
 | \<Leader>\<Tab> | switch to alternative buffer |
 
 tab mappings:
 
-|    mapping     |        meaning         |
+|    mapping     |      description       |
 | :------------: | :--------------------: |
 | \<Leader>1 ~ 9 |  switch to tab 1 ~ 9   |
 |   \<Leader>-   | switch to previous tab |
@@ -336,7 +342,7 @@ tab mappings:
 
 Use [NerdCommemter](https://github.com/preservim/nerdcommenter) to comment/uncomment code.
 
-|  mappings   |       meaning        |
+|  mappings   |     description      |
 | :---------: | :------------------: |
 | \<Leader>cc |    comment lines     |
 | \<Leader>cu |   uncomment lines    |
@@ -351,13 +357,31 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 
 [vim-man](https://github.com/vim-utils/vim-man) enables viewing and navigating manual pages in Vim. coc.nvim enables viewing API doc in pop up window.
 
-| mapping |                    meaning                    |
+| mapping |                  description                  |
 | :-----: | :-------------------------------------------: |
 |   gm    |          vertical open manual pages           |
 |   gh    |            vertical open vim help             |
 |   gK    | open document in pop up window using coc.nvim |
 
 ![open-document](./images/open-docment.gif)
+
+### Git support
+
+- [gv.vim](https://github.com/junegunn/gv.vim): browse git commit history
+- [vim-fugitive](https://github.com/tpope/vim-fugitive): use git in Vim
+- [vim-gitgutter](https://github.com/airblade/vim-gitgutter): show git diff in the sign column
+
+Sometimes, I implement more than one features one time and it is hard to split them into multiple commits. Gitgutter provides functionalities to stash and restore changed hunks, by which I can split changes into different commits. I only define mappings for vim-gitgutter.
+
+| mapping |      description      |
+| :-----: | :-------------------: |
+|   ghp   |     preview hunk      |
+|   ghs   |      stage hunk       |
+|   ghu   |       undo hunk       |
+|   [c    | jump to previous hunk |
+|   ]c    |   jump to next hunk   |
+
+
 
 ## Problem and Solution
 
@@ -376,7 +400,6 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 6. When I install plugin, Vim goes stuck.
 
     dein.vim will block vim when installing plugins. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
-
 # Thanks
 
 Thanks to every plugin author, they are true vimmers.
