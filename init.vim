@@ -327,12 +327,7 @@ let g:Lf_WildIgnore = {
 			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
 			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
 			\}
-" integrate LeaderF, guentags and gtags
-let g:Lf_CacheDirectory = expand('~')
-let g:Lf_GtagsAutoGenerate = 0
-let g:Lf_GtagsGutentags = 1
-let g:Lf_Gtagslabel = 'native-pygments'
-let g:Lf_RootMarkers = ['.root', '.git', '.pro', 'Cargo.toml']   " 设置项目根目录标记
+let g:Lf_RootMarkers = general#findder
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>f"
 let g:Lf_ShortcutB = "<Leader>bl"
@@ -385,8 +380,7 @@ let g:gutentags_ctags_extra_args += ['--exclude=plugged']
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
 " Integrate Leaderf and gutentags
-" Put all gtags file in ~/.LfCache/gtags
-let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory . '/.LfCache/gtags')
+let g:gutentags_cache_dir = general#vimfiles .. '/.tags'
 
 " Don't load gtags_cscope database automatically
 let g:gutentags_auto_add_gtags_cscope = 0
