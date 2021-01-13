@@ -881,6 +881,11 @@ let doge_mapping_comment_jump_backward = '<C-k'
 runtime macros/sandwich/keymap/surround.vim
 " }}}
 
+" accelerated-jk {{{
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+" }}}
+
 " abbreviation{{{
 iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
