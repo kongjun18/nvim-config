@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2020-12-26
+" Last Change: 2021-01-13
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -45,7 +45,7 @@ if executable('rg')
 	let general#grepper = 'rg'
 	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
-let general#project_root_maker = ['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']
+let general#project_root_maker = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']
 
 call tools#ensure_dir_exist(general#backup_dir)
 call tools#ensure_dir_exist(general#swap_dir)
