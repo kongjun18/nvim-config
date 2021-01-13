@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-12
+" Last Change: 2021-01-13
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -467,95 +467,14 @@ let g:UltiSnipsEditSplit="vertical"
 "}}}
 
 " vim-quickui{{{
-
+" vim-quickiui is a simple ui for terminal vim, but I only use it to preview
+" tag in pop up window. 
 if has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0
 	echoerr "vim-quickui can't work"
 else
-	autocmd VimEnter * call quickui#menu#reset()
-
-	autocmd VimEnter * call quickui#menu#install('&Build', [
-				\ [ "Build &File", 'AsyncTask file-build' ],
-				\ [ "Run &File", 'AsyncTask file-run' ],
-				\ [ "Build &Project", 'AsyncTask project-build' ],
-				\ [ "Run &Project", 'AsyncTask project-run' ],
-				\ [ "Run &Test", 'AsyncTask file-test' ]
-				\ ])
-	autocmd VimEnter * call quickui#menu#install('&Symbol', [
-				\ [ "Find &Definition\t(GNU Global)", 'autocmd VimEnter * call MenuHelp_Gscope("g")', 'GNU Global search g'],
-				\ [ "Find &Symbol\t(GNU Global)", 'call MenuHelp_Gscope("s")', 'GNU Gloal search s'],
-				\ [ "Find &Called by\t(GNU Global)", 'call MenuHelp_Gscope("d")', 'GNU Global search d'],
-				\ [ "Find C&alling\t(GNU Global)", 'call MenuHelp_Gscope("c")', 'GNU Global search c'],
-				\ [ "Find &From Ctags\t(GNU Global)", 'call MenuHelp_Gscope("z")', 'GNU Global search c'],
-				\ [ "--", ],
-				\ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
-				\ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
-				\ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
-				\ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
-				\ ])
-	" call quickui#menu#install('&Tools', [
-	"           \ ['List &Buffer', 'call quickui#tools#list_buffer("e")', ],
-	"           \ ['List &Function', 'call quickui#tools#list_function()', ],
-	"           \ ['--',''],
-	"           \ ['&Spell %{&spell? "Disable":"Enable"}', 'set spell!', 'Toggle spell check %{&spell? "off" : "on"}'],
-	"           \ ])
-
-	autocmd VimEnter * call quickui#menu#install('&Vimwiki', [
-				\ ["&Vimwiki2HTMLBrowse", "Vimwiki2HTMLBrowse", "Convert Vimwiki to HTML and browse it"],
-				\ ['&VimwikiTOC', "VimwikiTOC", "Generate TOC"]
-				\ ])
-
-	autocmd VimEnter * call quickui#menu#install('&Plugin', [
-				\ ["Plugin &Snapshot", "PlugSnapshot", "Update snapshort"],
-				\ ["Plugin &Update", "PlugUpdate", "Update plugin"],
-				\ ["Plugin &upgrade", "PlugUpgrade", "Upgrade plugin manager"],
-				\ ["Plugin &Install", "PlugInstall", "Install plugin"],
-				\ ["Plugin &Clean", "PlugClean", "Clean plugin"]
-				\ ])
-
-
-	autocmd VimEnter * call quickui#menu#install('Help (&?)', [
-				\ ["&Index", 'tab help index', ''],
-				\ ['Ti&ps', 'tab help tips', ''],
-				\ ['--',''],
-				\ ["&Tutorial", 'tab help tutor', ''],
-				\ ['&Quick Reference', 'tab help quickref', ''],
-				\ ['&Summary', 'tab help summary', ''],
-				\ ['--',''],
-				\ ['&Vim Script', 'tab help eval', ''],
-				\ ['&Function List', 'tab help function-list', ''],
-				\ ], 10000)
-
-	let g:quickui_show_tip = 1
-
-
-	"----------------------------------------------------------------------
-	" context menu
-	"----------------------------------------------------------------------
-	let g:context_menu_k = [
-				\ ["&Peek Definition\tAlt+;", 'call quickui#tools#preview_tag("")'],
-				\ ["S&earch in Project\t\\cx", 'exec "silent! GrepCode! " . expand("<cword>")'],
-				\ [ "--", ],
-				\ [ "Find &Definition\t\\cg", 'call MenuHelp_Fscope("g")', 'GNU Global search g'],
-				\ [ "Find &Symbol\t\\cs", 'call MenuHelp_Fscope("s")', 'GNU Gloal search s'],
-				\ [ "Find &Called by\t\\cd", 'call MenuHelp_Fscope("d")', 'GNU Global search d'],
-				\ [ "Find C&alling\t\\cc", 'call MenuHelp_Fscope("c")', 'GNU Global search c'],
-				\ [ "Find &From Ctags\t\\cz", 'call MenuHelp_Fscope("z")', 'GNU Global search c'],
-				\ [ "--", ],
-				\ [ "Goto D&efinition\t(YCM)", 'YcmCompleter GoToDefinitionElseDeclaration'],
-				\ [ "Goto &References\t(YCM)", 'YcmCompleter GoToReferences'],
-				\ [ "Get D&oc\t(YCM)", 'YcmCompleter GetDoc'],
-				\ [ "Get &Type\t(YCM)", 'YcmCompleter GetTypeImprecise'],
-				\ [ "--", ],
-				\ ['Dash &Help', 'call asclib#utils#dash_ft(&ft, expand("<cword>"))'],
-				\ ['Cpp&man', 'exec "Cppman " . expand("<cword>")', '', 'c,cpp'],
-				\ ['P&ython Doc', 'call quickui#tools#python_help("")', 'python'],
-				\ ]
-
-	" 定义按两次空格就打开上面的目录
-	noremap  <localleader>m :call quickui#menu#open()<cr>
-	nnoremap <localleader>p :call quickui#tools#preview_tag('')<cr>
-	nnoremap <localleader>j :call quickui#preview#scroll(5)<cr>
-	nnoremap <localleader>k :call quickui#preview#scroll(-5)<cr>
+	nnoremap <silent> <localleader>p :call quickui#tools#preview_tag('')<CR>
+	nnoremap <silent> <localleader>j :call quickui#preview#scroll(5)<CR>
+	nnoremap <silent> <localleader>k :call quickui#preview#scroll(-5)<CR>
 endif
 "}}}
 
