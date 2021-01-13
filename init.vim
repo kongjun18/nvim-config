@@ -168,6 +168,7 @@ if dein#load_state(general#plugin_dir)
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
                     \ 'on_ft': ['c', 'cpp'],
+                    \ 'depends': 'coc.nvim' 
                     \ })
         call dein#add('wsdjeg/vim-lua', {
                     \ 'lazy': 1,
