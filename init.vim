@@ -327,7 +327,7 @@ let g:Lf_WildIgnore = {
 			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
 			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
 			\}
-let g:Lf_RootMarkers = general#findder
+let g:Lf_RootMarkers = general#project_root_maker
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>f"
 let g:Lf_ShortcutB = "<Leader>bl"
