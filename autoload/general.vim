@@ -16,12 +16,6 @@ if has('unix')
     let general#is_windows = 0
     let general#vimrc = $HOME . "/.config/nvim/init.vim"
     let general#vimfiles = $HOME . "/.config/nvim"
-    let general#plugin_dir = $HOME . "/.config/nvim/plugged"
-    let general#backup_dir = $HOME . "/.config/nvim/.backup"
-    let general#swap_dir = $HOME . "/.config/nvim/.swap"
-    let general#undo_dir = $HOME . "/.config/nvim/.undo"
-    let general#session_dir = $HOME . "/.config/nvim/.session"
-    let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
 
     " suppress the output of external program
     " I use fish shell, so give it extra attention
@@ -39,13 +33,13 @@ elseif has('win32')
     let general#is_unix = 0
     let general#vimrc = $HOME . "\\_vimrc"
     let general#vimfiles = $HOME . "\\vimfiles"
-    let general#plugin_dir = $HOME . "\\vimfiles\\plugged"
-    let general#backup_dir = $HOME . "\\vimfiles\\.backup"
-    let general#swap_dir = $HOME . "\\vimfiles\\.swap"
-    let general#undo_dir = $HOME . "\\vimfiles\\.undo"
-    let general#session_dir = $HOME . "\\vimfiles\\.session"
-    let general#dein_file = general#plugin_dir . '\\repos\\github.com\\Shougo\\dein.vim'
 endif
+let general#plugin_dir = general#vimfiles . "/plugged"
+let general#backup_dir = general#vimfiles . "/.backup"
+let general#swap_dir = general#vimfiles . "/.swap"
+let general#undo_dir = general#vimfiles . "/.undo"
+let general#session_dir = general#vimfiles . "/.session"
+let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
 let general#nvim_is_latest = tools#nvim_is_latest()
 let general#only_use_static_tag = 0
 let general#grepper = 'grep'
@@ -89,22 +83,7 @@ let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrwSettings = 1
 let g:loaded_netrwFileHandlers = 1
-let g:loaded_gzip = 1
-let g:loaded_tar = 1
-let g:loaded_tarPlugin = 1
-let g:loaded_zip = 1
-let g:loaded_zipPlugin = 1
-let g:loaded_getscript = 1
-let g:loaded_getscriptPlugin = 1
-let g:loaded_vimball = 1
-let g:loaded_vimballPlugin = 1
-let g:loaded_2html_plugin = 1
-let g:loaded_logiPat = 1
-let g:loaded_rrhelper = 1
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
+let g:did_install_default_menus = 1
 
 set path+=include
 set backspace=indent,eol,start
