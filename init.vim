@@ -449,6 +449,9 @@ let g:AutoPairsShortcutToggle = ''          " disable shortcut
 
 " vim-floaterm{{{
 
+if general#is_windows && executable('bash')
+    let g:floaterm_shell = exepath('bash')
+endif
 let g:floaterm_keymap_toggle = '[ot'
 let g:floaterm_keymap_hide   = ']ot'
 let g:floaterm_keymap_prev   = '[t'
@@ -529,8 +532,7 @@ let g:Lf_Extensions.task = {
 			\ }
 
 " Edit system-wide tasks.ini
-command! TaskEdit exec 'vsp ' . g:vimfiles . '/tasks.ini'
-
+command! TaskEdit exec 'vsp ' .. general#vimfiles .. '/tasks.ini'
 " Run program in tab
 let g:asynctasks_term_pos = 'tab'
 " Set quickfix window height
