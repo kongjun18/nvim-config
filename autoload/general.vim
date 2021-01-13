@@ -33,6 +33,9 @@ elseif has('win32')
     let general#is_unix = 0
     let general#vimrc = $HOME . "\\_vimrc"
     let general#vimfiles = $HOME . "\\vimfiles"
+
+    " Use the Documents as default working directory
+	:cd $HOME\Documents
 endif
 let general#plugin_dir = general#vimfiles . "/plugged"
 let general#backup_dir = general#vimfiles . "/.backup"
