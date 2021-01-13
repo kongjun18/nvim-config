@@ -22,6 +22,18 @@ if has('unix')
     let general#undo_dir = $HOME . "/.config/nvim/.undo"
     let general#session_dir = $HOME . "/.config/nvim/.session"
     let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
+
+    " suppress the output of external program
+    " I use fish shell, so give it extra attention
+    if &shell =~? 'fish'
+        set shellpipe=&>\ %s
+    endif
+
+    " Skip python search to accelerate startup time
+    let g:python_host_skip_check=1
+    let g:python_host_prog = '/usr/bin/python'
+    let g:python3_host_skip_check=1
+    let g:python3_host_prog = '/usr/bin/python3'
 elseif has('win32')
     let general#is_windows = 1
     let general#is_unix = 0
@@ -156,16 +168,8 @@ else
 	set signcolumn=yes
 endif
 
-" suppress the output of external program
-"
-" I use fish shell, so give it extra attention
-if general#is_unix && &shell =~? 'fish'
-	set shellpipe=&>\ %s
-endif
-
 " Turn on true color
 if has('nvim')
-	" Enable true color
 	set termguicolors
 elseif has('termguicolors')
 	" Fix bug for Vim
@@ -173,20 +177,7 @@ elseif has('termguicolors')
 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 	set termguicolors
 else
-	" 8-bit color
 	set t_Co=256
 endif
 
-" Skip python search to accelerate startup time
-if general#is_unix
-    let g:python_host_skip_check=1
-    let g:python_host_prog = '/usr/bin/python'
-    let g:python3_host_skip_check=1
-    let g:python3_host_prog = '/usr/bin/python3'
-endif
-
-" Automatically change working directory to Documents
-if general#is_windows
-    autocmd VimEnter * cd ~/Documents
-endif
 "}}}
