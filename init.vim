@@ -43,6 +43,7 @@ if dein#load_state(general#plugin_dir)
 				\ 'on_event': 'BufReadPost'
 				\})                        " Show marks
 	call dein#add('preservim/nerdtree', {
+                \ 'rev': '6.9.11',
 				\ 'lazy': 1,
 				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDToggle']
 				\ })                                              " File system explorer
@@ -74,11 +75,13 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_ev': 'BufReadPost'
                 \ })                         " Exchange two words or lines
 	call dein#add('SirVer/ultisnips', {
-				\ 'on_if':"has('python3')",
+                \ 'rev': '3.2',
                 \ 'lazy': 1,
+				\ 'on_if':"has('python3')",
 				\ 'on_event': 'TextChangedI'
 				\ })                                              " Code snippets engine
 	call dein#add('preservim/nerdcommenter', {
+                \ 'rev': '2.5.2',
                 \ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })
@@ -98,7 +101,10 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
                 \ })                      " Align code
-	call dein#add('Yggdroot/indentLine', {'on_event': 'BufRead'}) " Indent indication
+	call dein#add('Yggdroot/indentLine', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufRead'}
+                \ ) " Indent indication
     call dein#add('Chiel92/vim-autoformat', {
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
@@ -134,7 +140,7 @@ if dein#load_state(general#plugin_dir)
 				\ })                                            " Debug adaptor of Vim
 
 	" Git
-	call dein#add('tpope/vim-fugitive')
+	call dein#add('tpope/vim-fugitive', {'rev': '3.2'})
     call dein#add('junegunn/gv.vim')
 	call dein#add('airblade/vim-gitgutter', {
 				\ 'lazy': 1,
@@ -187,14 +193,18 @@ if dein#load_state(general#plugin_dir)
 				\ })                                           " Ease the development of vimscript
 
 	" Color scheme
-	call dein#add('sainnhe/edge')							   " Defualt color scheme
-    call dein#add('cormacrelf/vim-colors-github')
+	call dein#add('sainnhe/edge', {'rev': 'v0.1.4'})							   " Defualt color scheme
+    call dein#add('cormacrelf/vim-colors-github', {'rev': 'v0.4'})
 
 	" project management
-	call dein#add('Yggdroot/LeaderF', {'build': ':LeaderfInstallCExtension'})                          " Fuzzy finder
+	call dein#add('Yggdroot/LeaderF', {
+                \ 'rev': 'v1.23',
+                \ 'build': ':LeaderfInstallCExtension'}
+                \ )                          " Fuzzy finder
     call dein#add('neoclide/coc.nvim', {
-                \ 'merge': 0,
                 \ 'lazy': 1,
+                \ 'rev': 'v0.0.80',
+                \ 'merge': 0,
                 \ 'on_event': 'BufReadPost'
                 \ })
     call dein#add('fannheyward/coc-rust-analyzer', {
@@ -213,7 +223,7 @@ if dein#load_state(general#plugin_dir)
 				\ 'hook_source_post': ':call doge#install()<CR>'
 				\ })                                         " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
-	call dein#add('skywind3000/asyncrun.vim')                    " Run shell command asynchronously
+	call dein#add('skywind3000/asyncrun.vim', {'rev': 'v2.7.8'})                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
 	call dein#add('Shougo/echodoc.vim', {
 				\ 'lazy': 1,
@@ -226,10 +236,12 @@ if dein#load_state(general#plugin_dir)
 	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
 	call dein#add('tpope/vim-eunuch', {'on_if': general#is_unix})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
+                \ 'rev': 'v1.3.0',
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
 				\ })                                            " Simple menu bar of terminal Vim
 	call dein#add('wakatime/vim-wakatime', {
+                \ 'rev': 'v8.0.0',
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                                            " Time statistics
