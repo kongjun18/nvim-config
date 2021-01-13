@@ -4,10 +4,9 @@
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
-noremap j gj
-noremap k gk
-map <C-f> <C-f>zz
-map <C-b> <C-b>zz
+nnoremap j gj
+nnoremap k gk
+nnoremap ZA :waqall<CR>
 map <C-d> <C-d>zz
 map <C-u> <C-u>zz
 map <C-o> <C-o>zz
