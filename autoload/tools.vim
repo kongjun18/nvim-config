@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2020-12-26
+" Last Change: 2021-01-13
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0

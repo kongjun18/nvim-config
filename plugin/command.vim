@@ -21,7 +21,14 @@ command! -nargs=0 PlugInstall call dein#install()
 command! -nargs=0 PlugUpdate call dein#update()
 command! -nargs=0 PlugClean call tools#plugin_clean()
 command! -nargs=0 PlugRecache call tools#plugin_recache()
-command! -nargs=? PlugReinstall call tools#plugin_reinstall(split('<args>'))
+command! -nargs=? PlugReinstall 
+            \ if empty('<args>')                        |
+            \   echohl WarnningMsg                      |
+            \   echomsg "Require one or more arguments" |
+            \   echohl None                             |
+            \ else                                      |
+            \   call tools#plugin_reinstall(args)       |
+            \ endif
 
 " Save current buffer and switch to source/header file 
 command -nargs=0 W :w | A

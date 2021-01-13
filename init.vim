@@ -564,38 +564,6 @@ vmap <silent> <Leader>tr <Plug>TranslateRV
 nmap <silent> <Leader>tx <Plug>TranslateX
 "}}}
 
-" plugin shortcut{{{
-
-function <SID>PluginClean()
-	let unused_plugin_dir = dein#check_clean()
-	if len(unused_plugin_dir) == 0
-		echomsg "There is no unused plugin"
-		return
-	endif
-	for dir in unused_plugin_dir
-		try
-			call delete(dir, 'rf')
-		catch /.*/
-			echoerr "remove unused plugin directory failed"
-		endtry
-		echomsg "removed unused plugin directory"
-	endfor
-endfunction
-
-function <SID>PluginRecache()
-	try
-		call dein#clear_state()
-		call dein#recache_runtimepath()
-	catch /.*/
-		echoerr "Error in <SID>PluginRecache"
-	endtry
-endfunction
-command! -nargs=0 PlugInstall call dein#install()
-command! -nargs=0 PlugUpdate call dein#update()
-command! -nargs=0 PlugClean call <SID>PluginClean()
-command! -nargs=0 PlugRecache call <SID>PluginRecache()
-" }}}
-
 " coc.nvim{{{
 hi! CocErrorSign guifg=#d1666a
 let g:coc_status_error_sign = "✖ "
