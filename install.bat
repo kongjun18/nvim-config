@@ -3,22 +3,21 @@ set VIMRC=%HOME%\_vimrc
 set GVIMRC=%HOME%\_gvimrc
 
 if exist %VIMFILES% (
-    echo rename %VIMFILES% to %VIMFILES%.backup
-    rename %VIMFILES% vimfiles.backup
-    md %VIMFILES%
+    copy /y %VIMFILES% vimfiles.backup
+    del %VIMFILES%
 )
 
 if exist %VIMRC% (
-    echo rename %VIMRC% to %VIMRC%.backup
-    rename %VIMRC% _vimrc.backup
+    copy /y %VIMRC% _vimrc.backup
+    del %VIMRC%
 )
 
 if exist %GVIMRC% (
-    echo rename %GVIMRC% to %GVIMRC%.backup
-    rename %GVIMRC% _gvimrc.backup
+    copy /y %GVIMRC% _gvimrc.backup
+    del %GVIMRC%
 )
 
-move %cd%/nvim-config %VIMFILES%
+rename nvim-config vimfiles
 mklink %VIMRC% %VIMFILES%\init.vim
 mklink %GVIMRC%  %VIMFILES%\gvimrc 
 powershell.exe -file %VIMFILES%\tools\dein.ps1 %VIMFILES%\plugged
