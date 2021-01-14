@@ -21,4 +21,4 @@ if exist %GVIMRC% (
 xcopy %cd% %VIMFILES% /s/e/i
 copy %cd%\init.vim %VIMRC%
 copy %cd%\gvimrc %GVIMRC%
-%cd%\tools\dein.ps1 %VIMFILES%\plugged
+powershell.exe %cd%\tools\dein.ps1 %VIMFILES%\plugged
