@@ -28,34 +28,53 @@ Compulsory:
 - Python3.6+:          for [Ultisnips](https://github.com/SirVer/ultisnips), [LeaderF](https://github.com/Yggdroot/LeaderF) and other plugins
 - [universal ctags](https://github.com/universal-ctags/ctags):     generate tag file
 
+
+
 Optional:
 - Latest **Neovim nightly** with Python3 support
+- cygwin(Windows): a large collection of GNU tools
 - [rg(ripgrep)](https://github.com/BurntSushi/ripgrep):         a better grep
 - [fd](https://github.com/sharkdp/fd):                  a faster find
 - [gtags](https://www.gnu.org/software/global/):               find reference, included file and so on
 - [pygments](https://pygments.org):            extend gtags' functionality
-- clanghttps://github.com/rizsotto/Bear-format:        format C/C++ code
+- clang-format:        format C/C++ code
 - clang-tidy, clazy:   C++ linter
-- shellcheck:          linter for sh and bash
 - [bear](https://github.com/rizsotto/Bear):                generate compile database for Makefile
 - axel:                a multi-threaded downloader 
 
+I highly recommend Windows users to install cygwin which makes you use UNIX tools on Windows.
 
+Notes:
+
+- UNIX: Python executable must be placed in /usr/bin
+- Windows: Only support vim
 
 ## Installation
 
+Please backup your configuration and follow the instructions below to install my configuration. When you launch vim, it will install plugins automatically. If the networking is working correctly, you just need to wait 3 minutes.
+
 ### UNIX
 
-Clone it, run `sh install.sh` in shell and then open (Neo)vim. (Neo)vim will install dein.nvim and other plugins automatically.
+Clone it, run `sh install.sh` in shell and then open (Neo)vim.
 ```sh
-git clone https://github.com/kongjun18/nvim-config.git --depth=1
-cd nvim-config
-sh install.sh
+git clone https://github.com/kongjun18/nvim-config.git
+sh nvim-config/install.sh
 ```
 
 ### Windows
 
-I am not familiar with shell and neovim on Windows platform. Thus, there is no installation script and support for neovim. If you work on Windows, please use GVim and create vimfiles and _vimrc yourself.
+Open cmd.exe with administrator right, and type the following commands:
+
+```shell
+cd %HOME%
+git clone https://github.com/kongjun18/nvim-config.git
+copy nvim-config\install.bat
+install.bat
+```
+
+When launch vim, you will see nothing(as if vim is not lauched). Don't panic, open task manager, you can see many Git processes, which indicates Vim is installing plugins.
+
+
 
 ## Structure of configuration
 
@@ -79,6 +98,7 @@ I am not familiar with shell and neovim on Windows platform. Thus, there is no i
 |   └── edge.vim
 ├── init.vim
 ├── install.sh
+├── install.bat
 ├── plugin
 │   ├── command.vim
 │   └── keymap.vim
@@ -117,7 +137,9 @@ Leader:`<Space>`
 
 Localleader: `z`
 
-I use `['.root', '.git', '.pro', 'Cargo.toml', 'compile_commands.json']` to identify the root of project. So you must define one of these files at the root of project. If you don't like it, please modify `g:project_root_maker` in init.vim(fold *general setting*).
+I use `general#project_root_maker`(`['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']`) to identify the root of project. Thus, you must define one of these files at the root of project.
+
+For more information, you need to read source code. README.md only describes key points of my configuration.
 
 ### Manage plugins
 
@@ -125,12 +147,13 @@ I manage plagins using [dein.vim](https://github.com/Shougo/dein.vim). It is fas
 
 Because dein.vim only provides functions, I add some simple commands.
 
-|    command    |                     description                     |
-| :-----------: | :-------------------------------------------------: |
-|  PluginClean  |               clean not-used plugins                |
-| PluginInstall | install plugins added by dein.vim but not installed |
-| PluginUpdate  |                 update all plugins                  |
-| PluginRecache |             recache plugin directories              |
+|     command     |                     description                     |
+| :-------------: | :-------------------------------------------------: |
+|   PluginClean   |               clean not-used plugins                |
+|  PluginInstall  | install plugins added by dein.vim but not installed |
+|  PluginUpdate   |                 update all plugins                  |
+|  PluginRecache  |             recache plugin directories              |
+| PluginReinstall |                  reinstall plugins                  |
 
 ### Build and run project in (Neo)vim
 
@@ -140,21 +163,24 @@ Use [Asynctask](https://github.com/skywind3000/asynctasks.vim) to manage task. A
 | :-------------------------------------: | :-----: | :--------------------------------------------------: |
 |               file-build                | \<Tab>5  |                  build current file                  |
 |                file-run                 | \<Tab>6  |                   run current file                   |
-|                asm-build                |  None   |         build current AT&T x86 assembly file         |
 |              project-build              | \<Tab>7  |             build current C/C++ project              |
 |               project-run               | \<Tab>8  | run executable with the same name of current project |
 |              project-clean              | \<Tab>9  |                clean current project                 |
 | generate-compile-database-from-makefile |  None   |              generate compile database               |
+| clang-tidy | None | lint current project |
 
 Project-related tasks are defined for C/C++ project based on CMake. But  I also defined some [profiles](https://github.com/skywind3000/asynctasks.vim#task-with-different-profiles) to support diffrent tool chains(such as Makefile). If my tasks don't meet your demand, please modify it.
 
 I add custom command `:TaskEdit` to edit global asynctask configuration. You also can use `:AsyncTaskEdit` to edit global or local asynctask configuration.
 
-If you want to handle project-specific asynctask configuration, please copy ~/.config/nvim/tasks.init to the root of current project(it is so-called local asynctask configuration) and modify it.
+If you want to handle project-specific asynctask configuration, please type `:AsynctaskEdit` and write your configuration based on global tasks.ini.
 
 I don't want to define mapping for every task, but i integrate [Leaderf](https://github.com/Yggdroot/LeaderF) and Asynctask. You can type `<Leaderf>lt` to find and run any tasks conveniently.
 
-**note:** For some unknown reasons, If edit Rust file in directory which is not the root of project, run `cargo build` (task `project-build:cargo`) and then jump to file in quickfix, we will jump to empty file. So always edit Rust file in the root of project.
+**Note:** 
+
+- For some unknown reasons, If edit Rust file in directory which is not the root of project, run `cargo build` (task `project-build:cargo`) and then jump to file in quickfix, we will jump to empty file. So always edit Rust file in the root of project.
+- task clang-tidy depends on UNIX find
 
 ![build-project](./images/build-project.gif)
 
@@ -164,17 +190,13 @@ Use [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint code. 
 
 Use \<Tab> to select suggestions. \<C-n> select next suggestions and \<C-p> select previous one.
 
-For C/C++, You should generate [compile database](https://www.jetbrains.com/help/clion/compilation-database.html)(compile_command.json) and place it at the root of C/C++ project. If you use CMake, just put `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` in your CMakeLists.txt. If you use Makefile, you can use compiledb or bear to generate compile_command.json at the root.
-
-Task `project-generate` would generate CMake project and place compile_commands.json to the root. `generate-compile-database-from-makefile` use compiledb to generate Makefile.
+For C/C++, You should generate [compile database](https://www.jetbrains.com/help/clion/compilation-database.html)(compile_command.json) and place it at the root of C/C++ project. If you use CMake or Makefile, my configuration handles it for you. Please check aformentioned `project-configurate` and `generate-compile-database-from-makefile`.
 
 coc.nvim has full capability of LSP(language server protocal). Theoretically, coc.nvim supports all LSP. If you want to write other language(such as Lua), just find the corresponding LSP and configure coc.nvim.
 
 ![code completion](./images/code-completion.gif)
 
 ### Dynamic check
-
-I integrate [coc.nvim](https://github.com/neoclide/coc.nvim) and [ALE](https://github.com/dense-analysis/ale) to lint code. You can modify ALE configuration to add more linters.
 
 See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
 
@@ -217,9 +239,13 @@ Sometimes, gutentags fails to generate gtags or ctags file and produce warning. 
 :call tools#rm_gtags(asyncrun#get_root('%'))
 ```
 
-**note**: LSP-based tag system consumes more memory and CPU than static tag system. If you use languages which don't support overloaded function, static tag system is better.
+**Note**: LSP-based tag system consumes more memory and CPU than static tag system. If you use languages which don't support overloaded function, static tag system is better.
 
 ![tag](./images/tag.gif)
+
+### Switch between source and header
+
+[projectionist.vim](https://github.com/tpope/vim-projectionist) finishes this task perfectly except that vim will generate error when we switch buffer without save. I create  `:W` to save the current buffer and switch to corresponding file.
 
 ### Scroll adjacent window and quickfix without change focus
 
@@ -274,6 +300,7 @@ If there are [ripgrep](https://github.com/BurntSushi/ripgrep/) and [fd](https://
 | \<LeaderF>l  |         Find symbol in the current buffer          |
 | \<Leaderf>bl |                    Find buffer                     |
 | \<Leaderf>rg | Use ripgrep to find pattern in the current project |
+| \<Leaderf>tt |                  Toggle NERDTree                   |
 
 ![fuzzy find](./images/fuzzy-find.gif)
 
@@ -283,7 +310,7 @@ Vim provides powerful window operations, but is not relaxing. If you want to ope
 
 All mappings are defined in keymap/window.vim. I substitute CTRL+W with \<Leader>+w and make mappings easier to remember.
 
-move, close window:
+Move, close window:
 
 |   mapping    |         description          |
 | :----------: | :--------------------------: |
@@ -307,7 +334,7 @@ move, close window:
 |      J       |     move to below window     |
 |      K       |     move to upper window     |
 
-resize, split window:
+Resize, split window:
 
 |   mapping   |          description           |
 | :---------: | :----------------------------: |
@@ -319,16 +346,16 @@ resize, split window:
 | \<Leader>w, | decrease current window width  |
 | \<Leader>w. | increase current window width  |
 
-**note:**`,` is the same key with `<` but easier to type, so I substitute `<` with `,`. Likewise, I use `=` substitute `+`.
+**Note:**`,` is the same key with `<` but easier to type, so I substitute `<` with `,`. Likewise, I use `=` substitute `+`.
 
-buffer mappings:
+Buffer mappings:
 
 |     mapping     |         description          |
 | :-------------: | :--------------------------: |
 |   \<Leader>bd   |    delete current buffer     |
 | \<Leader>\<Tab> | switch to alternative buffer |
 
-tab mappings:
+Tab mappings:
 
 |    mapping     |      description       |
 | :------------: | :--------------------: |
@@ -371,7 +398,7 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 - [vim-fugitive](https://github.com/tpope/vim-fugitive): use git in Vim
 - [vim-gitgutter](https://github.com/airblade/vim-gitgutter): show git diff in the sign column
 
-Sometimes, I implement more than one features one time and it is hard to split them into multiple commits. Gitgutter provides functionalities to stash and restore changed hunks, by which I can split changes into different commits. I only define mappings for vim-gitgutter.
+There's no need to create mappings for vim-fugitive which has nice command interface.  So I only define mappings for vim-gitgutter.
 
 | mapping |      description      |
 | :-----: | :-------------------: |
@@ -400,6 +427,11 @@ Sometimes, I implement more than one features one time and it is hard to split t
 6. When I install plugin, Vim goes stuck.
 
     dein.vim will block vim when installing plugins. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
+    
+5. I can't start vim after installation.
+
+ Don't panic, open task manager, you can see many Git processes, which indicates Vim is installing plugins. If the networking is working correctly, you just need to wait 3 minutes.
+
 # Thanks
 
 Thanks to every plugin author, they are true vimmers.
