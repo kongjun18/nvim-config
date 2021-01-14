@@ -19,17 +19,16 @@ if [ -d ${NVIM} -o -L ${NVIM} ]; then
 	mv ${NVIM} ${NVIM}.backup
 fi
 
-echo "mkdir -p ${NVIM}"
-mkdir -p ${NVIM}
-
-echo "cp -r $(pwd)/* ${NVIM}"
-cp -r $(pwd)/* ${NVIM}
+git clone https://github.com/kongjun18/nvim-config.git
+echo "mv $(pwd)/nvim-config ${NVIM}"
+mv $(pwd)/nvim-config ${NVIM}
 
 echo "ln -s ${NVIM} ${VIM}"
 ln -s ${NVIM} ${VIM}
 
 echo "ln -s ${NVIMRC} ${VIMRC}"
 ln -s ${NVIMRC} ${VIMRC}
-sh $(pwd)/tools/dein.sh ${NVIM}/plugged
+
+sh ${NVIM}/tools/dein.sh ${NVIM}/plugged
 
 

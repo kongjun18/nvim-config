@@ -18,7 +18,8 @@ if exist %GVIMRC% (
     rename %GVIMRC% _gvimrc.backup
 )
 
-xcopy %cd% %VIMFILES% /s/e/i
-copy %cd%\init.vim %VIMRC%
-copy %cd%\gvimrc %GVIMRC%
-powershell.exe %cd%\tools\dein.ps1 %VIMFILES%\plugged
+git clone https://github.com/kongjun18/nvim-config.git
+move %cd%/nvim-config %VIMFILES%
+mklink %VIMRC% %VIMFILES%\init.vim
+mklink %GVIMRC%  %VIMFILES%\gvimrc 
+powershell.exe -file %VIMFILES%\tools\dein.ps1 %VIMFILES%\plugged
