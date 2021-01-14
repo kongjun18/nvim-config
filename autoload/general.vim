@@ -22,8 +22,8 @@ if has('unix')
     let general#undo_dir = general#vimfiles . '/.undo'
     let general#session_dir = general#vimfiles . '/.session'
     let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
-    ' suppress the output of external program
-    ' I use fish shell, so give it extra attention
+    " suppress the output of external program
+    " I use fish shell, so give it extra attention
     if &shell =~? 'fish'
         set shellpipe=&>\ %s
     endif
