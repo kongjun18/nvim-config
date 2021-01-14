@@ -12,15 +12,6 @@ let loaded_init_vim = 1
 " }}}
 
 " dein ----{{{
-if !isdirectory(general#plugin_dir)
-    if general#is_unix
-		silent !sh ~/.config/nvim/tools/dein.sh ~/.config/nvim/plugged
-		autocmd VimEnter * call dein#install()
-    else
-        :echomsg "Don't support windows"
-    endif
-endif
-
 " Substitute wget or curl with axel which is a multi-threaded downloader
 if executable('axel')
 	let g:dein#download_command = 'axel -n 8 -o'

@@ -31,7 +31,7 @@ command! -nargs=? PlugReinstall
             \ endif
 
 " Save current buffer and switch to source/header file 
-command -nargs=0 W :w | A
+command! -nargs=0 W :w | A
 
 " Echo current buffer path
 command -nargs=0 EchoBufferPath :echo expand('%:p')

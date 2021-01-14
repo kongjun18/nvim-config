@@ -14,11 +14,16 @@ let general#loaded_general_vim = 1
 if has('unix')
     let general#is_unix = 1
     let general#is_windows = 0
-    let general#vimrc = $HOME . "/.config/nvim/init.vim"
-    let general#vimfiles = $HOME . "/.config/nvim"
-
-    " suppress the output of external program
-    " I use fish shell, so give it extra attention
+    let general#vimrc = $HOME . '/.config/nvim/init.vim'
+    let general#vimfiles = $HOME . '/.config/nvim'
+    let general#plugin_dir = general#vimfiles . '/plugged'
+    let general#backup_dir = general#vimfiles . '/.backup'
+    let general#swap_dir = general#vimfiles . '/.swap'
+    let general#undo_dir = general#vimfiles . '/.undo'
+    let general#session_dir = general#vimfiles . '/.session'
+    let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
+    ' suppress the output of external program
+    ' I use fish shell, so give it extra attention
     if &shell =~? 'fish'
         set shellpipe=&>\ %s
     endif
@@ -31,18 +36,17 @@ if has('unix')
 elseif has('win32')
     let general#is_windows = 1
     let general#is_unix = 0
-    let general#vimrc = $HOME . "\\_vimrc"
-    let general#vimfiles = $HOME . "\\vimfiles"
-
+    let general#vimrc = $HOME .. '\_vimrc'
+    let general#vimfiles = $HOME .. '\vimfiles'
+    let general#plugin_dir = general#vimfiles . '\plugged'
+    let general#backup_dir = general#vimfiles . '\.backup'
+    let general#swap_dir = general#vimfiles . '\.swap'
+    let general#undo_dir = general#vimfiles . '\.undo'
+    let general#session_dir = general#vimfiles . '\.session'
+    let general#dein_file = general#plugin_dir . '\repos\github.com\Shougo\dein.vim'
     " Use the Documents as default working directory
 	:cd $HOME\Documents
 endif
-let general#plugin_dir = general#vimfiles . "/plugged"
-let general#backup_dir = general#vimfiles . "/.backup"
-let general#swap_dir = general#vimfiles . "/.swap"
-let general#undo_dir = general#vimfiles . "/.undo"
-let general#session_dir = general#vimfiles . "/.session"
-let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
 let general#nvim_is_latest = tools#nvim_is_latest()
 let general#only_use_static_tag = 0
 let general#grepper = 'grep'

@@ -30,6 +30,6 @@ ln -s ${NVIM} ${VIM}
 
 echo "ln -s ${NVIMRC} ${VIMRC}"
 ln -s ${NVIMRC} ${VIMRC}
-
+$(pwd)/tools/dein.sh ${NVIM}/plugged
 
 
