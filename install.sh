@@ -19,7 +19,6 @@ if [ -d ${NVIM} -o -L ${NVIM} ]; then
 	mv ${NVIM} ${NVIM}.backup
 fi
 
-git clone https://github.com/kongjun18/nvim-config.git
 echo "mv $(pwd)/nvim-config ${NVIM}"
 mv $(pwd)/nvim-config ${NVIM}
 

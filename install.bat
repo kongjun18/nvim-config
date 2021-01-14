@@ -18,7 +18,6 @@ if exist %GVIMRC% (
     rename %GVIMRC% _gvimrc.backup
 )
 
-git clone https://github.com/kongjun18/nvim-config.git
 move %cd%/nvim-config %VIMFILES%
 mklink %VIMRC% %VIMFILES%\init.vim
 mklink %GVIMRC%  %VIMFILES%\gvimrc 
