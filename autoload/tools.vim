@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-01-13
+" Last Change: 2021-01-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -315,8 +315,19 @@ endfunction
 
 " Use static tag system {{{
 function tools#use_static_tag() abort
-    nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-    nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+    if &csprg == 'gtags-cscope'
+        nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
+        nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
+        nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+        nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+        nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+    else
+        nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gs :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gd :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
+    endif
 endfunction
 "}}}
 

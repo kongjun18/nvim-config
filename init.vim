@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-13
+" Last Change: 2021-01-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -319,15 +319,86 @@ nnoremap <Leader>rg :Leaderf rg<Space><Right>
 nnoremap <leader>T :Leaderf task<CR>
 "}}}
 
-" tag system ------------{{{
-nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+" coc.nvim{{{
+let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer']
+hi! CocErrorSign guifg=#d1666a
+let g:coc_status_error_sign = "✖ "
+let g:coc_status_warning_sign = "‼ "
 
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+nmap <silent> gN <Plug>(coc-diagnostic-prev)
+nmap <silent> gn <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+if !general#only_use_static_tag
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gs <Plug>(coc-references)
+    nmap <silent> gt <Plug>(coc-type-definition)
+    nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+    nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
+endif
+
+
+" Use gK to show documentation in preview window.
+nnoremap <silent> gK :call <SID>show_documentation()<CR>
+
+
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rv <Plug>(coc-rename)
+nmap <Leader>rf <Plug>(coc-refactor)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" }}}
+
+" static tag system ------------{{{
 " gutentags ----------------{{{
 " Exclude these types
-let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css']
+let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim']
 
 " Use pygment to extend gtags
 let $GTAGSLABEL = 'native-pygments'
@@ -366,12 +437,12 @@ let g:gutentags_cache_dir = general#vimfiles .. '/.tags'
 let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
+nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+
 "       gutentags_plus ------------{{{
-
-" change focus to quickfix window after search (optional).
-let g:gutentags_plus_switch = 0
-let g:gutentags_plus_nomap = 1
-
 
 if general#only_use_static_tag
 	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
@@ -381,10 +452,28 @@ if general#only_use_static_tag
     nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 endif
 
-" --------------}}}
+nnoremap <C-g> :GtagsCursor<CR>zz
 
-" gtags(global) {{{
-noremap <C-g> mG:GtagsCursor<CR>zz"}}}
+" change focus to quickfix window after search (optional).
+let g:gutentags_plus_switch = 0
+let g:gutentags_plus_nomap = 1
+
+" Gtags is not installed
+if &csprg != 'gtags-cscope'
+    nnoremap <silent> ge :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> gf :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> ga :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> <C-g> :echoerr 'gtags-scope is not available'<CR>
+    if general#only_use_static_tag
+        nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gs :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gd :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
+    endif
+endif
+" --------------}}}
 
 " vista{{{
 
@@ -545,81 +634,6 @@ vmap <silent> <Leader>tr <Plug>TranslateRV
 " Translate the text in clipboard
 nmap <silent> <Leader>tx <Plug>TranslateX
 "}}}
-
-" coc.nvim{{{
-let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer']
-hi! CocErrorSign guifg=#d1666a
-let g:coc_status_error_sign = "✖ "
-let g:coc_status_warning_sign = "‼ "
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-nmap <silent> gN <Plug>(coc-diagnostic-prev)
-nmap <silent> gn <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-if !general#only_use_static_tag
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gs <Plug>(coc-references)
-    nmap <silent> gt <Plug>(coc-type-definition)
-    nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
-    nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
-endif
-
-
-" Use K to show documentation in preview window.
-nnoremap <silent> gK :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
-        call CocActionAsync('doHover')
-    else
-        execute '!' . &keywordprg . " " . expand('<cword>')
-    endif
-endfunction
-
-" Symbol renaming.
-nmap <leader>rv <Plug>(coc-rename)
-nmap <Leader>rf <Plug>(coc-refactor)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" }}}
 
 " leetcode{{{
 
