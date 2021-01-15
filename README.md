@@ -4,7 +4,7 @@ This repository is my personal configuration of (Neo)vim.
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run on any GNU/Linux distributions, Windows and FreeBSD.
+I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run in any GNU/Linux distributions, Windows and FreeBSD.
 
 Feature list:
 
@@ -42,7 +42,7 @@ Optional:
 - [bear](https://github.com/rizsotto/Bear):                generate compile database for Makefile
 - axel:                a multi-threaded downloader 
 
-I highly recommend Windows users to install cygwin which makes you use UNIX tools on Windows.
+I highly recommend Windows users to install cygwin which makes you use UNIX tools in Windows.
 
 Notes:
 
@@ -233,7 +233,7 @@ I use [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) and [vim-
 
 Every time open or write file belong to project, Vim will generate ctags and gtags incrementally. 
 
-Sometimes, gutentags fails to generate gtags or ctags file and produce warning. You can type `:DebugGutentags` to see log, fix the problem and type `:UndebugGutags` to disable messages. In most case, delete gtags file fix all problems. All tags reside on ~/.config/.cache/tags. I write a function `tools#rm_gtags(dir)` to delete gtags. To delete gtags of current project, type the following line:
+Sometimes, gutentags fails to generate gtags or ctags file and produce warning. You can type `:DebugGutentags` to see log, fix the problem and type `:UndebugGutags` to disable messages. In most case, delete gtags file fix all problems. All tags are stored in ~/.config/.cache/tags. I write a function `tools#rm_gtags(dir)` to delete gtags. To delete gtags of current project, type the following line:
 
 ```vim
 :call tools#rm_gtags(asyncrun#get_root('%'))
@@ -430,7 +430,17 @@ There's no need to create mappings for vim-fugitive which has nice command inter
     
 5. I can't start vim after installation.
 
- Don't panic, open task manager, you can see many Git processes, which indicates Vim is installing plugins. If the networking is working correctly, you just need to wait 3 minutes.
+     Don't panic, open task manager, you can see many Git processes, which indicates Vim is installing plugins. If the networking is working correctly, you just need to wait 3 minutes.
+
+6. tag jump mappings not to work.
+
+    Please ensure gtags is in PATH and pygments is installed. If it still have problems, set `$GTAGSCONF` variable in init.vim using the following comamnds:
+
+    ```vim
+    let $GTAGSCONF = 'path/to/gtags.conf'
+    ```
+
+    In Windows, gtags.conf is placed in `gtags-installation-path\gtags\share\gtags`;In UNIX, gtags.conf is placed in `/usr/local/share/gtags`.
 
 # Thanks
 
