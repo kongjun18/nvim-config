@@ -2,6 +2,8 @@
 	"coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
     "coc.preferences.jumpCommand": "drop",
     "suggest.echodocSupport": true,
+    "diagnostic.errorSign": "✖",
+    "diagnostic.warningSign": "‼",
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",
