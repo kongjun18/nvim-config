@@ -6,7 +6,7 @@
 
 nnoremap j gj
 nnoremap k gk
-nnoremap ZA :waqall<CR>
+nnoremap ZA :wqa<CR>
 map <C-d> <C-d>zz
 map <C-u> <C-u>zz
 map <C-o> <C-o>zz
