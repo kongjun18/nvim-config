@@ -15,6 +15,7 @@ if has('unix')
     let general#is_unix = 1
     let general#is_windows = 0
     let general#vimrc = $HOME . '/.config/nvim/init.vim'
+    let general#gvimrc = $HOME . '/.gvimrc'
     let general#vimfiles = $HOME . '/.config/nvim'
     let general#plugin_dir = general#vimfiles . '/plugged'
     let general#backup_dir = general#vimfiles . '/.backup'
@@ -38,6 +39,7 @@ elseif has('win32')
     let general#is_unix = 0
     let general#vimrc = $HOME .. '\_vimrc'
     let general#vimfiles = $HOME .. '\vimfiles'
+    let general#gvimrc = $HOME .. '\_gvimrc'
     let general#plugin_dir = general#vimfiles . '\plugged'
     let general#backup_dir = general#vimfiles . '\.backup'
     let general#swap_dir = general#vimfiles . '\.swap'
@@ -166,4 +168,8 @@ else
 	set t_Co=256
 endif
 
+" Neovim gui
+if has('gui_running')
+    exec 'source' general#gvimrc
+endif
 "}}}
