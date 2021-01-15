@@ -36,7 +36,7 @@ if dein#load_state(general#plugin_dir)
 	call dein#add('preservim/nerdtree', {
                 \ 'rev': '6.9.11',
 				\ 'lazy': 1,
-				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDToggle']
+				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDTreeToggle', 'NERDTreeToggleVSC']
 				\ })                                              " File system explorer
 	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'

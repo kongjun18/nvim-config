@@ -27,7 +27,7 @@ command! -nargs=? PlugReinstall
             \   echomsg "Require one or more arguments" |
             \   echohl None                             |
             \ else                                      |
-            \   call tools#plugin_reinstall(args)       |
+            \   call tools#plugin_reinstall(split('<args>'))       |
             \ endif
 
 " Save current buffer and switch to source/header file 
