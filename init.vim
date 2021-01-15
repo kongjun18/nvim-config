@@ -199,18 +199,6 @@ if dein#load_state(general#plugin_dir)
                 \ 'merge': 0,
                 \ 'on_event': 'BufReadPost'
                 \ })
-    call dein#add('fannheyward/coc-rust-analyzer', {
-                \ 'lazy': 1,
-                \ 'build': 'yarn install --frozen-lockfile',
-                \ 'depends': 'coc.nvim',
-                \ 'on_ft': 'rust'
-                \ })
-    call dein#add('iamcco/coc-vimlsp', {
-                \ 'lazy': 1,
-                \ 'build': 'yarn install --frozen-lockfile',
-                \ 'depends': 'coc.nvim',
-                \ 'on_ft': 'vim'
-                \ })
 	call dein#add('kkoomen/vim-doge', {
 				\ 'hook_source_post': ':call doge#install()<CR>'
 				\ })                                         " Document code
@@ -559,6 +547,7 @@ nmap <silent> <Leader>tx <Plug>TranslateX
 "}}}
 
 " coc.nvim{{{
+let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer']
 hi! CocErrorSign guifg=#d1666a
 let g:coc_status_error_sign = "✖ "
 let g:coc_status_warning_sign = "‼ "
