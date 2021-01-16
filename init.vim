@@ -90,7 +90,7 @@ if dein#load_state(general#plugin_dir)
 				\ })                                              " Some shortcuts should be built in Vim
     call dein#add('junegunn/vim-easy-align', {
                 \ 'lazy': 1,
-                \ 'on_ev': 'BufReadPost'
+                \ 'on_event': 'BufReadPost'
                 \ })                      " Align code
 	call dein#add('Yggdroot/indentLine', {
                 \ 'lazy': 1,
