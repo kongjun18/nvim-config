@@ -1,16 +1,18 @@
-# Vim configuration for C/C++ and Rust development
+# A (neo)vim configuration for C/C++ and Rust development
 This repository is my personal configuration of (Neo)vim.
 
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
 ## Feature
-I use vim edit almost any files. My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run in any GNU/Linux distributions, Windows and FreeBSD.
+My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run in any GNU/Linux distributions, Windows and FreeBSD.
 
 Feature list:
 
 - build and run project in Vim
 - code completion
 - dynamic check
+- git support
+- jump to definition/reference/implementation/alignment and so on 
 - scroll window and quickfix without change focus
 - disassembly current C/C++ file
 - fuzzy finder
@@ -20,19 +22,19 @@ Feature list:
 
 Compulsory:
 - Vim 8.1.2269+ or Neovim 4.4+ with python3 support
-- Node 10.12:          for coc.nvim
+- Node 10.12+:          for coc.nvim
 - [ccls](https://github.com/MaskRay/ccls):                C++ LSP
-- [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer):       Rust LSP
 - curl or wget:        downloader used by dein.nvim
 - git:                 downloader used by dein.nvim
 - Python3.6+:          for [Ultisnips](https://github.com/SirVer/ultisnips), [LeaderF](https://github.com/Yggdroot/LeaderF) and other plugins
 - [universal ctags](https://github.com/universal-ctags/ctags):     generate tag file
+- Source Code Pro(GUI): a nice programmer font
 
 
 
 Optional:
 - Latest **Neovim nightly** with Python3 support
-- cygwin(Windows): a large collection of GNU tools
+- [cygwin(Windows)](https://www.cygwin.com): a large collection of GNU tools
 - [rg(ripgrep)](https://github.com/BurntSushi/ripgrep):         a better grep
 - [fd](https://github.com/sharkdp/fd):                  a faster find
 - [gtags](https://www.gnu.org/software/global/):               find reference, included file and so on
@@ -41,13 +43,17 @@ Optional:
 - clang-tidy, clazy:   C++ linter
 - [bear](https://github.com/rizsotto/Bear):                generate compile database for Makefile
 - axel:                a multi-threaded downloader 
+- [nerd-fonts](https://github.com/ryanoasis/nerd-fonts): display icons
+- C++ compler:        compile [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
-I highly recommend Windows users to install cygwin which makes you use UNIX tools in Windows.
+
+
+[neovim nightly](https://github.com/neovim/neovim/releases) and [cygwin](https://www.cygwin.com) are highly recommended.
 
 Notes:
 
 - UNIX: Python executable must be placed in /usr/bin
-- Windows: Only support vim
+- Windows: Some features related to utils.vim and tools.vim are not available
 
 ## Installation
 
@@ -398,7 +404,7 @@ NerdCommenter is the best commenter I have ever seen. It supports fine-grained c
 - [vim-fugitive](https://github.com/tpope/vim-fugitive): use git in Vim
 - [vim-gitgutter](https://github.com/airblade/vim-gitgutter): show git diff in the sign column
 
-There's no need to create mappings for vim-fugitive which has nice command interface.  So I only define mappings for vim-gitgutter.
+There's no need to create mappings for vim-fugitive which has a nice command interface.  So I only define mappings for vim-gitgutter.
 
 | mapping |      description      |
 | :-----: | :-------------------: |
