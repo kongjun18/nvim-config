@@ -249,142 +249,6 @@ endfunction
 command -nargs=0 Disassembly call tools#disassembly()
 " }}}
 
-" get_root_dir() -- Get the project root directory{{{
-"
-" return the project root directory if the current file resieds in the
-" project. Otherwise, return empty string.
-function tools#get_root_dir() abort
-    let l:project_root_makers =  deepcopy(g:general#project_root_makers)
-    let l:project_root_dir = ''
-    " :echomsg 'l:project_root_makers' l:project_root_makers
-    " :echomsg 'l:project_root_dir' l:project_root_dir
-    for l:maker in l:project_root_makers
-        let l:project_root_dir = findfile(l:maker, '.;')
-        if !empty(l:project_root_dir)
-            break
-        endif
-        let l:project_root_dir = finddir(l:maker, '.;')
-        if !empty(l:project_root_dir)
-            break
-        endif
-    endfor
-    if g:general#is_unix
-        " :echomsg 'l:project_root_dir:' l:project_root_dir
-
-        " The current file don't resieds in any projects 
-        if empty(l:project_root_dir)
-            return ''
-        endif
-
-        " Get a basename from findfile()
-        if empty(matchstr(l:project_root_dir, '/'))
-            let l:maker = l:project_root_dir
-            let l:project_root_dir = expand('%:p')
-            " :echomsg 'l:maker:' l:maker
-            " :echomsg 'l:project_root_dir:' l:project_root_dir
-            " No buffer 
-            if empty(l:project_root_dir)
-                let l:project_root_dir = getcwd() .. '/convinient-for-implement'
-            endif
-            " Find maker in the parent directory
-            let l:root_is_found = v:false
-            while (!l:root_is_found)
-                let l:project_root_dir = substitute(l:project_root_dir, '/[^/]\+$', '', '')
-                " :echomsg 'l:project_root_dir:' l:project_root_dir
-                " We need if statement because glob pattern '*' doesn't match '.root'
-                if l:maker !~# '\..*'
-                    let l:items_in_dir = glob(l:project_root_dir .. '/*', v:false, v:true)
-                else
-                    let l:items_in_dir = glob(l:project_root_dir .. '/.*', v:false, v:true)
-                endif
-                " :echomsg 'l:items_in_dir:' l:items_in_dir
-                for l:item in l:items_in_dir
-                " :echomsg 'l:item:' l:item
-                    if l:item =~# '\.*/\' .. l:maker
-                        let l:root_is_found =  v:true
-                        break
-                    endif
-                endfor
-            endwhile
-        else
-            " Get an abusolute path from finddir()
-            let l:project_root_dir = substitute(l:project_root_dir, '/[^/]\+$', '', '')
-        endif
-    else
-        " TODO
-    endif
-    return l:project_root_dir
-endfunction
-"}}}
-
-" get_outermost_dir() {{{
-" Get the outermost directory which contains the current file
-
-function tools#get_outermost_dir()
-    let l:project_root_dir = tools#get_root_dir()
-    if empty(l:project_root_dir)
-        return ''
-    endif
-    let l:outermost_dir = expand('%:p')
-    if empty(l:outermost_dir)
-        if general#is_unix
-            let l:outermost_dir = getcwd() .. '/convinient-for-implement'
-        else
-            " TODO
-        endif
-    endif
-    " :echomsg 'l:project_root_dir:' l:project_root_dir
-    " :echomsg 'l:outermost_dir:' l:outermost_dir
-    if g:general#is_unix
-        while l:project_root_dir !=# substitute(l:outermost_dir, '/[^/]\+$', '', '')
-            let l:outermost_dir = substitute(l:outermost_dir, '/[^/]\+$', '', '')
-        endwhile
-        return l:outermost_dir
-    else
-        " TODO
-    endif
-endfunction
-" }}}
-
-" get_innermost_dir() {{{
-" -- Get the innermost directory which contains the current
-" file in project
-function tools#get_innermost_dir()
-    let l:innermost_dir = expand('%:p')
-    let l:innermost_dir = substitute(l:innermost_dir, '/[^/]\+$', '', '')
-    return l:innermost_dir
-endfunction
-"}}}
-
-" nvim_is_latest() -- Determine whether neovim is lastest {{{
-"
-" This function is hard-coded. Only check neovim is whether 0.5.0 or not because neovim installed in different ways has
-" different version output.
-"
-" I write this function to determine whether install nvim-treesitter which
-" requires lastest neovim or not.
-"
-function! tools#nvim_is_latest()
-    if !has('nvim')
-        return 0
-    endif
-    redir => l:s
-    silent! version
-    redir END
-    let l:version_message =  matchstr(l:s, 'NVIM v\zs[^\n]*')
-    let l:nvim_version = matchstr(l:version_message, '\d\.\d\.\d')
-    let l:nvim_version_list = split(l:nvim_version, '\.')
-    if l:nvim_version_list[0] != 0
-        return 0
-    elseif l:nvim_version_list[1] < 5
-        return 0
-        " Because lastest version is 0.5.0, so don't need check last number.
-    endif
-
-    return 1
-endfunction
-"}}}
-
 " Integrate lightline and ale {{{
 function! g:LightlineLinterWarnings() abort
     let l:counts = ale#statusline#Count(bufnr(''))
@@ -502,3 +366,48 @@ function tools#plugin_reinstall(list)
 endfunction
 "}}}
 
+" NERDTree {{{
+function tools#nerdtree_toggle_outermost_dir() abort
+    if t:nerdtree_open_mode.outermost == 1
+        let t:nerdtree_open_mode = map(t:nerdtree_open_mode, {key, val -> 0})
+        :NERDTreeClose
+    else
+        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
+        if utils#is_basename(l:last_accessed_buffer_path)
+            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+        endif
+        execute ':NERDTree' utils#get_outermost_dir(l:last_accessed_buffer_path)
+        let t:nerdtree_open_mode.outermost = 1
+    endif
+endfunction
+
+function tools#nerdtree_toggle_innermost_dir() abort
+    if t:nerdtree_open_mode.innermost == 1
+        :NERDTreeClose
+    else
+        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
+        if utils#is_basename(l:last_accessed_buffer_path)
+            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+        endif
+        execute ':NERDTree' utils#get_innermost_dir(l:last_accessed_buffer_path)
+        let t:nerdtree_open_mode.innermost = 1
+    endif
+endfunction
+
+function tools#nerdtree_close() abort
+    :NERDTreeClose
+endfunction
+
+function tools#nerdtree_toggle_root() abort
+    if t:nerdtree_open_mode.root == 1
+        :NERDTreeClose
+    else
+        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
+        if utils#is_basename(l:last_accessed_buffer_path)
+            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+        endif
+        execute ':NERDTree' utils#get_root_dir(l:last_accessed_buffer_path)
+        let t:nerdtree_open_mode.root = 1
+    endif
+endfunction
+" }}}

@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-15
+" Last Change: 2021-01-16
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -307,7 +307,7 @@ let g:Lf_WildIgnore = {
 			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
 			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
 			\}
-let g:Lf_RootMarkers = general#project_root_maker
+let g:Lf_RootMarkers = general#project_root_makers
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>f"
 let g:Lf_ShortcutB = "<Leader>bl"
@@ -396,13 +396,13 @@ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " static tag system ------------{{{
 " gutentags ----------------{{{
 " Exclude these types
-let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim']
+let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim', 'txt']
 
 " Use pygment to extend gtags
 let $GTAGSLABEL = 'native-pygments'
 
 " Set root makers of project
-let g:gutentags_project_root = general#project_root_maker
+let g:gutentags_project_root = general#project_root_makers
 
 " All ctags files suffixed with .tag'
 let g:gutentags_ctags_tagfile = '.tag'
@@ -607,7 +607,7 @@ let g:asyncrun_open = 10
 " Bell when task finished
 let g:asyncrun_bell = 1
 " Set root makers of project
-let g:asyncrun_rootmarks = general#project_root_maker
+let g:asyncrun_rootmarks = general#project_root_makers
 
 nnoremap  <Tab>5 :AsyncTask file-build<cr>
 nnoremap  <Tab>6 :AsyncTask file-run<cr>

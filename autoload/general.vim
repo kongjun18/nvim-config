@@ -6,10 +6,10 @@
 
 set nocompatible
 
-if exists('general#loaded_general_vim') || &cp || version < 700
+if exists('g:loaded_general_vim') || &cp || version < 700
     finish
 endif
-let general#loaded_general_vim = 1
+let g:loaded_general_vim = 1
 
 if has('unix')
     let general#is_unix = 1
@@ -23,6 +23,7 @@ if has('unix')
     let general#undo_dir = general#vimfiles . '/.undo'
     let general#session_dir = general#vimfiles . '/.session'
     let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
+    let general#delimiter = '/'
     " suppress the output of external program
     " I use fish shell, so give it extra attention
     if &shell =~? 'fish'
@@ -46,10 +47,11 @@ elseif has('win32')
     let general#undo_dir = general#vimfiles . '\.undo'
     let general#session_dir = general#vimfiles . '\.session'
     let general#dein_file = general#plugin_dir . '\repos\github.com\Shougo\dein.vim'
+    let general#delimiter = '\'
     " Use the Documents as default working directory
 	:cd $HOME\Documents
 endif
-let general#nvim_is_latest = tools#nvim_is_latest()
+let general#nvim_is_latest = utils#nvim_is_latest()
 let general#only_use_static_tag = 0
 let general#grepper = 'grep'
 let general#findder = 'find'
@@ -60,7 +62,7 @@ if executable('rg')
 	let general#grepper = 'rg'
 	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
-let general#project_root_maker = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']
+let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']
 
 call tools#ensure_dir_exist(general#backup_dir)
 call tools#ensure_dir_exist(general#swap_dir)
