@@ -622,8 +622,6 @@ nnoremap  <Tab>0 :AsyncTask project-clean<CR>
 let g:translator_default_engines = ['google', 'bing', 'youdao']
 let g:translator_history_enable = 1
 
-nmap <silent> <Leader>t <Plug>Translate
-vmap <silent> <Leader>t <Plug>TranslateV
 " Display translation in a window
 nmap <silent> <Leader>tw <Plug>TranslateW
 vmap <silent> <Leader>tw <Plug>TranslateWV
@@ -724,13 +722,36 @@ let g:NERDAllowAnyVisualDelims = 0
 " }}}
 
 " nerdtree {{{
-let NERDTreeRespectWildIgnore = 1
 augroup nerdtree
 	autocmd StdinReadPre * let s:std_in=1
 	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    " Avoid open wrong directory in NERDTree window
+    autocmd BufWinEnter * if &ft != 'nerdtree'   |
+            \ let t:last_accessed_winnr = winnr()|
+            \ let t:nerdtree_open_mode = {
+            \   'root': 0,
+            \   'outermost': 0,
+            \   'innermost': 0
+            \ }                                  |
+            \ endif
+    autocmd BufWinLeave * if &ft == 'nerdtree'   | 
+            \ let t:nerdtree_open_mode = {
+            \   'root': 0,
+            \   'outermost': 0,
+            \   'innermost': 0
+            \ }                                  |
+            \ endif
 augroup END
-nnoremap <silent> <Leader>tt :NERDTreeToggle<CR>
+
+let NERDTreeRespectWildIgnore = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeCascadeOpenSingleChildDir = 1
+nnoremap <silent> <Leader>to :call tools#nerdtree_toggle_outermost_dir()<CR>
+nnoremap <silent> <Leader>ti :call tools#nerdtree_toggle_innermost_dir()<CR>
+nnoremap <silent> <leader>tt :call tools#nerdtree_toggle_root()<CR> 
+nnoremap <silent> <leader>tc :call tools#nerdtree_close()<CR>
+
 "}}}
 
 " vim-fugitive {{{
