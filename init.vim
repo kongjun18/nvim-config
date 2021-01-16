@@ -347,8 +347,6 @@ if !general#only_use_static_tag
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gs <Plug>(coc-references)
     nmap <silent> gt <Plug>(coc-type-definition)
-    nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
-    nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 endif
 
 
@@ -441,21 +439,22 @@ nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
 nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
 nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 
 "       gutentags_plus ------------{{{
 
 if general#only_use_static_tag
 	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
 	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
-    nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
     nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
-    nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
 endif
 
 nnoremap <C-g> :GtagsCursor<CR>zz
 
-" change focus to quickfix window after search (optional).
+" Don't change focus to quickfix window after search
 let g:gutentags_plus_switch = 0
+" Disable default mapping
 let g:gutentags_plus_nomap = 1
 
 " Gtags is not installed
@@ -465,12 +464,12 @@ if &csprg != 'gtags-cscope'
     nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
     nnoremap <silent> ga :echoerr 'gtags-scope is not available'<CR>
     nnoremap <silent> <C-g> :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
+    nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
     if general#only_use_static_tag
-        nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gs :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gd :echoerr 'gtags-scope is not available'<CR>
-        nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
     endif
 endif
 " --------------}}}

@@ -249,6 +249,113 @@ endfunction
 command -nargs=0 Disassembly call tools#disassembly()
 " }}}
 
+" get_root_dir() -- Get the project root directory{{{
+"
+" return the project root directory if the current file resieds in the
+" project. Otherwise, return empty string.
+function tools#get_root_dir() abort
+    let l:project_root_makers =  deepcopy(g:general#project_root_makers)
+    let l:project_root_dir = ''
+    " :echomsg 'l:project_root_makers' l:project_root_makers
+    " :echomsg 'l:project_root_dir' l:project_root_dir
+    for l:maker in l:project_root_makers
+        let l:project_root_dir = findfile(l:maker, '.;')
+        if !empty(l:project_root_dir)
+            break
+        endif
+        let l:project_root_dir = finddir(l:maker, '.;')
+        if !empty(l:project_root_dir)
+            break
+        endif
+    endfor
+    if g:general#is_unix
+        " :echomsg 'l:project_root_dir:' l:project_root_dir
+
+        " The current file don't resieds in any projects 
+        if empty(l:project_root_dir)
+            return ''
+        endif
+
+        " Get a basename from findfile()
+        if empty(matchstr(l:project_root_dir, '/'))
+            let l:maker = l:project_root_dir
+            let l:project_root_dir = expand('%:p')
+            " :echomsg 'l:maker:' l:maker
+            " :echomsg 'l:project_root_dir:' l:project_root_dir
+            " No buffer 
+            if empty(l:project_root_dir)
+                let l:project_root_dir = getcwd() .. '/convinient-for-implement'
+            endif
+            " Find maker in the parent directory
+            let l:root_is_found = v:false
+            while (!l:root_is_found)
+                let l:project_root_dir = substitute(l:project_root_dir, '/[^/]\+$', '', '')
+                " :echomsg 'l:project_root_dir:' l:project_root_dir
+                " We need if statement because glob pattern '*' doesn't match '.root'
+                if l:maker !~# '\..*'
+                    let l:items_in_dir = glob(l:project_root_dir .. '/*', v:false, v:true)
+                else
+                    let l:items_in_dir = glob(l:project_root_dir .. '/.*', v:false, v:true)
+                endif
+                " :echomsg 'l:items_in_dir:' l:items_in_dir
+                for l:item in l:items_in_dir
+                " :echomsg 'l:item:' l:item
+                    if l:item =~# '\.*/\' .. l:maker
+                        let l:root_is_found =  v:true
+                        break
+                    endif
+                endfor
+            endwhile
+        else
+            " Get an abusolute path from finddir()
+            let l:project_root_dir = substitute(l:project_root_dir, '/[^/]\+$', '', '')
+        endif
+    else
+        " TODO
+    endif
+    return l:project_root_dir
+endfunction
+"}}}
+
+" get_outermost_dir() {{{
+" Get the outermost directory which contains the current file
+
+function tools#get_outermost_dir()
+    let l:project_root_dir = tools#get_root_dir()
+    if empty(l:project_root_dir)
+        return ''
+    endif
+    let l:outermost_dir = expand('%:p')
+    if empty(l:outermost_dir)
+        if general#is_unix
+            let l:outermost_dir = getcwd() .. '/convinient-for-implement'
+        else
+            " TODO
+        endif
+    endif
+    " :echomsg 'l:project_root_dir:' l:project_root_dir
+    " :echomsg 'l:outermost_dir:' l:outermost_dir
+    if g:general#is_unix
+        while l:project_root_dir !=# substitute(l:outermost_dir, '/[^/]\+$', '', '')
+            let l:outermost_dir = substitute(l:outermost_dir, '/[^/]\+$', '', '')
+        endwhile
+        return l:outermost_dir
+    else
+        " TODO
+    endif
+endfunction
+" }}}
+
+" get_innermost_dir() {{{
+" -- Get the innermost directory which contains the current
+" file in project
+function tools#get_innermost_dir()
+    let l:innermost_dir = expand('%:p')
+    let l:innermost_dir = substitute(l:innermost_dir, '/[^/]\+$', '', '')
+    return l:innermost_dir
+endfunction
+"}}}
+
 " nvim_is_latest() -- Determine whether neovim is lastest {{{
 "
 " This function is hard-coded. Only check neovim is whether 0.5.0 or not because neovim installed in different ways has
@@ -313,20 +420,51 @@ function tools#undebug_gutentags()
 endfunction
 " }}}
 
-" Use static tag system {{{
+" Switch tag system {{{
 function tools#use_static_tag() abort
+    let g:general#only_use_static_tag = 1
     if &csprg == 'gtags-cscope'
         nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+        nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
     else
         nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gs :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gd :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
+        nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
+    endif
+    if &filetype == 'rust'
+        nnoremap <silent> gi :echoerr 'Rust does not use header/source model'<CR>
+    endif
+endfunction
+
+function tools#use_lsp_tag() abort
+    let g:general#only_use_static_tag = 0
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gs <Plug>(coc-references)
+    nmap <silent> gt <Plug>(coc-type-definition)
+    if &filetype == 'c' || &filetype == 'cpp'
+        nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+        nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
+        if &csprg == 'gtags-cscope'
+            nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+        else
+            nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
+        endif
+    elseif &filetype =='rust'
+        nmap <silent> gi <Plug>(coc-implementation)
+        if &csprg == 'gtags-cscope'
+            nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
+            nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+        else
+            nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
+            nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
+        endif
     endif
 endfunction
 "}}}
@@ -363,3 +501,4 @@ function tools#plugin_reinstall(list)
     endif
 endfunction
 "}}}
+

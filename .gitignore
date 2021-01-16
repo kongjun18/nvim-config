@@ -18,4 +18,4 @@ installer.sh
 .cache
 
 " edge.vim
-after/ftplugin/
+after/ftplugin/*/

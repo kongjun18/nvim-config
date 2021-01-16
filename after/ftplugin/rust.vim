@@ -5,7 +5,11 @@
 " License: GPL-3.0
 
 setlocal makeprg=cargo\ $*
-nmap <silent> gi <Plug>(coc-implementation)
+if !g:general#only_use_static_tag
+    nmap <silent> gi <Plug>(coc-implementation)
+else
+    nnoremap <silent> gi :echoerr 'Rust does not use header/source model'<CR>
+endif
 setlocal errorformat=
 			\%-G,
 			\%-Gerror:\ aborting\ %.%#,

@@ -11,6 +11,7 @@ command ToolEdit :exec 'vsp ' . general#vimfiles . '/autoload/tools.vim'
 
 " Use static tag system instead of LSP
 command -nargs=0 UseStaticTag call tools#use_static_tag()
+command -nargs=0 UseLspTag call tools#use_lsp_tag()
 
 " Debug gutentags
 command -nargs=0 DebugGutentags call tools#debug_gutentgs()
