@@ -28,6 +28,9 @@ ln -s ${NVIM} ${VIM}
 echo "ln -s ${NVIMRC} ${VIMRC}"
 ln -s ${NVIMRC} ${VIMRC}
 
+echo "ln -s ~/.gvimrc ~/.config/nvim/gvimrc"
+ln -s ~/.gvimrc ~/.config/nvim/gvimrc
+
 sh ${NVIM}/tools/dein.sh ${NVIM}/plugged
 
 
