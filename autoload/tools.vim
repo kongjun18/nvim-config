@@ -367,15 +367,20 @@ endfunction
 "}}}
 
 " NERDTree {{{
+
+" Only used by tools#nerdtree_XXXX()
+function s:get_last_accessed_buf_path() abort
+    let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
+    let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+    return l:last_accessed_buffer_path
+endfunction
+
 function tools#nerdtree_toggle_outermost_dir() abort
     if t:nerdtree_open_mode.outermost == 1
         let t:nerdtree_open_mode = map(t:nerdtree_open_mode, {key, val -> 0})
         :NERDTreeClose
     else
-        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
-        if utils#is_basename(l:last_accessed_buffer_path)
-            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
-        endif
+        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
         execute ':NERDTree' utils#get_outermost_dir(l:last_accessed_buffer_path)
         let t:nerdtree_open_mode.outermost = 1
     endif
@@ -385,10 +390,8 @@ function tools#nerdtree_toggle_innermost_dir() abort
     if t:nerdtree_open_mode.innermost == 1
         :NERDTreeClose
     else
-        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
-        if utils#is_basename(l:last_accessed_buffer_path)
-            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
-        endif
+        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
+        :echomsg 'tools#nerdtree_toggle_outermost_dir():' l:last_accessed_buffer_path
         execute ':NERDTree' utils#get_innermost_dir(l:last_accessed_buffer_path)
         let t:nerdtree_open_mode.innermost = 1
     endif
@@ -402,10 +405,7 @@ function tools#nerdtree_toggle_root() abort
     if t:nerdtree_open_mode.root == 1
         :NERDTreeClose
     else
-        let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
-        if utils#is_basename(l:last_accessed_buffer_path)
-            let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
-        endif
+        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
         execute ':NERDTree' utils#get_root_dir(l:last_accessed_buffer_path)
         let t:nerdtree_open_mode.root = 1
     endif
