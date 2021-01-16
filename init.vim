@@ -152,8 +152,9 @@ if dein#load_state(general#plugin_dir)
                 \ })                                           " A syntax file of fish shell
     if general#nvim_is_latest
         call dein#add('nvim-treesitter/nvim-treesitter', {
-                \ 'lazy': 1,
-                \ 'on_ft': ['c', 'cpp', 'lua', 'json', 'python', 'rust', 'bash', 'toml'],
+                \ 'rev': '1c3fb201c65b42a3752b299d31b1fcf40e3c38e4',
+                \ 'on_event': 'BufRead',
+                \ 'merge': 0,
                 \ })
     else
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
@@ -190,7 +191,6 @@ if dein#load_state(general#plugin_dir)
 
 	" project management
 	call dein#add('Yggdroot/LeaderF', {
-                \ 'rev': 'v1.23',
                 \ 'build': ':LeaderfInstallCExtension'}
                 \ )                          " Fuzzy finder
     call dein#add('neoclide/coc.nvim', {
@@ -797,7 +797,6 @@ iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 
 " nvim-treesitter {{{
 if general#nvim_is_latest
-    call dein#source('nvim-treesitter')
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust'},
