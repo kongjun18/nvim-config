@@ -94,8 +94,8 @@ if dein#load_state(general#plugin_dir)
                 \ })                      " Align code
 	call dein#add('Yggdroot/indentLine', {
                 \ 'lazy': 1,
-                \ 'on_event': 'BufRead'}
-                \ ) " Indent indication
+                \ 'on_event': 'BufRead'
+                \ }) " Indent indication
     call dein#add('Chiel92/vim-autoformat', {
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
@@ -151,11 +151,8 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_ft': 'fish',
                 \ })                                           " A syntax file of fish shell
     if general#nvim_is_latest
-        call dein#add('nvim-treesitter/nvim-treesitter', {
-                \ 'rev': '1c3fb201c65b42a3752b299d31b1fcf40e3c38e4',
-                \ 'on_event': 'BufRead',
-                \ 'merge': 0,
-                \ })
+                " \ 'on_event': 'BufRead',
+        call dein#add('nvim-treesitter/nvim-treesitter', {'merge': 0})
     else
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
