@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-01-15
+" Last Change: 2021-01-16
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -391,7 +391,6 @@ function tools#nerdtree_toggle_innermost_dir() abort
         :NERDTreeClose
     else
         let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
-        :echomsg 'tools#nerdtree_toggle_outermost_dir():' l:last_accessed_buffer_path
         execute ':NERDTree' utils#get_innermost_dir(l:last_accessed_buffer_path)
         let t:nerdtree_open_mode.innermost = 1
     endif

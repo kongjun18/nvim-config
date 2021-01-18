@@ -719,6 +719,7 @@ let g:NERDToggleCheckAllLines = 1
 
 " Usefull when comment argument 
 let g:NERDAllowAnyVisualDelims = 0
+let g:NERDAltDelims_asm = 1
 " }}}
 
 " nerdtree {{{
