@@ -196,9 +196,12 @@ if dein#load_state(general#plugin_dir)
                 \ 'merge': 0,
                 \ 'on_event': 'BufReadPost'
                 \ })
-	call dein#add('kkoomen/vim-doge', {
-				\ 'hook_source_post': ':call doge#install()<CR>'
-				\ })                                         " Document code
+    call dein#add('kkoomen/vim-doge', {
+                \ 'rev': 'v3.6.0',
+                \ 'lazy': 1,
+                \ 'on_ft': ['c', 'cpp'],
+                \ 'hook_post_update': 'call dein#source("vim-doge") | call doge#install()'
+                \ })                                         " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
 	call dein#add('skywind3000/asyncrun.vim', {'rev': 'v2.7.8'})                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
