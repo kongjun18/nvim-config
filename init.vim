@@ -132,6 +132,10 @@ if dein#load_state(general#plugin_dir)
 
 	" Git
 	call dein#add('tpope/vim-fugitive', {'rev': '3.2'})
+    call dein#add('tpope/vim-rhubarb', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('junegunn/gv.vim')
 	call dein#add('airblade/vim-gitgutter', {
 				\ 'lazy': 1,
@@ -764,6 +768,9 @@ nnoremap <silent> <leader>tc :call tools#nerdtree_close()<CR>
 " This command will cause vim-dispatch and all other make wrapper plugins go
 " wrong 
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+
+nnoremap <nowait> <silent> gl :diffget //2<CR>
+nnoremap <nowait> <silent> gr :diffget //3<CR>
 "}}}
 
 " gitgutter {{{
