@@ -11,6 +11,16 @@ map <C-d> <C-d>zz
 map <C-u> <C-u>zz
 map <C-o> <C-o>zz
 map <C-i> <C-i>zz
+nnoremap `` ``zz
+
+nnoremap '+ "+
+vnoremap '+ "+
+nnoremap '= "=
+vnoremap '= "=
+nnoremap '0 "0
+vnoremap '0 "0
+inoremap <C-R>' <C-R>"
+xmap q "
 
 nnoremap <silent> <leader>ev :exec 'vsplit ' . general#vimfiles . '/init.vim'<CR>
 nnoremap <silent> <leader>es :exec 'source ' . general#vimfiles . '/init.vim'<CR>
