@@ -727,30 +727,6 @@ let g:NERDAltDelims_asm = 1
 " }}}
 
 " nerdtree {{{
-augroup nerdtree
-	autocmd StdinReadPre * let s:std_in=1
-	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    " Avoid open wrong directory in NERDTree window
-    autocmd BufWinEnter * if &ft != 'nerdtree'       |
-            \ let t:last_accessed_winnr = winnr() |
-            \ if !exists('t:nerdtree_open_mode')     |
-            \     let t:nerdtree_open_mode = {
-            \         'root': 0,
-            \         'outermost': 0,
-            \         'innermost': 0
-            \     }                                  |
-            \ endif                                  |
-            \ endif
-    autocmd BufWinLeave * if &ft == 'nerdtree'       |
-            \ let t:nerdtree_open_mode = {
-            \   'root': 0,
-            \   'outermost': 0,
-            \   'innermost': 0
-            \ }                                      |
-            \ endif
-augroup END
-
 let NERDTreeRespectWildIgnore = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeCascadeOpenSingleChildDir = 1
