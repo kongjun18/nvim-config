@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-16
+" Last Change: 2021-01-23
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -295,10 +295,6 @@ let g:rainbow_conf = {
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_PopupHeight = 0.3
-let g:Lf_DefaultExternalTool = general#findder
-if general#findder == 'fd'
-	let g:Lf_ExternalCommand = 'fd -E _builds -E doc -E target --type f "%s"'   
-endif
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
 			\ 'File': 0,
@@ -312,9 +308,12 @@ let g:Lf_PreviewResult = {
 			\ 'Rg': 1,
 			\ 'Gtags': 1
 			\}
+
+" Only used when g:Lf_UseVersionControlTool is 0 or files are not inside a
+" repo
 let g:Lf_WildIgnore = {
 			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
-			\ 'file': ['Makefile', '*.txt', '*.md', '*.wiki', '*.ini', '*.json', '*.js', '*.html', '*.css']
+			\ 'file': split(&wildignore, ',')
 			\}
 let g:Lf_RootMarkers = general#project_root_makers
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
@@ -438,7 +437,7 @@ let g:gutentags_ctags_extra_args += ['--exclude=plugged']
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
 " Integrate Leaderf and gutentags
-let g:gutentags_cache_dir = general#vimfiles .. '/.tags'
+let g:gutentags_cache_dir = general#vimfiles .. general#delimiter .. '.tags'
 
 " Don't load gtags_cscope database automatically
 let g:gutentags_auto_add_gtags_cscope = 0
