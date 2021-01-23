@@ -39,6 +39,11 @@ if dein#load_state(general#plugin_dir)
 				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDTreeToggle', 'NERDTreeToggleVCS']
 				\ })                                              " File system explorer
 	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
+    call dein#add('andymass/vim-matchup', {
+                \ 'rev': 'v0.5.0',
+                \ 'lazy':1,
+                \ 'on_event': 'BufReadPost'
+                \ })
 	call dein#add('rhysd/accelerated-jk')                         " Accelerate speed of key 'j' and 'k'
 	call dein#add('bronson/vim-visual-star-search')               " Use * and # in visual mode
 	call dein#add('tweekmonster/startuptime.vim', {
@@ -801,4 +806,10 @@ hlmap["punctuation.delimiter"] = "Delimiter"
 hlmap["punctuation.bracket"] = nil
 EOF
 endif
+"}}}
+
+" match-up {{{
+let g:matchup_matchparen_deferred = 1
+let g:matchup_matchparen_offscreen = {'method': 'popup'}
+let g:matchup_matchpref = {'cpp': {'template': 1}}
 "}}}
