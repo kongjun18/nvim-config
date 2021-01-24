@@ -791,9 +791,6 @@ require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true, 
   },
-  indent = {
-    enable = true,
-  }
 }
 -- integrate with rainbow
 require "nvim-treesitter.highlight"
