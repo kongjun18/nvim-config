@@ -247,19 +247,6 @@ syntax on
 
 " }}}
 
-" color scheme {{{
-if strftime("%H") <= 15
-    let g:github_colors_soft = 1
-    set background=light
-    colorscheme github
-else
-    let g:edge_style = 'neon'
-    let g:edge_better_performance = 1
-    set background=dark
-    colorscheme edge
-endif
-" }}}
-
 " echodoc setting{{{
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = "floating"
@@ -647,7 +634,6 @@ let g:leetcode_china = 1
 
 "  lightline -{{{
 let g:lightline = {
-            \ 'colorscheme': 'edge',
             \ 'active': {
             \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
             \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
@@ -664,6 +650,21 @@ let g:lightline = {
             \ }
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
+" }}}
+
+" color scheme {{{
+if strftime("%H") <= 15
+    let g:github_colors_soft = 1
+    set background=light
+    colorscheme github
+    let g:lightline.colorscheme = 'github'
+else
+    let g:edge_style = 'neon'
+    let g:edge_better_performance = 1
+    set background=dark
+    colorscheme edge
+    let g:lightline['colorscheme'] = 'edge'
+endif
 " }}}
 
 " vim-battery {{{
