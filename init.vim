@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-23
+" Last Change: 2021-01-25
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -764,8 +764,8 @@ nmap ]c <Plug>(GitGutterNextHunk)
 
 " doge {{{
 let g:doge_enable_mappings = 0
-let doge_doc_standard_c = 'doxygen_javadoc_banner'
-let doge_doc_standard_cpp = 'doxygen_javadoc_banner'
+let doge_doc_standard_c = 'doxygen_javadoc'
+let doge_doc_standard_cpp = 'doxygen_javadoc'
 let g:doge_mapping_comment_jump_forward = '<C-j>'
 let doge_mapping_comment_jump_backward = '<C-k'
 "}}}
