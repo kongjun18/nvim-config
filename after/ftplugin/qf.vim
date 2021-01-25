@@ -5,5 +5,6 @@
 " License: GPL-3.0
 
 setlocal nocursorline
+setlocal relativenumber
 nnoremap <buffer> <silent> q :wincmd q<CR>
 noremap <silent><buffer> p :call quickui#tools#preview_quickfix()<cr>
