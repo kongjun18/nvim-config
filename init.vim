@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-25
+" Last Change: 2021-01-27 
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -29,6 +29,10 @@ if dein#load_state(general#plugin_dir)
     call dein#begin(general#plugin_dir)
     call dein#add(general#dein_file)
 	" Vim enhacement
+    call dein#add('kongjun18/vim-rest-reminder', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
 	call dein#add('kshenoy/vim-signature', {
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
@@ -279,9 +283,7 @@ let g:rainbow_conf = {
 
 " LeaderF{{{
 
-let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
-let g:Lf_PopupHeight = 0.3
 let g:Lf_PreviewCode = 1
 let g:Lf_PreviewResult = {
 			\ 'File': 0,
@@ -306,12 +308,12 @@ let g:Lf_RootMarkers = general#project_root_makers
 let g:Lf_WorkingDirectoryMode = 'A'                " 设置 LeaderF 工作目录为项目根目录，如果不在项目中，则为当前目录。
 let g:Lf_ShortcutF = "<Leader>f"
 let g:Lf_ShortcutB = "<Leader>bl"
-nnoremap <Leader>p :LeaderfFunctionAll<CR>
-nnoremap <Leader>l :LeaderfBufTagAll<CR>
-nnoremap <Leader>d :LeaderfTag<CR>
-nnoremap <leader>h :LeaderfHelp<CR>
-nnoremap <Leader>rg :Leaderf rg<Space><Right>
-nnoremap <leader>T :Leaderf task<CR>
+nnoremap <silent><Leader>p :LeaderfFunctionAll<CR>
+nnoremap <silent><Leader>l :LeaderfBufTagAll<CR>
+nnoremap <silent><Leader>d :LeaderfTag<CR>
+nnoremap <silent><leader>h :LeaderfHelp<CR>
+nnoremap <silent> <Leader>rg :LeaderfRgInteractive<CR>
+nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
 " coc.nvim{{{
