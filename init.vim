@@ -312,7 +312,7 @@ nnoremap <silent><Leader>p :LeaderfFunctionAll<CR>
 nnoremap <silent><Leader>l :LeaderfBufTagAll<CR>
 nnoremap <silent><Leader>d :LeaderfTag<CR>
 nnoremap <silent><leader>h :LeaderfHelp<CR>
-nnoremap <silent> <Leader>rg :LeaderfRgInteractive<CR>
+nnoremap <silent> <Leader>rg :Leaderf rg -r<Space><Right>
 nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
