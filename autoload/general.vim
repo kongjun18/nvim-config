@@ -100,7 +100,6 @@ let g:did_install_default_menus = 1
 set path+=include
 set backspace=indent,eol,start
 set mouse=r
-set foldmethod=marker
 set laststatus=2    " always show status line
 set number
 set showtabline=2
