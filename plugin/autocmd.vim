@@ -33,3 +33,9 @@ augroup nerdtree
             \ endif
 augroup END
 
+augroup format
+    autocmd BufWritePre * if &ft !~? '.*git.*' |
+            \ :%s/\s\+$//ge                    |
+            \ endif
+augroup END
+
