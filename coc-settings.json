@@ -1,5 +1,5 @@
 {
-	"coc.preferences.rootPatterns": [".git", ".root", "Cargo.toml", "compile_commands.json"],
+	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".git"],
     "coc.preferences.jumpCommand": "drop",
     "suggest.echodocSupport": true,
     "diagnostic.errorSign": "✖",
@@ -37,9 +37,6 @@
 			"initializationOptions": {
 				"cache": {
 					"directory": ".cache/ccls"
-				},
-				"client": {
-					"snippetSupport": true
 				},
                 "highlight": {"lsRanges": true } 
 			}
