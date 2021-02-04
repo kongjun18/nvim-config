@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-01-13
+" Last Change: 2021-02-04
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -108,6 +108,7 @@ set noerrorbells    " No beep
 set vb t_vb=        
 set undofile        " Persist undo history
 set backup          " Backup files
+set completeopt+=noselect
 set wildignore=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
 set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib 
 set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex

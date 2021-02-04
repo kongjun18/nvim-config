@@ -1,10 +1,10 @@
 " Configuration of markdown
-" Last Change: 2020-11-11
+" Last Change: 2021-02-04
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
-setlocal wrap
-setlocal spell
-setlocal autowrite
-
+setlocal wrap           " Wrap line
+setlocal spell          " Enable spell checking
+setlocal cpt=.,k,w,b    " Source for dictionary, current buffer and other loaded buffers
+let b:coc_enabled = 0   " Disable coc.nvim

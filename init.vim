@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-01-27 
+" Last Change: 2021-02-04
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -62,6 +62,15 @@ if dein#load_state(general#plugin_dir)
 	call dein#add('xolox/vim-session')                            " Save Vim session without pain
 
 	" Text edit
+    call dein#add('skywind3000/vim-auto-popmenu', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['text', 'markdown', 'gitcommit', 'vimwiki']
+                \ })
+    call dein#add('skywind3000/vim-dict', {
+                \ 'lazy': 1,
+                \ 'on_ft': ['text', 'markdown', 'gitcommit', 'vimwiki']
+                \ })
+
     call dein#add('wellle/targets.vim', {
                 \ 'lazy': 1,
                 \ 'on_event': ['BufReadPost']
@@ -807,3 +816,7 @@ let g:matchup_matchparen_deferred = 1
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:matchup_matchpref = {'cpp': {'template': 1}}
 "}}}
+
+" vim-auto-popmenu {{{
+let g:apc_enable_ft = {'text':1, 'markdown':1, 'gitcommit': 1, 'vimwiki': 1}
+" }}}
