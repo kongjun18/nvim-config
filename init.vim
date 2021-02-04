@@ -430,12 +430,12 @@ let g:gutentags_cache_dir = general#vimfiles .. general#delimiter .. '.tags'
 let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
-nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
+nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>
+nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr>
+nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr>
+nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>
+nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>
+nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>
 
 "       gutentags_plus ------------{{{
 
