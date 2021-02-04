@@ -10,18 +10,18 @@
 " error return empty string
 " TODO: support windows
 function utils#get_basename(path) abort
-    if type(a:arg) != v:t_string
+    if type(a:path) != v:t_string
         return ''
     endif
     if utils#is_basename(a:path)
         return a:path
     endif
 
-    let l:arg = a:arg
+    let l:path = a:path
     if g:general#is_unix
-        if !empty(matchstr(l:arg, '/[^/]\+$'))
-            let l:arg = substitute(l:arg, '.*/', '', '')
-            return l:arg
+        if !empty(matchstr(l:path, '/[^/]\+$'))
+            let l:path = substitute(l:path, '.*/', '', '')
+            return l:path
         endif
     else
         " Windows: TODO
