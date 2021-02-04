@@ -1,0 +1,81 @@
+{
+    "configurations": {
+        "variables": {
+            "kernelBin": "kernel.bin",
+            "riscvGDB": "/usr/local/bin/riscv64-unknown-elf-gdb"
+        },
+        // Used by lzuos lab
+        "qemu-debug": {
+            "adapter": "vscode-cpptools",
+            "configuration": {
+                "name": "qemu-debug",
+                "default": true,
+                "type":    "cppdbg",
+                "request": "launch",
+                "program": "kernel.bin",
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "stopAtEntry": true,
+                "MIMode": "gdb",
+                "miDebuggerPath": ${riscvGDB},
+                // For some unknown reasons, it don't work.
+                // "miDebuggerAddress": "localhost:1234",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "set architecture riscv",
+                        "ignoreFailures": false
+                    },
+                    {
+                        "description": "Connect gdbserver within qemu",
+                        "text": "target remote localhost:1234",
+                        "ignoreFailures": false
+                    }
+                ]
+            }
+        },
+        "cpp:launch": {
+            "adapter": "vscode-cpptools",
+            "configuration": {
+                "name": "cpp",
+                "default": true,
+                "type":    "cppdbg",
+                "request": "launch",
+                "program": "${fileDirname}/${fileBasenameNoExtension}",
+                // user input args
+                "args": ["*${ProgramArgs}"],
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "stopAtEntry": true,
+                "MIMode": "gdb",
+                "logging": {
+                    "engineLogging": false
+                },
+                "breakpointers": {
+                    "exception": {
+                        "cpp_throw": "Y",
+                        "cpp_catch": "N"
+                    }
+                }
+            }
+        },
+        "cpp:attach": {
+            "adapter": "vscode-cpptools",
+            "configuration": {
+                "name": "cpp",
+                "type": "cppdbg",
+                "request": "attach",
+                "program": "${fileDirname}/${fileBasenameNoExtension}",
+                "MIMode": "gdb",
+                "breakpointers": {
+                    "exception": {
+                        "cpp_throw": "Y",
+                        "cpp_catch": "N"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -194,4 +194,16 @@ function! utils#nvim_is_latest()
     return 1
 endfunction
 
-
+" Copy file a:apath to a:dir
+function utils#copy(apath, dir)
+    if type(a:apath) != v:t_string || type(a:dir) != v:t_string
+        echoerr "utils#copy(): arguments type error"
+    endif
+    let l:content = readfile(a:apath)
+    if !empty(l:content)
+        let l:to = a:dir .. g:general#delimiter .. utils#get_basename(a:apath)
+        if !filereadable(l:to)
+            call writefile(l:content, l:to)
+        endif
+    endif
+endfunction

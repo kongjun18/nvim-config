@@ -37,6 +37,9 @@ command! -nargs=0 W :w | A
 " Echo current buffer path
 command -nargs=0 EchoBufferPath :echo expand('%:p')
 
+" Create .vimspector.json
+command -nargs=0 CreateVimspector :call tools#create_vimspector(utils#get_root_dir(utils#current_path()))
+
 " Create Qt project
 command -nargs=1 -complete=customlist,ListQtType CreateQt :call tools#create_qt_project('<args>', getcwd()) | :e main.cpp | :silent CocRestart
 function ListQtType(A, L, P)
