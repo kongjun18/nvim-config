@@ -33,7 +33,3 @@ augroup nerdtree
             \ endif
 augroup END
 
-augroup machit
-    " Add git conflict maker to machit
-    autocmd BufReadPre * let b:match_words = '^<<<<<<<.*$:^|||||||.*$:^=======.*$:^>>>>>>>.*$'
-augroup END

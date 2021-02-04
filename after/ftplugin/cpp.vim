@@ -3,6 +3,7 @@
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
+execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
 
 if !g:general#only_use_static_tag
     nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>

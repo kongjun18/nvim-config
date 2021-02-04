@@ -4,6 +4,8 @@
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
 
+execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
+
 setlocal makeprg=cargo\ $*
 if !g:general#only_use_static_tag
     nmap <silent> gi <Plug>(coc-implementation)
