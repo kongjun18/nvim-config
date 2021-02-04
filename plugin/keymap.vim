@@ -7,11 +7,15 @@
 nnoremap j gj
 nnoremap k gk
 nnoremap ZA :wqa<CR>
-map <C-d> <C-d>zz
-map <C-u> <C-u>zz
-map <C-o> <C-o>zz
-map <C-i> <C-i>zz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
+nnoremap <C-]> <C-]>zz
+
 nnoremap `` ``zz
+nnoremap n nzz
+nnoremap N Nzz
 
 nnoremap '+ "+
 vnoremap '+ "+
