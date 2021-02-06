@@ -4,7 +4,7 @@
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
 
-" utils#get_basename(path) 
+" utils#get_basename(path)
 " parm path filename of abusolute path
 " return basename of a:path
 " error return empty string
@@ -29,7 +29,7 @@ function utils#get_basename(path) abort
 endfunction
 "
 
-" utils#is_basename(path) 
+" utils#is_basename(path)
 function utils#is_basename(path)
     if g:general#is_unix
         return empty(matchstr(a:path, '/'))
@@ -39,7 +39,7 @@ function utils#is_basename(path)
 endfunction
 "
 
-" utils#up(apath) 
+" utils#up(apath)
 " parm apath abusolute path
 " return parent directory(empty string is a:apath is root)
 " TODO: support windows
@@ -54,17 +54,17 @@ function utils#up(apath)
 endfunction
 "
 
-" utils#get_dir_entries(apath) 
+" utils#get_dir_entries(apath)
 " return all entries(include '.' and '..') of directory a:apath
 " TODO support windows
 function utils#get_dir_entries(apath)
-    let l:entries = glob(a:apath .. '/*', v:false, v:true)  
+    let l:entries = glob(a:apath .. '/*', v:false, v:true)
     let l:entries += glob(a:apath .. '/.*', v:false, v:true)
     return l:entries
 endfunction
 "
 
-" utils#current_path() 
+" utils#current_path()
 " If there is an editing buffer, return it's path. Otherwise, return a
 " non-existing file path in the current working directory for convenience.
 function utils#current_path()
@@ -80,16 +80,17 @@ endfunction
 "
 
 " utils#get_root_dir(path) -- Get the project root directory
-" parm path relative/absolute path 
-" return project root directory 
+" @parm path relative/absolute path
+" @return project root directory
+" @note respect the precedence of g:general#project_root_makers
 " TODO support windows
 function utils#get_root_dir(path) abort
     let l:project_root_makers =  deepcopy(g:general#project_root_makers)
     let l:project_root_dir = ''
     " :echomsg 'l:project_root_makers' l:project_root_makers
-    " :echomsg 'l:project_root_dir' l:project_root_dir
     for l:maker in l:project_root_makers
         let l:project_root_dir = findfile(l:maker, a:path .. ';')
+        let l:current_path = utils#current_path()
         if !empty(l:project_root_dir)
             break
         endif
@@ -98,20 +99,21 @@ function utils#get_root_dir(path) abort
             break
         endif
     endfor
+
+    " :echomsg 'l:project_root_dir' l:project_root_dir
     if g:general#is_unix
         " :echomsg 'l:project_root_dir:' l:project_root_dir
 
-        " The current file don't resieds in any projects 
+        " The current file don't resieds in any projects
         if empty(l:project_root_dir)
             return ''
         endif
 
-        " Get a basename from findfile()
         if empty(matchstr(l:project_root_dir, '/'))
             let l:maker = l:project_root_dir
             " :echomsg 'l:maker:' l:maker
             " :echomsg 'l:project_root_dir:' l:project_root_dir
-            " No buffer 
+            " No buffer
             let l:project_root_dir = utils#current_path()
             " Find maker in the parent directory
             let l:root_is_found = v:false
@@ -126,17 +128,17 @@ function utils#get_root_dir(path) abort
                 endfor
             endwhile
         else
-            " Get an abusolute path from finddir()
             let l:project_root_dir = utils#up(l:project_root_dir)
         endif
     else
         " TODO
     endif
+    " :echomsg 'l:project_root_dir' l:project_root_dir
     return l:project_root_dir
 endfunction
 
 
-" utils#get_outermost_dir(path) 
+" utils#get_outermost_dir(path)
 " parm path ralative/abusolute path
 " return outermost directory containing current file in project
 function utils#get_outermost_dir(path)
@@ -154,11 +156,11 @@ function utils#get_outermost_dir(path)
 endfunction
 "
 
-" get_innermost_dir(path) 
+" get_innermost_dir(path)
 " parm path ralative/abusolute path
 " return innermost directory containing current file in project
 function utils#get_innermost_dir(path)
-    let l:root_dir = utils#get_root_dir(a:path) 
+    let l:root_dir = utils#get_root_dir(a:path)
     if empty(l:root_dir)
         return ''
     endif
@@ -166,7 +168,7 @@ function utils#get_innermost_dir(path)
 endfunction
 
 
-" utils#nvim_is_latest() -- Determine whether neovim is lastest 
+" utils#nvim_is_latest() -- Determine whether neovim is lastest
 "
 " This function is hard-coded. Only check neovim is whether 0.5.0 or not because neovim installed in different ways has
 " different version output.

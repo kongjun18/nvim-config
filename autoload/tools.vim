@@ -4,13 +4,13 @@
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
 
-" guard 
+" guard
 if exists('g:loaded_tools_vim') || &cp || version < 700
     finish
 endif
 let g:loaded_tools_vim = 1
 
-" create_gitignore() -- Create gitignore template 
+" create_gitignore() -- Create gitignore template
 " @brief: Create .gitignore file for C/C++
 " @note:     only impletemt c and cpp
 function tools#create_gitignore(filetype)
@@ -56,9 +56,9 @@ function g:tools#rm_gtags(project_dir)
         echoerr "Can't delete tag directory " . l:gtags_dir
     endif
 endfunction
-" 
+"
 
-" scroll_adjacent_window() -- Scroll adjcent window without change focus 
+" scroll_adjacent_window() -- Scroll adjcent window without change focus
 " @para dir  0 -- up  1 -- down
 " @para mode 'i' -- insert 'n' -- normal
 " @complain neovim don't support win_execute(). What a pity!!!
@@ -127,9 +127,9 @@ function tools#scroll_adjacent_window(dir, mode)
         noautocmd wincmd p
     endif
 endfunction
-" 
+"
 
-" scroll_quickfix() -- Scroll quickfix without change focus 
+" scroll_quickfix() -- Scroll quickfix without change focus
 " @param dir  0 -- up  1 -- down
 " @param mode 'i' -- insert 'n' -- normal
 "
@@ -155,9 +155,9 @@ function tools#scroll_quickfix(dir, mode)
 
 endfunction
 
-" " 
+" "
 
-" ensure_dir_exist() -- Ensure directory exists 
+" ensure_dir_exist() -- Ensure directory exists
 " if @dir exists, just exit.
 " if @dir not exists, create it
 function! tools#ensure_dir_exist(dir)
@@ -167,7 +167,8 @@ function! tools#ensure_dir_exist(dir)
 endfunction
 "
 
-" create_qt_project() -- Create Qt project 
+" create_qt_project() -- Create Qt project
+" TODO: refactor code to platform-dependent
 function tools#create_qt_project(type, to)
     if a:type != "QMainWindow" && a:type != "QWidget" && a:type != "QDialog"
         echoerr "Please input correct argument"
@@ -185,9 +186,9 @@ function tools#create_qt_project(type, to)
         echomsg "create_qt_project(): failed to copy templates"
     endif
 endfunction
-" 
+"
 
-" disassembly() -- Disassembly current file 
+" disassembly() -- Disassembly current file
 "
 " only impletemt C and C++
 function tools#disassembly()
@@ -241,9 +242,9 @@ function tools#disassembly()
 endfunction
 
 command -nargs=0 Disassembly call tools#disassembly()
-" 
+"
 
-" Integrate lightline and ale 
+" Integrate lightline and ale
 function! g:LightlineLinterWarnings() abort
     let l:counts = ale#statusline#Count(bufnr(''))
     let l:all_errors = l:counts.error + l:counts.style_error
@@ -264,9 +265,9 @@ function! g:LightlineLinterOK() abort
     let l:all_non_errors = l:counts.total - l:all_errors
     return l:counts.total == 0 ? '✓' : ''
 endfunction
-" 
+"
 
-" Debug gutentags 
+" Debug gutentags
 function tools#debug_gutentgs()
     let g:gutentags_define_advanced_commands = 1
     let g:gutentags_trace = 1
@@ -276,9 +277,9 @@ function tools#undebug_gutentags()
     let g:gutentags_define_advanced_commands = 0
     let g:gutentags_trace = 0
 endfunction
-" 
+"
 
-" Switch tag system 
+" Switch tag system
 function tools#use_static_tag() abort
     let g:general#only_use_static_tag = 1
     if &csprg == 'gtags-cscope'
@@ -327,7 +328,7 @@ function tools#use_lsp_tag() abort
 endfunction
 "
 
-" Plugin operations 
+" Plugin operations
 function tools#plugin_clean()
 	let unused_plugin_dir = dein#check_clean()
 	if len(unused_plugin_dir) == 0
@@ -360,12 +361,17 @@ function tools#plugin_reinstall(list)
 endfunction
 "
 
-" NERDTree 
+" NERDTree
 
 " Only used by tools#nerdtree_XXXX()
 function s:get_last_accessed_buf_path() abort
     let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
-    let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+    if empty(l:last_accessed_buffer_path)
+        let l:last_accessed_buffer_path = utils#current_path()
+    else
+        let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
+    endif
+    " :echomsg l:last_accessed_buffer_path
     return l:last_accessed_buffer_path
 endfunction
 
@@ -399,8 +405,9 @@ function tools#nerdtree_toggle_root() abort
         :NERDTreeClose
     else
         let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
+        " :echomsg l:last_accessed_buffer_path
         execute ':NERDTree' utils#get_root_dir(l:last_accessed_buffer_path)
         let t:nerdtree_open_mode.root = 1
     endif
 endfunction
- 
+

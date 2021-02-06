@@ -118,12 +118,12 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
                 \ })
-	call dein#add('machakann/vim-sandwich') 
+	call dein#add('machakann/vim-sandwich')
 	call dein#add('machakann/vim-highlightedyank')                " Highlight yanked area
-	call dein#add('lilydjwg/fcitx.vim', {
-				\ 'lazy': 1,
-				\ 'on_event': 'InsertEnter'
-				\ })
+    call dein#add('lilydjwg/fcitx.vim', {
+                \ 'lazy': 1,
+                \ 'on_event': 'InsertEnter'
+                \ })
 	" Leetcode
 	call dein#add('ianding1/leetcode.vim', {
 				\ 'lazy': 1,
@@ -179,7 +179,7 @@ if dein#load_state(general#plugin_dir)
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
                     \ 'on_ft': ['c', 'cpp'],
-                    \ 'depends': 'coc.nvim' 
+                    \ 'depends': 'coc.nvim'
                     \ })
         call dein#add('wsdjeg/vim-lua', {
                     \ 'lazy': 1,
@@ -322,7 +322,7 @@ nnoremap <silent><Leader>p :LeaderfFunctionAll<CR>
 nnoremap <silent><Leader>l :LeaderfBufTagAll<CR>
 nnoremap <silent><Leader>d :LeaderfTag<CR>
 nnoremap <silent><leader>h :LeaderfHelp<CR>
-nnoremap <silent> <Leader>rg :Leaderf rg -r<Space><Right>
+nnoremap <silent> <Leader>rg :Leaderf rg <Space><Right>
 nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
@@ -441,18 +441,18 @@ let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
 nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>
-nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<cr>
-nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr>
-nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>
-nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>
-nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>
+nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<CR><CR>
+nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<CR><CR>
+nnoremap <silent> ga :GscopeFind a <C-R><C-W><CR>
+nnoremap <silent> gc :GscopeFind c <C-R><C-W><CR>
+nnoremap <silent> gC :GscopeFind d <C-R><C-W><CR>
 
 "       gutentags_plus ------------{{{
 
 if general#only_use_static_tag
-	nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
-	nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
-    nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
+	nnoremap <silent> gs :GscopeFind s <C-R><C-W><CR>:cnext<CR>zz
+	nnoremap <silent> gd :GscopeFind g <C-R><C-W><CR>:cnext<CR>zz
+    nnoremap <silent> gt :GscopeFind t <C-R><C-W><CR>:cnext<CR>zz
 endif
 
 nnoremap <C-g> :GtagsCursor<CR>zz
@@ -541,7 +541,7 @@ let g:UltiSnipsEditSplit="vertical"
 
 " vim-quickui{{{
 " vim-quickiui is a simple ui for terminal vim, but I only use it to preview
-" tag in pop up window. 
+" tag in pop up window.
 if has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0
 	echoerr "vim-quickui can't work"
 else
@@ -611,6 +611,7 @@ let g:asyncrun_bell = 1
 " Set root makers of project
 let g:asyncrun_rootmarks = general#project_root_makers
 
+" They will slow down <C-I> because <Tab> equals to <C-I>
 nnoremap  <Tab>5 :AsyncTask file-build<cr>
 nnoremap  <Tab>6 :AsyncTask file-run<cr>
 nnoremap  <Tab>7 :AsyncTask project-configure<CR>
@@ -733,7 +734,7 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 
-" Usefull when comment argument 
+" Usefull when comment argument
 let g:NERDAllowAnyVisualDelims = 0
 let g:NERDAltDelims_asm = 1
 " }}}
@@ -744,7 +745,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeCascadeOpenSingleChildDir = 1
 nnoremap <silent> <Leader>to :call tools#nerdtree_toggle_outermost_dir()<CR>
 nnoremap <silent> <Leader>ti :call tools#nerdtree_toggle_innermost_dir()<CR>
-nnoremap <silent> <leader>tt :call tools#nerdtree_toggle_root()<CR> 
+nnoremap <silent> <leader>tt :call tools#nerdtree_toggle_root()<CR>
 nnoremap <silent> <leader>tc :call tools#nerdtree_close()<CR>
 
 "}}}
@@ -754,7 +755,7 @@ nnoremap <silent> <leader>tc :call tools#nerdtree_close()<CR>
 " asynchronously
 "
 " This command will cause vim-dispatch and all other make wrapper plugins go
-" wrong 
+" wrong
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 
 nnoremap <nowait> <silent> gl :diffget //2<CR>
@@ -799,7 +800,7 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust'},
   highlight = {
-    enable = true, 
+    enable = true,
   },
 }
 -- integrate with rainbow

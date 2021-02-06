@@ -98,20 +98,21 @@ let g:loaded_netrwFileHandlers = 1
 let g:did_install_default_menus = 1
 
 set path+=include
-set backspace=indent,eol,start
+set backspace=indent,eol,start " Ensure backspace is available
 set mouse=r
-set laststatus=2    " always show status line
+" set fileformat=unix " Always use unix file format(CRLF)
+set laststatus=2    " Always show status line
 set number
-set showtabline=2
+set showtabline=2   " Always display tabline
 set noerrorbells    " No beep
-set vb t_vb=        
+set vb t_vb=
 set undofile        " Persist undo history
 set backup          " Backup files
 set completeopt+=noselect
 set wildignore=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
-set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib 
+set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib
 set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
-set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    
+set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz
 set wildignore+=*DS_Store*,*.ipch
 set wildignore+=target
 set wildignore+=node_modules

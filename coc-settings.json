@@ -38,7 +38,7 @@
 				"cache": {
 					"directory": ".cache/ccls"
 				},
-                "highlight": {"lsRanges": true } 
+                "highlight": {"lsRanges": true }
 			}
 		}
 	},
