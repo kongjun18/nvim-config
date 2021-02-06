@@ -39,3 +39,4 @@ augroup format
             \ endif
 augroup END
 
+autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path()), g:general#delimiter, '~', 'g')
