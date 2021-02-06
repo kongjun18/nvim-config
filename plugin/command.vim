@@ -45,3 +45,6 @@ command -nargs=1 -complete=customlist,ListQtType CreateQt :call tools#create_qt_
 function ListQtType(A, L, P)
     return ["QMainWindow", "QWidget", "QDialog"]
 endfunction
+
+command -nargs=0 Merge :call asyncrun#run('', {'errorformat': '%f'}, "git diff --name-only --diff-filter=U")
+

@@ -40,3 +40,6 @@ augroup format
 augroup END
 
 autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path()), g:general#delimiter, '~', 'g')
+
+" Add git conflict maker to machit
+autocmd BufReadPre * let b:match_words = '^<<<<<<<:^|||||||:^=======:^>>>>>>>'

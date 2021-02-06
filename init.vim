@@ -102,18 +102,16 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
                 \ })                             " Repeat modification made by vim-commentary, vim-surround
-	call dein#add('tpope/vim-unimpaired', {
-				\ 'lazy': 1,
-				\ 'on_event': 'BufReadPost'
-				\ })                                              " Some shortcuts should be built in Vim
+	call dein#add('tpope/vim-unimpaired')
     call dein#add('junegunn/vim-easy-align', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
                 \ })                      " Align code
-	call dein#add('Yggdroot/indentLine', {
+    call dein#add('Yggdroot/indentLine', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufRead'
-                \ }) " Indent indication
+                \ })                      " Indent indication
+                                          " Lazy load will break :G mergetool
     call dein#add('Chiel92/vim-autoformat', {
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
