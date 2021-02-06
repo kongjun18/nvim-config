@@ -209,6 +209,7 @@ if dein#load_state(general#plugin_dir)
     call dein#add('cormacrelf/vim-colors-github', {'rev': 'v0.4'})
 
 	" project management
+    call dein#add('editorconfig/editorconfig-vim')
 	call dein#add('Yggdroot/LeaderF', {
                 \ 'build': ':LeaderfInstallCExtension'}
                 \ )                          " Fuzzy finder
@@ -819,4 +820,8 @@ let g:matchup_matchpref = {'cpp': {'template': 1}}
 
 " vim-auto-popmenu {{{
 let g:apc_enable_ft = {'text':1, 'markdown':1, 'gitcommit': 1, 'vimwiki': 1}
+" }}}
+
+" editorconfig {{{
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
