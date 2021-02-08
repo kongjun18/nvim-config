@@ -96,7 +96,7 @@ When launch vim, you will see nothing(as if vim is not lauched). Don't panic, op
 │		├── rust.vim
 │		└── vimwiki.vim
 ├── autoload
-│ 	├── tools.vim
+│   ├── tools.vim
 |   └──general.vim
 ├── coc-settings.json
 ├── colors
@@ -113,9 +113,7 @@ When launch vim, you will see nothing(as if vim is not lauched). Don't panic, op
 ├── README.md
 ├── spell
 ├── tasks.ini
-│   ├── dein.sh
-│   ├── gitignore/
-│   └── Qt/
+├── tools/
 └── UltiSnips
     ├── cmake.snippets
     ├── cpp.snippets
