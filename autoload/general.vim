@@ -90,7 +90,7 @@ let g:loaded_vimballPlugin = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_machit = 1
-:let loaded_matchparen = 1
+let loaded_matchparen = 1
 let g:loaded_rrhelper = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrwSettings = 1
@@ -108,6 +108,7 @@ set noerrorbells    " No beep
 set vb t_vb=
 set undofile        " Persist undo history
 set backup          " Backup files
+set backupskip+=COMMIT_EDITMSG " Don't backup git commit
 set completeopt+=noselect
 set wildignore=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
 set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib
