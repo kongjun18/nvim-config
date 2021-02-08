@@ -12,7 +12,7 @@ Feature list:
 - code completion
 - dynamic check
 - git support
-- jump to definition/reference/implementation/alignment and so on 
+- jump to definition/reference/implementation/alignment and so on
 - scroll window and quickfix without change focus
 - disassembly current C/C++ file
 - fuzzy finder
@@ -42,7 +42,7 @@ Optional:
 - clang-format:        format C/C++ code
 - clang-tidy, clazy:   C++ linter
 - [bear](https://github.com/rizsotto/Bear):                generate compile database for Makefile
-- axel:                a multi-threaded downloader 
+- axel:                a multi-threaded downloader
 - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts): display icons
 - C++ compler:        compile [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
@@ -126,16 +126,15 @@ When launch vim, you will see nothing(as if vim is not lauched). Don't panic, op
 ```
 
 - after/ftplugin: Filetype-specific setting.
-- autoload: Some tools written in VimL.
 - coc-setting.json: Configuration of coc.nvim.
 - colors: Color scheme.
 - init.vim: Configuration file of (Neo)vim.
 - plugin/keymap.vim: Plugin-independent key mappings.
 - plugin/command.vim: commands
 - spell: Spell files. They may be no use to you.
-- autoload/tools.vim : Some tools such as gitignore templates.
-- autoload/general.vim: General settings 
-- UltiSnips: Snippets. 
+- tools/ : Some tools such as gitignore templates.
+- autoload/general.vim: General settings
+- UltiSnips: Snippets.
 
 ## Usage
 
@@ -183,7 +182,7 @@ If you want to handle project-specific asynctask configuration, please type `:As
 
 I don't want to define mapping for every task, but i integrate [Leaderf](https://github.com/Yggdroot/LeaderF) and Asynctask. You can type `<Leaderf>lt` to find and run any tasks conveniently.
 
-**Note:** 
+**Note:**
 
 - For some unknown reasons, If edit Rust file in directory which is not the root of project, run `cargo build` (task `project-build:cargo`) and then jump to file in quickfix, we will jump to empty file. So always edit Rust file in the root of project.
 - task clang-tidy depends on UNIX find
@@ -192,7 +191,7 @@ I don't want to define mapping for every task, but i integrate [Leaderf](https:/
 
 ### Code completion
 
-Use [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint code. For Rust, It can be used out of box. 
+Use [coc.nvim](https://github.com/neoclide/coc.nvim) to complete and lint code. For Rust, It can be used out of box.
 
 Use \<Tab> to select suggestions. \<C-n> select next suggestions and \<C-p> select previous one.
 
@@ -212,11 +211,11 @@ See [code completion](https://github.com/kongjun18/nvim-config#code-completion).
 
 I use both static analysis tools([global(gtags)](https://www.gnu.org/software/global/) and [universial-ctags](https://github.com/universal-ctags/ctags)) and coc.nvim to index source code.
 
-static analysis tag system like gtags and ctags is powerful, scalable, but not smart enough. Gtags(integrated with [pygment](https://pygments.org/)) supports more than 50 languages and proficient in searching definition, symbol, reference, alignment, calling function, called function, including file. Ctags support more than 200 languages, but only proficient in searching definition. Both gtags and ctags are based on static symbol analysis, if you search overloaded function, you will get many functions with same name and need to select the correct one manually. 
+static analysis tag system like gtags and ctags is powerful, scalable, but not smart enough. Gtags(integrated with [pygment](https://pygments.org/)) supports more than 50 languages and proficient in searching definition, symbol, reference, alignment, calling function, called function, including file. Ctags support more than 200 languages, but only proficient in searching definition. Both gtags and ctags are based on static symbol analysis, if you search overloaded function, you will get many functions with same name and need to select the correct one manually.
 
 LSP-based tag system like functionalities coc.nvim provides is smart but not powerful enough. coc.nvim only supports reference, definition. I use coc.nvim to find definition and reference, use static tagging system find other things.
 
-Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file. 
+Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) except  go to definition and go to including file.
 
 |       mapping       |                         description                          |
 | :-----------------: | :----------------------------------------------------------: |
@@ -233,11 +232,11 @@ Mappings related to tag is similar to [cscope](http://cscope.sourceforge.net/) e
 | \<Localleader>p(zp) |  preview definition of symbol under cursor in pop up window  |
 | p(type in quickfix) |                 preview tag in pop up window                 |
 
-By default, `gd`,  `gs` , `gt`, `gc` and `gC` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim. 
+By default, `gd`,  `gs` , `gt`, `gc` and `gC` use coc.nvim. If you don't want to use LSP-based tag, please set `g:only_use_static_tag` (defined in fold *general setting*, init.vim) to `1`. Besides, you can type `:UseStaticTag` to switch to static tag system in  Vim.
 
 I use [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags) and [vim-gutentags_plugs](https://github.com/skywind3000/gutentags_plus) to manage tag file.
 
-Every time open or write file belong to project, Vim will generate ctags and gtags incrementally. 
+Every time open or write file belong to project, Vim will generate ctags and gtags incrementally.
 
 Sometimes, gutentags fails to generate gtags or ctags file and produce warning. You can type `:DebugGutentags` to see log, fix the problem and type `:UndebugGutags` to disable messages. In most case, delete gtags file fix all problems. All tags are stored in ~/.config/.cache/tags. I write a function `tools#rm_gtags(dir)` to delete gtags. To delete gtags of current project, type the following line:
 
@@ -432,8 +431,8 @@ There's no need to create mappings for vim-fugitive which has a nice command int
 
 6. When I install plugin, Vim goes stuck.
 
-    dein.vim will block vim when installing plugins. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently. 
-    
+    dein.vim will block vim when installing plugins. Type `ps as | grep git`, you will see many processes of Git. This proves dein.vim run perfectly. Please wait patiently.
+
 5. I can't start vim after installation.
 
      Don't panic, open task manager, you can see many Git processes, which indicates Vim is installing plugins. If the networking is working correctly, you just need to wait 3 minutes.
