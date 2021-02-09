@@ -153,6 +153,7 @@ set noautochdir     " Don't change working directory automatically. I always lau
 set wildmenu        " Enhance command completion
 set wildmode=full   "
 set shortmess+=c    " Don't give ins-completion-menu messages
+set lazyredraw
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
