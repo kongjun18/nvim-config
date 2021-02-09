@@ -102,7 +102,10 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
                 \ })                             " Repeat modification made by vim-commentary, vim-surround
-	call dein#add('tpope/vim-unimpaired')
+    call dein#add('tpope/vim-unimpaired', {
+                \ 'lazy': 1,
+                \ 'on_map': ['[a',']a','[A',']A','[b',']b','[B',']B','[l',']l','[L',']L','[<C-L>',']<C-L>','[q',']q','[Q',']Q','[<C-Q>',']<C-Q>','[t',']t','[T',']T','[<C-T>',']<C-T>','[ob',']ob','yob','[oc',']oc','yoc','[od',']od','yod','[oh',']oh','yoh','[oi',']oi','yoi','[ol',']ol','yol','[on',']on','yon','[or',']or','yor','[os',']os','yos','[ou',']ou','you','[ov',']ov','yov','[ow',']ow','yow','[ox',']ox','yox','<Space>',']<Space>','[e',']e']
+                \ })
     call dein#add('junegunn/vim-easy-align', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
@@ -234,7 +237,14 @@ if dein#load_state(general#plugin_dir)
 	" other
 	call dein#add('yianwillis/vimcdoc')                         " Chinese version of vi mdoc
 	call dein#add('voldikss/vim-translator')                    " Translator
-	call dein#add('voldikss/vim-floaterm')                      " Popup terminal
+    call dein#add('voldikss/vim-floaterm', {
+                \ 'lazy': 1,
+                \ 'on_map': ['[ot',']ot']
+                \ })                      " Popup terminal
+    call dein#add('skywind3000/vim-terminal-help', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
 	call dein#add('tpope/vim-eunuch', {'on_if': general#is_unix})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
                 \ 'rev': 'v1.3.0',
