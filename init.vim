@@ -256,7 +256,10 @@ if dein#load_state(general#plugin_dir)
 				\ 'lazy': 1,
 				\ 'on_event': 'BufReadPost'
 				\ })                                            " Time statistics
-
+    call dein#add('liuchengxu/graphviz.vim', {
+                \' lazy': 1,
+                \ 'on_ft': 'dot'
+                \ })
 	call dein#end()
 	call dein#save_state()
 endif
