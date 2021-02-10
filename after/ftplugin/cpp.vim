@@ -1,9 +1,16 @@
 " Settings for C++
-" Last Change: today
+" Last Change: 2021-02-10
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
 execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
+
+" Support Chinese version of GNU Make
+setlocal errorformat+=
+            \%D%*\\a[%*\\d]:\ 进入目录“%f”,
+            \%X%*\\a[%*\\d]:\ 离开目录“%f”,
+            \%D%*\\a:\ 进入目录“%f”,
+            \%X%*\\a:\ 离开目录“%f”
 
 if !g:general#only_use_static_tag
     nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
