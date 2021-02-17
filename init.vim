@@ -838,3 +838,6 @@ let g:apc_enable_ft = {'text':1, 'markdown':1, 'gitcommit': 1, 'vimwiki': 1}
 " editorconfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
+" vim-terminal-help {{{
+let g:terminal_cwd = 0
+" }}}
