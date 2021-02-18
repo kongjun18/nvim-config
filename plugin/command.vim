@@ -51,3 +51,6 @@ command -nargs=0 Merge :call asyncrun#run('', {'errorformat': '%f'}, "git diff -
 
 " Write buffer to privileged file
 command! -nargs=0 SudoWrite :execute 'silent! write !sudo tee "%" > /dev/null' | edit!
+
+" Rename current file
+command! -nargs=1 Rename try | execute "saveas %:p:h" . g:general#delimiter . "<args>" | call delete(expand('#')) | bd # | endtry
