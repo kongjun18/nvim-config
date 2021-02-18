@@ -110,11 +110,6 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
                 \ })                      " Align code
-    call dein#add('Yggdroot/indentLine', {
-                \ 'lazy': 1,
-                \ 'on_event': 'BufRead'
-                \ })                      " Indent indication
-                                          " Lazy load will break :G mergetool
     call dein#add('Chiel92/vim-autoformat', {
                 \ 'lazy': 1,
                 \ 'on_ev': 'BufReadPost'
@@ -504,18 +499,12 @@ noremap yov :Vista!!<CR>
 
 " indentLine{{{
 
-let g:indentLine_enabled = 1
-let g:indentLine_conceallevel = 2
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']"}}}
+" let g:indentLine_enabled = 1
+" let g:indentLine_conceallevel = 2
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+"}}}
 
 " AutoFormat{{{
-
-" use clang-format as default formatter
-" use mozilla style as default C/C++ style
-" let g:formatdef_my_custom_c = '"clang-format --style=\"{BasedOnStyle: mozilla, IndentWidth: 4}\""'
-" let g:formatters_c = ['my_custom_c']
-" let g:formatters_cpp = ['my_custom_c']
-
 " use lua-format as default lua formatter
 let g:formatdef_my_custom_lua = 'lua-format -i'
 let g:formatter_lua = ['my_custom_lua']
