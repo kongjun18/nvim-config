@@ -246,7 +246,6 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_event': 'BufReadPost',
                 \ 'on_map': '<M-=>'
                 \ })
-	call dein#add('tpope/vim-eunuch', {'on_if': general#is_unix})   " use UNIX command in Vim
 	call dein#add('skywind3000/vim-quickui', {
                 \ 'rev': 'v1.3.0',
 				\ 'lazy': 1,
