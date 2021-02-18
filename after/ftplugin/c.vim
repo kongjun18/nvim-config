@@ -12,6 +12,10 @@ setlocal errorformat+=
             \%D%*\\a:\ 进入目录“%f”,
             \%X%*\\a:\ 离开目录“%f”
 
+" Highlight text that goes over the 80 column limit
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
 if !g:general#only_use_static_tag
     nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
     nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>

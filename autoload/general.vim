@@ -156,10 +156,6 @@ set shortmess+=c    " Don't give ins-completion-menu messages
 set lazyredraw      " Delay redraw event
 set listchars=eol:¬,tab:>·,extends:>,precedes:<,space:␣ " Display special characters
 
-" Highlight text that goes over the 80 column limit
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
-
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("patch-8.1.1564")
