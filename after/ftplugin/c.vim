@@ -5,6 +5,8 @@
 " License: GPL-2.0
 execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
 
+syntax sync fromstart
+
 " Support Chinese version of GNU Make
 setlocal errorformat+=
             \%D%*\\a[%*\\d]:\ 进入目录“%f”,
