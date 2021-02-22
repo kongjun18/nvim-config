@@ -99,8 +99,7 @@ let g:did_install_default_menus = 1
 
 set path+=include
 set backspace=indent,eol,start " Ensure backspace is available
-set mouse=r
-" set fileformat=unix " Always use unix file format(CRLF)
+set mouse=a
 set laststatus=2    " Always show status line
 set number
 set showtabline=2   " Always display tabline
