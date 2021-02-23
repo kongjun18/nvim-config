@@ -15,7 +15,11 @@ setlocal errorformat+=
             \%X%*\\a:\ 离开目录“%f”
 
 " Highlight text that goes over the 80 column limit
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+if &background == 'light'
+    highlight OverLength ctermfg=243 ctermbg=153 guifg=#76787b guibg=#e4effb
+else
+    highlight OverLength term=reverse ctermbg=237 guibg=#393e53
+endif
 match OverLength /\%81v.\+/
 
 if !g:general#only_use_static_tag
