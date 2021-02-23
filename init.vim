@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-02-04
+" Last Change: 2021-02-23
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -141,7 +141,7 @@ if dein#load_state(general#plugin_dir)
 	" debug
 	call dein#add('puremourning/vimspector', {
 				\ 'lazy': 1,
-				\ 'on_ft': ['c', 'cpp', 'rust', 'python']
+                \ 'on_cmd': 'BufReadPost'
 				\ })                                            " Debug adaptor of Vim
 
 	" Git
@@ -683,7 +683,31 @@ nnoremap gk :vertical help <C-r><C-w><CR>
 "}}}
 
 " vimspector setting{{{
-let g:vimspector_enable_mappings = 'HUMAN'
+nnoremap <silent> <F1> :call vimspector#Stop()<CR>
+nnoremap <silent> <F2> :call vimspector#Restart()<CR>
+nnoremap <silent> <F3> :call vimspector#Continue()<CR>
+nnoremap <silent> <F4> :call vimspector#Pause()<CR>
+nnoremap <silent> <F5> :call vimspector#RunToCursor()<CR>
+nnoremap <silent> <F6> :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <silent> <Leader><F6> :call vimspector#ListBreakpoints()<CR>
+nnoremap <silent> <F7> :call <SID>toogle_conditional_breakpoint()<CR>
+nnoremap <silent> <F8> :call vimspector#StepOver()<CR>
+nnoremap <silent> <F9> :call vimspector#StepInto()<CR>
+nnoremap <silent> <F10> :call vimspector#StepOut()<CR>
+function! s:toogle_conditional_breakpoint()
+    let l:condition = trim(input("Condition: "))
+    if empty(l:condition)
+        return
+    endif
+    let l:count = trim(input("Count: "))
+    if empty(l:count)
+        let l:count = 1
+    else
+        let l:count = str2nr(l:count)
+    endif
+    call vimspector#ToggleBreakpoint({'condition': l:condition, 'hitCondition': l:count})
+endfunction
+
 "}}}
 
 " vimwiki{{{
