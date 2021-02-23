@@ -169,8 +169,11 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_ft': 'fish',
                 \ })                                           " A syntax file of fish shell
     if general#nvim_is_latest
-                " \ 'on_event': 'BufRead',
         call dein#add('nvim-treesitter/nvim-treesitter', {'merge': 0})
+        call dein#add('nvim-treesitter/nvim-treesitter-textobjects', {
+                    \ 'lazy': 1,
+                    \ 'on_event': 'BufReadPost'
+                    \ })
     else
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
@@ -380,17 +383,6 @@ endfunction
 " Symbol renaming.
 nmap <leader>rv <Plug>(coc-rename)
 nmap <Leader>rf <Plug>(coc-refactor)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -794,7 +786,7 @@ iabbrev rn return
 iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 " }}}
 
-" nvim-treesitter {{{
+" nvim-treesitter and textobjects {{{
 if general#nvim_is_latest
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
@@ -802,6 +794,31 @@ require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
   },
+  textobjects = {
+    select = {
+      enable = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["am"] = "@comment.outer",
+        ["ii"] = "@conditional.inner",
+        ["ai"] = "@conditional.outer",
+        ["il"] = "@loop.inner",
+        ["al"] = "@loop.outer",
+      },
+    },
+    move = {
+      enable = true,
+      goto_next_start = {
+        ["]f"] = "@function.outer",
+      },
+      goto_previous_start = {
+        ["[f"] = "@function.outer",
+      }
+    }
+  }
 }
 -- integrate with rainbow
 require "nvim-treesitter.highlight"
@@ -810,7 +827,19 @@ hlmap.error = nil
 hlmap["punctuation.delimiter"] = "Delimiter"
 hlmap["punctuation.bracket"] = nil
 EOF
+else
+    " Map function and class text objects
+    " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
 endif
+
 "}}}
 
 " match-up {{{
