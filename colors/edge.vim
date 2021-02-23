@@ -7,9 +7,17 @@
 " -----------------------------------------------------------------------------
 
 " Initialization: {{{
-highlight clear
-if exists('syntax_on')
-  syntax reset
+let s:configuration = edge#get_configuration()
+let s:palette = edge#get_palette(s:configuration.style)
+let s:path = expand('<sfile>:p') " the path of this script
+let s:last_modified = 'Tue Dec 29 05:06:48 AM UTC 2020'
+let g:edge_loaded_file_types = []
+
+if !(exists('g:colors_name') && g:colors_name ==# 'edge' && s:configuration.better_performance)
+  highlight clear
+  if exists('syntax_on')
+    syntax reset
+  endif
 endif
 
 let g:colors_name = 'edge'
@@ -17,12 +25,6 @@ let g:colors_name = 'edge'
 if !(has('termguicolors') && &termguicolors) && !has('gui_running') && &t_Co != 256
   finish
 endif
-
-let s:configuration = edge#get_configuration()
-let s:palette = edge#get_palette(s:configuration.style)
-let s:path = expand('<sfile>:p') " the path of this script
-let s:last_modified = 'Mon Nov 23 03:02:33 AM UTC 2020'
-let g:edge_loaded_file_types = []
 " }}}
 " Common Highlight Groups: {{{
 " UI: {{{
@@ -143,6 +145,9 @@ if has('nvim')
   highlight! link LspDiagnosticsSignWarning YellowSign
   highlight! link LspDiagnosticsSignInformation BlueSign
   highlight! link LspDiagnosticsSignHint GreenSign
+  highlight! link LspReferenceText CurrentWord
+  highlight! link LspReferenceRead CurrentWord
+  highlight! link LspReferenceWrite CurrentWord
   highlight! link TermCursor Cursor
   highlight! link healthError Red
   highlight! link healthSuccess Green
@@ -298,38 +303,52 @@ endif
 " }}}
 " Plugins: {{{
 " nvim-treesitter/nvim-treesitter {{{
-highlight! link TSPunctDelimiter Grey
-highlight! link TSPunctBracket Fg
-highlight! link TSPunctSpecial Fg
-highlight! link TSConstant YellowItalic
+highlight! link TSAnnotation Purple
+highlight! link TSAttribute Yellow
+highlight! link TSBoolean Yellow
+highlight! link TSCharacter Green
+highlight! link TSComment Grey
+highlight! link TSConditional Purple
 highlight! link TSConstBuiltin YellowItalic
 highlight! link TSConstMacro Cyan
-highlight! link TSString Green
-highlight! link TSStringRegex Yellow
-highlight! link TSStringEscape Yellow
-highlight! link TSCharacter Green
-highlight! link TSNumber Yellow
-highlight! link TSBoolean Yellow
+highlight! link TSConstant YellowItalic
+highlight! link TSConstructor Fg
+highlight! link TSError CocErrorHighlight
+highlight! link TSException Purple
+highlight! link TSField Blue
 highlight! link TSFloat Yellow
-highlight! link TSFunction Blue
 highlight! link TSFuncBuiltin Blue
 highlight! link TSFuncMacro Blue
-highlight! link TSParameter CyanItalic
-highlight! link TSMethod Blue
-highlight! link TSField Blue
-highlight! link TSProperty Blue
-highlight! link TSConstructor Fg
-highlight! link TSConditional Purple
-highlight! link TSRepeat Purple
-highlight! link TSLabel Purple
-highlight! link TSOperator Purple
+highlight! link TSFunction Blue
+highlight! link TSInclude RedItalic
 highlight! link TSKeyword Purple
+highlight! link TSKeywordFunction Purple
+highlight! link TSLabel Purple
+highlight! link TSMethod Blue
+highlight! link TSNamespace YellowItalic
+highlight! link TSNumber Yellow
+highlight! link TSOperator Purple
+highlight! link TSParameter CyanItalic
+highlight! link TSParameterReference CyanItalic
+highlight! link TSProperty Blue
+highlight! link TSPunctBracket Fg
+highlight! link TSPunctDelimiter Grey
+highlight! link TSPunctSpecial Fg
+highlight! link TSRepeat Purple
+highlight! link TSString Green
+highlight! link TSStringEscape Yellow
+highlight! link TSStringRegex Yellow
+highlight! link TSStructure RedItalic
+highlight! link TSTag RedItalic
 highlight! link TSTagDelimiter Purple
-highlight! link TSException Purple
+highlight! link TSText Green
+call edge#highlight('TSEmphasis', s:palette.none, s:palette.none, 'bold')
+call edge#highlight('TSUnderline', s:palette.none, s:palette.none, 'underline')
 highlight! link TSType RedItalic
 highlight! link TSTypeBuiltin RedItalic
-highlight! link TSStructure RedItalic
-highlight! link TSInclude RedItalic
+highlight! link TSURI markdownUrl
+highlight! link TSVariable Fg
+highlight! link TSVariableBuiltin YellowItalic
 " }}}
 " neoclide/coc.nvim {{{
 call edge#highlight('CocHoverRange', s:palette.none, s:palette.none, 'bold,underline')
@@ -1140,7 +1159,8 @@ highlight! link typescriptFuncComma Fg
 highlight! link typescriptClassName RedItalic
 highlight! link typescriptClassHeritage RedItalic
 highlight! link typescriptInterfaceHeritage RedItalic
-highlight! link typescriptIdentifier CyanItalic
+highlight! link typescriptIdentifier YellowItalic
+highlight! link typescriptTry Purple
 highlight! link typescriptGlobal RedItalic
 highlight! link typescriptOperator Purple
 highlight! link typescriptNodeGlobal RedItalic
@@ -1270,6 +1290,7 @@ highlight! link dartMetadata CyanItalic
 " ft_begin: c/cpp/objc/objcpp {{{
 " vim-cpp-enhanced-highlight: https://github.com/octol/vim-cpp-enhanced-highlight{{{
 highlight! link cLabel Purple
+highlight! link cDefine Purple
 highlight! link cppSTLnamespace RedItalic
 highlight! link cppSTLtype RedItalic
 highlight! link cppAccess Purple
@@ -1285,7 +1306,7 @@ highlight! link cppSTLVariable RedItalic
 highlight! link Member CyanItalic
 highlight! link Variable Fg
 highlight! link Namespace RedItalic
-highlight! link EnumConstant CyanItalic
+highlight! link EnumConstant Yellow
 highlight! link chromaticaException Purple
 highlight! link chromaticaCast Purple
 highlight! link OperatorOverload Purple
@@ -1296,7 +1317,7 @@ highlight! link AutoType RedItalic
 " vim-lsp-cxx-highlight https://github.com/jackguo380/vim-lsp-cxx-highlight{{{
 highlight! link LspCxxHlSkippedRegion Grey
 highlight! link LspCxxHlSkippedRegionBeginEnd Purple
-highlight! link LspCxxHlGroupEnumConstant CyanItalic
+highlight! link LspCxxHlGroupEnumConstant Yellow
 highlight! link LspCxxHlGroupNamespace RedItalic
 highlight! link LspCxxHlGroupMemberVariable CyanItalic
 " }}}
@@ -1332,7 +1353,7 @@ highlight! link pythonDecoratorName CyanItalic
 " python-syntax: https://github.com/vim-python/python-syntax{{{
 highlight! link pythonExClass RedItalic
 highlight! link pythonBuiltinType RedItalic
-highlight! link pythonBuiltinObj CyanItalic
+highlight! link pythonBuiltinObj Yellow
 highlight! link pythonDottedName CyanItalic
 highlight! link pythonBuiltinFunc Blue
 highlight! link pythonFunction Blue
@@ -1355,7 +1376,7 @@ highlight! link semshiParameterUnused Grey
 highlight! link semshiSelf RedItalic
 highlight! link semshiGlobal Blue
 highlight! link semshiBuiltin Blue
-highlight! link semshiAttribute CyanItalic
+highlight! link semshiAttribute Yellow
 highlight! link semshiLocal Purple
 highlight! link semshiFree Purple
 highlight! link semshiSelected CocHighlightText
@@ -1430,6 +1451,7 @@ highlight! link goPackage Purple
 highlight! link goImport Purple
 highlight! link goBuiltins Blue
 highlight! link goPpurpleefinedIdentifiers CyanItalic
+highlight! link goPredefinedIdentifiers Yellow
 highlight! link goVar Purple
 " }}}
 " ft_end }}}
@@ -1447,7 +1469,7 @@ highlight! link rustMacroVariable CyanItalic
 highlight! link rustAssert Blue
 highlight! link rustPanic Blue
 highlight! link rustPubScopeCrate RedItalic
-highlight! link rustAttribute Yellow
+highlight! link rustAttribute Purple
 " }}}
 " ft_end }}}
 " ft_begin: swift {{{
@@ -1501,7 +1523,7 @@ highlight! link rubySymbol Fg
 " ft_begin: haskell {{{
 " haskell-vim: https://github.com/neovimhaskell/haskell-vim{{{
 highlight! link haskellBrackets Fg
-highlight! link haskellIdentifier CyanItalic
+highlight! link haskellIdentifier Yellow
 highlight! link haskellDecl Purple
 highlight! link haskellType RedItalic
 highlight! link haskellDeclKeyword Purple
@@ -1656,20 +1678,23 @@ highlight! link vimFunction Blue
 highlight! link vimIsCommand Fg
 highlight! link vimUserFunc Blue
 highlight! link vimFuncName Blue
-highlight! link vimMap RedItalic
-highlight! link vimNotation Yellow
+highlight! link vimMap Purple
+highlight! link vimMapModKey Red
+highlight! link vimNotation Red
 highlight! link vimMapLhs Blue
 highlight! link vimMapRhs Blue
-highlight! link vimSetEqual RedItalic
-highlight! link vimSetSep Fg
-highlight! link vimOption RedItalic
+highlight! link vimOption CyanItalic
 highlight! link vimUserAttrbKey RedItalic
 highlight! link vimUserAttrb Blue
-highlight! link vimAutoCmdSfxList Cyan
-highlight! link vimSynType Cyan
-highlight! link vimHiBang Cyan
-highlight! link vimSet RedItalic
+highlight! link vimSynType CyanItalic
+highlight! link vimHiBang Purple
+highlight! link vimSet Yellow
+highlight! link vimSetEqual Yellow
 highlight! link vimSetSep Grey
+highlight! link vimVar Fg
+highlight! link vimFuncVar Fg
+highlight! link vimContinue Grey
+highlight! link vimAutoCmdSfxList CyanItalic
 " ft_end }}}
 " ft_begin: make {{{
 highlight! link makeIdent Yellow
@@ -1793,8 +1818,10 @@ highlight! link jsonBraces Fg
 " ft_end }}}
 " ft_begin: yaml {{{
 highlight! link yamlKey Purple
+highlight! link yamlBlockMappingKey Purple
 highlight! link yamlConstant RedItalic
 highlight! link yamlString Green
+highlight! link yamlKeyValueDelimiter Grey
 " ft_end }}}
 " ft_begin: toml {{{
 call edge#highlight('tomlTable', s:palette.purple, s:palette.none, 'bold')
