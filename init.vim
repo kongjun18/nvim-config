@@ -658,7 +658,7 @@ autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
 " }}}
 
 " color scheme {{{
-if strftime("%H") <= 15
+if strftime("%H") <= 18
     let g:github_colors_soft = 1
     set background=light
     colorscheme github
