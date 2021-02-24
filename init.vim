@@ -776,9 +776,6 @@ nnoremap <silent> <leader>tc :call tools#nerdtree_close()<CR>
 " This command will cause vim-dispatch and all other make wrapper plugins go
 " wrong
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-
-nnoremap <nowait> <silent> gl :diffget //2<CR>
-nnoremap <nowait> <silent> gr :diffget //3<CR>
 "}}}
 
 " gitgutter {{{

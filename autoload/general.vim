@@ -103,6 +103,7 @@ set mouse=a
 set laststatus=2    " Always show status line
 set number
 set showtabline=2   " Always display tabline
+set diffopt+=vertical,algorithm:histogram
 set noerrorbells    " No beep
 set vb t_vb=
 set undofile        " Persist undo history
@@ -179,4 +180,16 @@ endif
 if has('gui_running')
     exec 'source' general#gvimrc
 endif
+
+" Use vim(fugitive) as git merge tool
+if exists('g:merged')
+    let g:diff_translations = 0
+    let g:SignatureEnabledAtStartup = 0
+    let b:coc_enabled = 0
+    autocmd BufWinEnter * normal gg
+    nnoremap <buffer> <nowait> <silent> gh :diffget //2<CR>]czz
+    nnoremap <buffer> <nowait> <silent> gl :diffget //3<CR>]czz
+    set syntax=diff
+endif
+
 "}}}

@@ -43,3 +43,72 @@ autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path())
 
 " Add git conflict maker to machit
 autocmd BufReadPre * let b:match_words = '^<<<<<<<:^|||||||:^=======:^>>>>>>>'
+
+" Add convenient mappings and avoid mapping conflicts
+autocmd DiffUpdated *
+            \ if &diff |
+            \     silent execute ':CocDisable'|
+            \     nnoremap <buffer> <nowait> <silent> dp :diffput <SID>get_merged_file()<CR>|
+            \     nnoremap <buffer> <nowait> <silent> gh :diffget //2<CR>]czz|
+            \     nnoremap <buffer> <nowait> <silent> gl :diffget //3<CR>]czz|
+            \     nnoremap <buffer> <nowait> <silent> [q :call <SID>handle_conflit_file('previous')<CR>|
+            \     nnoremap <buffer> <nowait> <silent> ]q :call <SID>handle_conflit_file('next')<CR>|
+            \ else |
+            \     call <SID>local_unmap(['gh', 'gl', 'dp'])|
+            \     silent execute ':CocEnable'|
+            \ endif
+
+" Jump to the previous/next conflicting file in quickfix without breaking
+" Gvdiffsplit!
+" param  direction  'previous' or 'next'
+function s:handle_conflit_file(direction) abort
+    if &modified
+        echohl ErrorMsg | echo "Error: No write since last change, please save buffer." | echohl None
+        return
+    endif
+    try
+        execute 'c' .. a:direction
+    catch /^Vim(\(cprevious\|cnext\)):E\d\+:/ " E553: No More Items
+        echohl ErrorMsg | echo "Error: No More Items" | echohl None
+        return
+    endtry
+    let l:local_bufnr = bufnr('//2')
+    let l:target_bufnr = bufnr('//3')
+    if l:local_bufnr > 0
+        execute 'bdelete! ' .. l:local_bufnr
+    endif
+    if l:target_bufnr > 0
+        execute 'bdelete! ' .. l:target_bufnr
+    endif
+    Gvdiffsplit!
+    normal gg
+endfunction
+
+" Unmap buffer mapping
+" param  mappings  a list of mapping or a single mapping
+function s:local_unmap(mappings)
+    if type(a:mappings) == v:t_list
+        for l:mapping in a:mappings
+            if !empty(maparg(l:mapping))
+                execute 'unmap <buffer> ' .. l:mapping
+            endif
+        endfor
+    elseif type(a:mappings) == v:t_string
+        if !empty(maparg(l:mapping))
+            execute 'unmap <buffer> ' .. a:mappings
+        endif
+    endif
+endfunction
+
+" Get buffer name of merged file in vim-fugitive's 3 way diff
+function s:get_merged_file()
+    let l:name = bufname('//2')
+    if !empty(l:name)
+        return matchstr(l:name, '//2/\zs\f\+\ze')
+    endif
+    let l:name = bufname('//3')
+    if !empty(l:name)
+        return matchstr(l:name, '//2/\zs\f\+\ze')
+    endif
+    return l:name
+endfunction
