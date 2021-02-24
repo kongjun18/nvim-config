@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-01-20
+" Last Change: 2021-02-24
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -37,6 +37,7 @@ augroup format
     autocmd BufWritePre * if &ft !~? '.*git.*' |
             \ :%s/\s\+$//ge                    |
             \ endif
+    autocmd BufWritePre *.vim :call <SID>update_timestamp()
 augroup END
 
 autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path()), g:general#delimiter, '~', 'g')
@@ -111,4 +112,20 @@ function s:get_merged_file()
         return matchstr(l:name, '//2/\zs\f\+\ze')
     endif
     return l:name
+endfunction
+
+" Update timestamp Last Change: YEAR-MONTH-DAY in copyright notice
+function s:update_timestamp()
+    let l:save_cursor = getcurpos()
+    normal gg
+    try
+        let l:author_is_kongjun = search('^" Author: Kong Jun <kongjun18@outlook.com>', 'n', 10)
+        if (l:author_is_kongjun)
+            silent execute '1, 10s/^" Last Change:\s\+\zs\d\+-\d\+-\d\+\s*$/' .. strftime("%Y-%m-%d")
+        endif
+    catch //
+        call setpos('.', l:save_cursor)
+        return
+    endtry
+    call setpos('.', l:save_cursor)
 endfunction
