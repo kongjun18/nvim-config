@@ -116,7 +116,7 @@ endfunction
 
 " Update timestamp Last Change: YEAR-MONTH-DAY in copyright notice
 function s:update_timestamp()
-    let l:save_cursor = getcurpos()
+    let l:save_window = winsaveview()
     normal gg
     try
         let l:author_is_kongjun = search('^" Author: Kong Jun <kongjun18@outlook.com>', 'n', 10)
@@ -124,8 +124,8 @@ function s:update_timestamp()
             silent execute '1, 10s/^" Last Change:\s\+\zs\d\+-\d\+-\d\+\s*$/' .. strftime("%Y-%m-%d")
         endif
     catch //
-        call setpos('.', l:save_cursor)
+        call winrestview(l:save_window)
         return
     endtry
-    call setpos('.', l:save_cursor)
+    call winrestview(l:save_window)
 endfunction
