@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-02-24
+" Last Change: 2021-02-25
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -34,10 +34,10 @@ augroup nerdtree
 augroup END
 
 augroup format
-    autocmd BufWritePre * if &ft !~? '.*git.*' |
+    autocmd BufWritePre * if &modified && &ft !~? '.*git.*' |
             \ :%s/\s\+$//ge                    |
             \ endif
-    autocmd BufWritePre *.vim :call <SID>update_timestamp()
+    autocmd BufWritePre *.vim if &modified | :call <SID>update_timestamp() | endif
 augroup END
 
 autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path()), g:general#delimiter, '~', 'g')
