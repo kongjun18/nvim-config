@@ -14,6 +14,10 @@ if [ -f ${VIMRC} -o -L ${VIMRC} ]; then
 	mv ${VIMRC} ${VIMRC}.backup
 fi
 
+if [ ! -d ${NVIM} -a ! -L ${NVIM} ]; then
+	mkdir -p ~/.config/nvim
+fi
+
 if [ -d ${NVIM} -o -L ${NVIM} ]; then
 	echo "mv ${NVIM} ${NVIM}.backup"
 	mv ${NVIM} ${NVIM}.backup
