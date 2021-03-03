@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory=$true)][String]$PluginDir
     )
 
-    $DeinVimRepo = "https://github.com/Shougo/dein.vim"
+    $DeinVimRepo = "https://gitee.com/kongjun18/dein.vim.git"
 
     # Convert the installation directory to absolute path and create plugin directory
     $PluginDir = (New-Item -Type Directory -Force $PluginDir).FullName
