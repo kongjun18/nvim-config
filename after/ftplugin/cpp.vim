@@ -5,3 +5,5 @@
 " License: GPL-2.0
 " Note: The common configuration of C and C++ lies in c.vim
 
+" grab C++ standard library symbol under the cursor correctly
+setlocal iskeyword+=:
