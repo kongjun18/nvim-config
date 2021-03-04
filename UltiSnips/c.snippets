@@ -20,7 +20,7 @@ snippet inc "#include <...>"
 $2
 endsnippet
 
-snippet incl 
+snippet incl
 #include "$1"
 $2
 endsnippet
@@ -35,10 +35,10 @@ snippet mark "#pragma mark (mark)"
 ${1:#pragma mark -
 }#pragma mark $2
 #endif
-endsnippet 
+endsnippet
 
 snippet main "main() (main)"
-int 
+int
 main()
 {
 	${VISUAL}$0
@@ -47,7 +47,7 @@ main()
 endsnippet
 
 snippet maina "main() (main)"
-int 
+int
 main(int argc, char **argv)
 {
 	${VISUAL}$0
@@ -132,22 +132,22 @@ endglobal
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
 snippet head "File Header" b
 /******************************************************************************
-* File:             `!p snip.rv = fn`
-*
-* Author:           Kong Jun <kongjun18@outlook.com>
-* Github:           https://github.com/kongjun18
-* Created:          `!v strftime("%Y-%m-%d")` 
-* Description:      ${4:${VISUAL}}
-*****************************************************************************/
+ * File:             `!p snip.rv = fn`
+ *
+ * Author:           Kong Jun <kongjun18@outlook.com>
+ * Github:           https://github.com/kongjun18
+ * Created:          `!v strftime("%Y-%m-%d")`
+ * Description:      ${4:${VISUAL}}
+ ******************************************************************************/
 ${0}
 endsnippet
 
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
-snippet func "Function Header" 
+snippet func "Function Header"
 /******************************************************************************
 * Function:         $1
 * Description:      ${4:${VISUAL}}
-* Where:`!p 
+* Where:`!p
 snip.rv = ""
 snip >> 2
 
