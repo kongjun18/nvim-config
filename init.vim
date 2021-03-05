@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-02-23
+" Last Change: 2021-03-05
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -134,7 +134,10 @@ if dein#load_state(general#plugin_dir)
 
 	" Tag system
 	call dein#add('vim-scripts/gtags.vim')                      " Integrate gtags(GNU Global) and Vim
-	call dein#add('liuchengxu/vista.vim')                       " Show tags in sidebar
+    call dein#add('preservim/tagbar', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufWinEnter'
+                \ })
 	call dein#add('ludovicchabant/vim-gutentags')               " Generate tags automatically
 	call dein#add('skywind3000/gutentags_plus')                 " Switch cscope automatically
 
@@ -420,7 +423,7 @@ if executable('gtags-cscope') && executable('gtags')
 	let g:gutentags_modules += ['gtags_cscope']
 endif
 
-" Please use universal-ctags instead of exuberant-ctags which is not maintained. Vista doesn't
+" Please use universal-ctags instead of exuberant-ctags which is not maintained. Tagbar doesn't
 " support old exuberant-ctags.
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
@@ -480,14 +483,23 @@ if &csprg != 'gtags-cscope'
 endif
 " --------------}}}
 
-" vista{{{
-let g:vista#renderer#enable_icon = 0
-let g:vista_executive_for = {
-  \ 'cpp': 'coc'
-  \ }
-noremap [ov :Vista<CR>
-noremap ]ov :Vista!<CR>
-noremap yov :Vista!!<CR>
+" tagbar{{{
+let g:tagbar_show_linenumbers = 0
+let g:tagbar_compact = 1
+let g:tagbar_wrap = 1
+noremap <silent> [ov :call <SID>open_tagbar()<CR>
+noremap <silent> ]ov :TagbarClose<CR>
+noremap <silent> yov :call <SID>toggle_tagbar()<CR>
+
+function s:open_tagbar() abort
+    let g:tagbar_width = min([80, winwidth(0) / 3 + 5])
+    TagbarOpen
+endfunction
+
+function s:toggle_tagbar() abort
+    let g:tagbar_width = min([80, winwidth(0) / 3 + 5])
+    TagbarToggle
+endfunction
 "}}}
 
 " -----------}}}
