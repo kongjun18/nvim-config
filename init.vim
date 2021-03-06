@@ -1,22 +1,19 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-05
+" Last Change: 2021-03-06
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
+
 
 " guard {{{
 if exists('loaded_init_vim') || &cp || version < 700
     finish
 endif
 let loaded_init_vim = 1
+
 " }}}
 
 " dein ----{{{
-" Substitute wget or curl with axel which is a multi-threaded downloader
-if executable('axel')
-	let g:dein#download_command = 'axel -n 8 -o'
-endif
-
 " Don't clone deeply
 let g:dein#types#git#clone_depth = 1
 let g:dein#install_message_type = 'none'
@@ -768,6 +765,21 @@ let g:NERDToggleCheckAllLines = 1
 " Usefull when comment argument
 let g:NERDAllowAnyVisualDelims = 0
 let g:NERDAltDelims_asm = 1
+
+function! NERDCommenter_before()
+    let l:marklist = getmarklist('%')
+    for l:mark in l:marklist
+        if l:mark['mark'] =~ "'>"
+            let g:nerdcommmenter_cursor = l:mark.pos
+            break
+        endif
+    endfor
+endfunction
+
+function! NERDCommenter_after()
+    call setpos('.', g:nerdcommmenter_cursor)
+endfunction
+
 " }}}
 
 " nerdtree {{{
