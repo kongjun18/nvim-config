@@ -84,13 +84,13 @@ if dein#load_state(general#plugin_dir)
                 \ 'rev': '3.2',
                 \ 'lazy': 1,
 				\ 'on_if':"has('python3')",
-				\ 'on_event': 'TextChangedI'
+                \ 'on_event': 'TextChangedI'
 				\ })                                              " Code snippets engine
-	call dein#add('preservim/nerdcommenter', {
-                \ 'rev': '2.5.2',
+    call dein#add('preservim/nerdcommenter', {
                 \ 'lazy': 1,
-				\ 'on_event': 'BufReadPost'
-				\ })
+                \ 'on_event': 'BufReadPost',
+                \ 'hook_post_source': 'call CreateCommenterMappings()'
+                \ })
     call dein#add('jiangmiao/auto-pairs', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
@@ -765,19 +765,67 @@ let g:NERDToggleCheckAllLines = 1
 " Usefull when comment argument
 let g:NERDAllowAnyVisualDelims = 0
 let g:NERDAltDelims_asm = 1
+let g:NERDCreateDefaultMappings = 0
 
-function! NERDCommenter_before()
-    let l:marklist = getmarklist('%')
-    for l:mark in l:marklist
-        if l:mark['mark'] =~ "'>"
-            let g:nerdcommmenter_cursor = l:mark.pos
-            break
-        endif
+" It is impossible to determine execute mode in hooks. Thus, I wrap raw NERDComment()
+" to pass mode infomation to hooks and create mappings manually.
+"
+" NERDCommenterAltDelims is not wrapped and it would execute hooks. So I
+" delete variable g:NERDCommenter_mode in NERDCommenter_after() to disable
+" hooks executed by NERDCommenterAltDelims
+function! s:NERDCommenter_wrapper(mode, type) range
+    let g:NERDCommenter_mode = a:mode
+    execute a:firstline .. ','  .. a:lastline 'call NERDComment(' .. string(a:mode) .. ',' .. string(a:type) .. ')'
+endfunction
+
+" modes: a list of mode(n - normal, x - visual)
+function! s:create_commenter_mapping(modes, map, type)
+    for l:mode in split(a:modes, '\zs')
+        execute l:mode .. 'noremap <silent> <Leader>' .. a:map .. ' :call <SID>NERDCommenter_wrapper(' .. string(l:mode) .. ', ' .. string(a:type) .. ')<CR>'
     endfor
 endfunction
 
+function! CreateCommenterMappings()
+    " All mappings are equal to standard NERDCommenter mappings.
+    call s:create_commenter_mapping('nx', 'cc', 'Comment')
+    call s:create_commenter_mapping('nx', 'cu', 'Uncomment')
+    call s:create_commenter_mapping('n', 'cA', 'Append')
+    call s:create_commenter_mapping('nx', 'c<space>', 'Toggle')
+    call s:create_commenter_mapping('nx', 'cm', 'Minimal')
+    call s:create_commenter_mapping('nx', 'cn', 'Nested')
+    call s:create_commenter_mapping('n', 'c$',  'ToEOL')
+    call s:create_commenter_mapping('nx', 'ci', 'Invert')
+    call s:create_commenter_mapping('nx', 'cs', 'Sexy')
+    call s:create_commenter_mapping('nx', 'cy', 'Yank')
+    call s:create_commenter_mapping('n', 'cA',  'Append')
+    call s:create_commenter_mapping('nx', 'cl', 'AlignLeft')
+    call s:create_commenter_mapping('nx', 'cb', 'AlignBoth')
+    call s:create_commenter_mapping('nx', 'cu', 'Uncomment')
+    call s:create_commenter_mapping('n', 'ca',  'AltDelims')
+    nmap <leader>ca <plug>NERDCommenterAltDelims
+endfunction
+
+" NERDCommenter hooks
+function! NERDCommenter_before()
+    let g:nerdcommmenter_visual_flag = v:false
+    if get(g:, 'NERDCommenter_mode', '') =~# '[vsx]'    " executed in visual mode
+        let l:marklist = getmarklist('%')
+        for l:mark in l:marklist
+            if l:mark['mark'] =~ "'>"
+                let g:nerdcommmenter_cursor = l:mark.pos
+                let g:nerdcommmenter_visual_flag = v:true
+                break
+            endif
+        endfor
+    endif
+endfunction
+
 function! NERDCommenter_after()
-    call setpos('.', g:nerdcommmenter_cursor)
+    if g:nerdcommmenter_visual_flag
+        call setpos('.', g:nerdcommmenter_cursor)
+    endif
+    let g:nerdcommmenter_visual_flag = v:false
+    unlet! g:NERDCommenter_mode
 endfunction
 
 " }}}
