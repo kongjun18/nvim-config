@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-06
+" Last Change: 2021-03-07
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -101,7 +101,7 @@ if dein#load_state(general#plugin_dir)
                 \ })                             " Repeat modification made by vim-commentary, vim-surround
     call dein#add('kongjun18/vim-unimpaired', {
                 \ 'lazy': 1,
-                \ 'on_map': ['[a',']a','[A',']A','[b',']b','[B',']B','[l',']l','[L',']L','[<C-L>',']<C-L>','[q',']q','[Q',']Q','[<C-Q>',']<C-Q>','[t',']t','[T',']T','[<C-T>',']<C-T>','[ob',']ob','yob','[oc',']oc','yoc','[od',']od','yod','[oh',']oh','yoh','[oi',']oi','yoi','[ol',']ol','yol','[on',']on','yon','[or',']or','yor','[os',']os','yos','[ou',']ou','you','[ov',']ov','yov','[ow',']ow','yow','[ox',']ox','yox','<Space>',']<Space>','[e',']e']
+                \ 'on_map': ['[a',']a','[A',']A','[b',']b','[B',']B','[l',']l','[L',']L','[<C-L>',']<C-L>','[q',']q','[Q',']Q','[<C-Q>',']<C-Q>','[t',']t','[T',']T','[<C-T>',']<C-T>','[ob',']ob','yob','[oc',']oc','yoc','[od',']od','yod','[oh',']oh','yoh','[oi',']oi','yoi','[ol',']ol','yol','[on',']on','yon','[or',']or','yor','[os',']os','yos','[ou',']ou','you','[ow',']ow','yow','[ox',']ox','yox','<Space>',']<Space>','[e',']e']
                 \ })
     call dein#add('junegunn/vim-easy-align', {
                 \ 'lazy': 1,
@@ -484,9 +484,9 @@ endif
 let g:tagbar_show_linenumbers = 0
 let g:tagbar_compact = 1
 let g:tagbar_wrap = 1
-noremap <silent> [ov :call <SID>open_tagbar()<CR>
-noremap <silent> ]ov :TagbarClose<CR>
-noremap <silent> yov :call <SID>toggle_tagbar()<CR>
+nnoremap <silent> [ov :call <SID>open_tagbar()<CR>
+nnoremap <silent> ]ov :TagbarClose<CR>
+nnoremap <silent> yov :call <SID>toggle_tagbar()<CR>
 
 function s:open_tagbar() abort
     let g:tagbar_width = min([80, winwidth(0) / 3 + 5])
@@ -903,6 +903,7 @@ let g:apc_enable_ft = {'text':1, 'markdown':1, 'gitcommit': 1, 'vimwiki': 1}
 " editorconfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
+
 " vim-terminal-help {{{
 let g:terminal_cwd = 0
 " }}}
