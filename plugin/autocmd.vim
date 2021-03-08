@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-03-06
+" Last Change: 2021-03-08
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -44,6 +44,8 @@ autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path())
 
 " Add git conflict maker to machit
 autocmd BufReadPre * let b:match_words = '^<<<<<<<:^|||||||:^=======:^>>>>>>>'
+
+autocmd VimEnter * call dein#call_hook('post_source')
 
 " Add convenient mappings and avoid mapping conflicts
 autocmd DiffUpdated *
