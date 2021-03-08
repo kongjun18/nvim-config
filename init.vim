@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-07
+" Last Change: 2021-03-08
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -399,7 +399,7 @@ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " static tag system ------------{{{
 " gutentags ----------------{{{
 " Exclude these types
-let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim', 'txt']
+let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim', 'txt', 'man']
 
 " Use pygment to extend gtags
 let $GTAGSLABEL = 'native-pygments'
