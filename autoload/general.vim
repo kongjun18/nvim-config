@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-03-04
+" Last Change: 2021-03-10
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -98,6 +98,7 @@ let g:loaded_netrwFileHandlers = 1
 let g:did_install_default_menus = 1
 
 set path+=include
+set fileformat=unix " Use UNIX line feed
 set backspace=indent,eol,start " Ensure backspace is available
 set mouse=a
 set laststatus=2    " Always show status line
