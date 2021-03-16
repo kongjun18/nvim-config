@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-15
+" Last Change: 2021-03-16
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -964,6 +964,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let g:terminal_cwd = 0
 " }}}
 " lens.vim {{{
-let g:lens#disabled_filetypes = ['nerdtree', 'list']
+let g:lens#disabled_filetypes = ['nerdtree', 'list', 'gitcommit', 'fugitive']
 let g:lens#disabled_buftypes = ['']
 " }}}
