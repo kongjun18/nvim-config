@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-08
+" Last Change: 2021-03-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -26,6 +26,14 @@ if dein#load_state(general#plugin_dir)
     call dein#begin(general#plugin_dir)
     call dein#add(general#dein_file)
 	" Vim enhacement
+    call dein#add('camspiers/animate.vim', {
+                \ 'lazy':1,
+                \ 'on_event': 'BufReadPost'
+                \ })
+    call dein#add('camspiers/lens.vim', {
+                \ 'lazy':1,
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('kongjun18/vim-rest-reminder', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
@@ -954,4 +962,8 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " vim-terminal-help {{{
 let g:terminal_cwd = 0
+" }}}
+" lens.vim {{{
+let g:lens#disabled_filetypes = ['nerdtree', 'list']
+let g:lens#disabled_buftypes = ['']
 " }}}
