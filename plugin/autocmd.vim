@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-03-08
+" Last Change: 2021-03-16
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -34,9 +34,7 @@ augroup nerdtree
 augroup END
 
 augroup format
-    autocmd BufWritePre * if &modified && &ft !~? '.*git.*' |
-            \ :%s/\s\+$//ge                    |
-            \ endif
+    autocmd BufWritePre * call <SID>remove_trailing_space()
     autocmd BufWritePre *.vim if &modified | :call <SID>update_timestamp() | endif
 augroup END
 
@@ -130,4 +128,12 @@ function s:update_timestamp()
         return
     endtry
     call winrestview(l:save_window)
+endfunction
+
+function s:remove_trailing_space() abort
+    if &modified && &ft !~? '.*git.*'
+        let l:cursor = getcurpos()
+        :keepmarks %s/\s\+$//ge
+        call setpos('.', l:cursor)
+    endif
 endfunction
