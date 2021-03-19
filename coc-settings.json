@@ -1,6 +1,5 @@
 {
 	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".git"],
-    "coc.preferences.jumpCommand": "drop",
     "suggest.echodocSupport": true,
     "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "‼",
@@ -43,6 +42,4 @@
 		}
 	},
 	"suggest.enablePreview": true,
-
-
 }

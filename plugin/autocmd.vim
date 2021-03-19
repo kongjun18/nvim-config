@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-03-16
+" Last Change: 2021-03-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -44,6 +44,10 @@ autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path())
 autocmd BufReadPre * let b:match_words = '^<<<<<<<:^|||||||:^=======:^>>>>>>>'
 
 autocmd VimEnter * call dein#call_hook('post_source')
+
+augroup MyVimspectorUICustomistaion
+  autocmd User VimspectorUICreated call <SID>vimspector_custom_ui()
+augroup END
 
 " Add convenient mappings and avoid mapping conflicts
 autocmd DiffUpdated *
@@ -137,3 +141,17 @@ function s:remove_trailing_space() abort
         call setpos('.', l:cursor)
     endif
 endfunction
+
+" Custom Vimspector UI
+" close console window to maximise source code window
+function s:vimspector_custom_ui()
+    if !getwinvar(g:vimspector_session_windows.output, '&hidden')
+        let l:winid = win_getid()
+        let l:cursor = getcurpos()
+        call win_gotoid(g:vimspector_session_windows.output)
+        :quit
+        call win_gotoid(l:winid)
+        call setpos('.', l:cursor)
+    endif
+endfunction
+

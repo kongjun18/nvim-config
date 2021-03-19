@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-16
+" Last Change: 2021-03-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -711,6 +711,10 @@ nnoremap <silent> <F7> :call <SID>toogle_conditional_breakpoint()<CR>
 nnoremap <silent> <F8> :call vimspector#StepOver()<CR>
 nnoremap <silent> <F9> :call vimspector#StepInto()<CR>
 nnoremap <silent> <F10> :call vimspector#StepOut()<CR>
+
+nmap <Leader>di <Plug>VimspectorBalloonEval
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
 function! s:toogle_conditional_breakpoint()
     let l:condition = trim(input("Condition: "))
     if empty(l:condition)
