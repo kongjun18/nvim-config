@@ -1,5 +1,5 @@
 " Settings for C
-" Last Change: 2021-02-10
+" Last Change: 2021-03-24
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -12,7 +12,11 @@ setlocal errorformat+=
             \%D%*\\a[%*\\d]:\ 进入目录“%f”,
             \%X%*\\a[%*\\d]:\ 离开目录“%f”,
             \%D%*\\a:\ 进入目录“%f”,
-            \%X%*\\a:\ 离开目录“%f”
+            \%X%*\\a:\ 离开目录“%f”,
+            \%-GIn\ file\ included\ from\ %f:%l:%c,
+            \%-GIn\ file\ included\ from\ %f:%l,
+            \%-Gfrom\ %f:%l,
+            \%-Gfrom\ %f:%l:%c
 
 " Highlight text that goes over the 80 column limit
 if &background == 'light'

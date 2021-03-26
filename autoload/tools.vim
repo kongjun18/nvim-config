@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-01-16
+" Last Change: 2021-03-17
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -186,62 +186,6 @@ function tools#create_qt_project(type, to)
         echomsg "create_qt_project(): failed to copy templates"
     endif
 endfunction
-"
-
-" disassembly() -- Disassembly current file
-"
-" only impletemt C and C++
-function tools#disassembly()
-    let path = ''
-    if &filetype == 'c'
-        let path = '/tmp/' . substitute(expand('%:t'), '\.c$', '\.s', '')
-        try
-            call system('gcc -S ' . expand('%') . ' -o ' . path)
-        catch *
-            echomsg "tools#disassembly: compile error"
-        endtry
-    elseif &filetype == 'cpp'
-        "Because symbol mangling, I disassembly from executable or object file
-        let path = '/tmp/' . substitute(expand('%:t'), '\.\(cc\|cpp\)$', '\.s', '')
-        let executable = substitute(path, '\.s', '', '')
-        " echomsg 'path: ' . path
-        " echomsg 'executable: ' . executable
-        silent exec '!g++ -std=c++17 ' . expand('%') . ' -o ' . executable
-        " echomsg 'system: ' . 'g++ -std=c++17 ' . expand('%') . ' -o ' . executable
-        if v:shell_error
-            silent exec '!g++ -std=c++17 -c ' . expand('%') . ' -o ' . executable
-            " echomsg 'system: ' . 'g++ -std=c++17 -c ' . expand('%') . ' -o ' . executable
-            if v:shell_error
-                echomsg "tools#disassembly: compile error"
-                return
-            endif
-        endif
-        silent exec '!objdump -d -C -M sufix ' . executable . ' > ' . path
-        " echomsg 'system: ' .'objdump -d -C -M sufix ' . executable . ' > ' . path
-        if v:shell_error
-            echomsg "tools#disassembly: objdump error"
-            return
-        endif
-    else
-        echomsg &filetype . ' : not impletemted'
-    endif
-
-    " echomsg 'vsp ' . path
-    if !bufexists(path) || bufexists(path) && empty(getbufinfo(path)[0].windows)
-        call execute('vsp ' . path)
-        " set autoread
-        " when we disassembly again, the buffer will change automatically
-        call setbufvar(path, '&autoread', 1)
-        let src_window_id = win_getid(winnr('#'))
-        call win_gotoid(src_window_id)
-    else
-        if !bufloaded(path)
-            call bufload(path)
-        endif
-    endif
-endfunction
-
-command -nargs=0 Disassembly call tools#disassembly()
 "
 
 " Integrate lightline and ale
