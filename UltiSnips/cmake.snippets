@@ -1,6 +1,6 @@
 
 ###############################################
-# Last Change: 2020-10-23 	
+# Last Change: 2020-10-23
 # Author: Kong Jun <kongjun18@outlook.com>
 # Github: https://github.com/kongjun18
 ###############################################
@@ -10,7 +10,7 @@ snippet cxxproject "C++ project declaration" b
 cmake_minimum_required(VERSION 3.17)
 project(${1:name} LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD ${2:17})
-set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 $3
 endsnippet
@@ -49,5 +49,24 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 $3
 endsnippet
 
+snippet fmt "Build fmt using FetchContent" b
+# Build fmt via FetchContent
+message(STATUS "Building fmt")
+FetchContent_Declare(fmt
+  GIT_REPOSITORY    https://github.com/fmtlib/fmt.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(fmt)
+${1}
+endsnippet
 
-
+snippet gtest "Build googletest using FetchContent" b
+# Build googletest via FetchContent
+message(STATUS "Building fmt")
+FetchContent_Declare(fmt
+  GIT_REPOSITORY    https://github.com/fmtlib/fmt.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(fmt)
+${1}
+endsnippet

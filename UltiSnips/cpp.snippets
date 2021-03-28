@@ -42,8 +42,12 @@ snippet incl "#include "
 ${2}
 endsnippet
 
-snippet beginend "$1.begin(), $1.end() (beginend)"
+snippet begend "$1.begin(), $1.end() (beginend)"
 ${1:v}${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}begin(), $1${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}end()
+endsnippet
+
+snippet cbegend "$1.cbegin(), $1.cend() (cbeginend)"
+${1:v}${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}cbegin(), $1${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}cend()
 endsnippet
 
 snippet cl "class .. (class)"
@@ -61,8 +65,8 @@ endsnippet
 snippet ns "namespace .. (namespace)"
 namespace${1/.+/ /m}${1:`!p snip.rv = snip.basename or "name"`}
 {
-	${VISUAL}$0
-}${1/.+/ \/* /m}$1${1/.+/ *\/ /m}
+${VISUAL}$0
+}${1/.+/ \/\/ namespace /m}$1${1/.+//m}
 endsnippet
 
 snippet map "std::map (map)"
