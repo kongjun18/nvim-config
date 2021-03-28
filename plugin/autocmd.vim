@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-03-19
+" Last Change: 2021-03-25
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -145,13 +145,8 @@ endfunction
 " Custom Vimspector UI
 " close console window to maximise source code window
 function s:vimspector_custom_ui()
-    if !getwinvar(g:vimspector_session_windows.output, '&hidden')
-        let l:winid = win_getid()
-        let l:cursor = getcurpos()
-        call win_gotoid(g:vimspector_session_windows.output)
-        :quit
-        call win_gotoid(l:winid)
-        call setpos('.', l:cursor)
-    endif
+    call win_gotoid(g:vimspector_session_windows.output)
+    :quit
+    call win_gotoid(g:vimspector_session_windows.code)
 endfunction
 
