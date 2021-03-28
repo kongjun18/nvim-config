@@ -509,13 +509,6 @@ endfunction
 
 " -----------}}}
 
-" indentLine{{{
-
-" let g:indentLine_enabled = 1
-" let g:indentLine_conceallevel = 2
-" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-"}}}
-
 " AutoFormat{{{
 " use lua-format as default lua formatter
 let g:formatdef_my_custom_lua = 'lua-format -i'
