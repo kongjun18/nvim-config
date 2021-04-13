@@ -153,7 +153,7 @@ if dein#load_state(general#plugin_dir)
 				\ })                                            " Debug adaptor of Vim
 
 	" Git
-	call dein#add('tpope/vim-fugitive', {'rev': '3.2'})
+	call dein#add('tpope/vim-fugitive')
     call dein#add('tpope/vim-rhubarb', {
                 \ 'lazy': 1,
                 \ 'on_event': 'BufReadPost'
@@ -221,7 +221,6 @@ if dein#load_state(general#plugin_dir)
                 \ )                          " Fuzzy finder
     call dein#add('neoclide/coc.nvim', {
                 \ 'lazy': 1,
-                \ 'rev': 'v0.0.80',
                 \ 'merge': 0,
                 \ 'on_event': 'BufReadPost'
                 \ })
