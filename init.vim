@@ -962,6 +962,6 @@ let g:terminal_cwd = 0
 " }}}
 
 " lens.vim {{{
-let g:lens#disabled_filetypes = ['nerdtree', 'list', 'gitcommit', 'fugitive', 'man', 'tagbar', 'qf', '']
+let g:lens#disabled_filetypes = ['nerdtree', 'list', 'gitcommit', 'fugitive', 'man', 'tagbar', 'qf', '', 'help', 'diff', 'undotree', 'leaderf']
 let g:lens#disabled_buftypes = ['nofile', '', 'terminal']
 " }}}
