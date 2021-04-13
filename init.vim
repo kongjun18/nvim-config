@@ -165,8 +165,7 @@ if dein#load_state(general#plugin_dir)
 				\ })                     " Show diff status
 
 	" Status
-	call dein#add('itchyny/lightline.vim')                      " Status line
-	call dein#add('lambdalisue/battery.vim')
+    call dein#add('itchyny/lightline.vim')                      " Status line
 	call dein#add('luochen1990/rainbow')                        " Give unmatched pairs different color
 	call dein#add('itchyny/vim-cursorword')                     " Underline the word of cursor
 	call dein#add('lfv89/vim-interestingwords')                 " Highlight interesting word
@@ -651,13 +650,12 @@ let g:leetcode_china = 1
 let g:lightline = {
             \ 'active': {
             \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
-            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], ['battery']]
+            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus']]
             \ },
             \ 'component_function': {
             \   'gutentags': 'gutentags#statusline',
             \   'gitbranch': 'FugitiveHead',
             \   'cocstatus': 'coc#status',
-            \   'battery': 'battery#component'
             \ },
             \ 'component_type': {
             \   'readonly': 'error',
@@ -681,11 +679,6 @@ else
     let g:lightline['colorscheme'] = 'edge'
 endif
 " }}}
-
-" vim-battery {{{
-let g:battery#update_statusline = 1
-let g:battery#symbol_charging = '⚡'
-"}}}
 
 " vim-mam{{{
 nnoremap gm :Vman 3 <C-r><C-w><CR>
