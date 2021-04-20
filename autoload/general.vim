@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-03-10
+" Last Change: 2021-04-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -100,9 +100,9 @@ let g:did_install_default_menus = 1
 set path+=include
 set fileformat=unix " Use UNIX line feed
 set backspace=indent,eol,start " Ensure backspace is available
-set mouse=a
+set mouse=a         " Enable mouse
 set laststatus=2    " Always show status line
-set number
+set number          " Show line number
 set showtabline=2   " Always display tabline
 set diffopt+=vertical,algorithm:histogram
 set noerrorbells    " No beep
@@ -110,7 +110,7 @@ set vb t_vb=
 set undofile        " Persist undo history
 set backup          " Backup files
 set backupskip+=COMMIT_EDITMSG " Don't backup git commit
-set completeopt+=noselect
+set completeopt+=noselect " Don't select candidate automatically
 set wildignore=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
 set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib,*.out
 set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
