@@ -255,11 +255,6 @@ if dein#load_state(general#plugin_dir)
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
 				\ })                                            " Simple menu bar of terminal Vim
-	call dein#add('wakatime/vim-wakatime', {
-                \ 'rev': 'v8.0.0',
-				\ 'lazy': 1,
-				\ 'on_event': 'BufReadPost'
-				\ })                                            " Time statistics
     call dein#add('liuchengxu/graphviz.vim', {
                 \' lazy': 1,
                 \ 'on_ft': 'dot'
@@ -403,7 +398,7 @@ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " }}}
 
 " static tag system ------------{{{
-" gutentags ----------------{{{
+" gutentags {{{
 " Exclude these types
 let g:gutentags_exclude_filetypes = ['text', 'markdown', 'cmake', 'snippets', 'vimwiki', 'dosini', 'gitcommit', 'git', 'json', 'help', 'html', 'javascript', 'css', 'vim', 'txt', 'man']
 
