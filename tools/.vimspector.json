@@ -39,7 +39,7 @@
                 "default": true,
                 "type":    "cppdbg",
                 "request": "launch",
-                "program": "${fileDirname}/${fileBasenameNoExtension}",
+                "program": "${fileDirname}/${fileBasenameNoExtension}.out",
                 // user input args
                 "args": ["*${ProgramArgs}"],
                 "cwd": "${workspaceRoot}",
@@ -85,7 +85,7 @@
             "configuration": {
                 "type": "cppdbg",
                 "request": "attach",
-                "program": "${fileDirname}/${fileBasenameNoExtension}",
+                "program": "${fileDirname}/${fileBasenameNoExtension}.out",
                 "MIMode": "gdb",
                 "breakpointers": {
                     "exception": {
