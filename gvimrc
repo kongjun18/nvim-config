@@ -21,8 +21,11 @@ set guioptions-=R
 set guioptions-=r
 set guioptions-=l
 
-" Use Source Code Pro as default font 
-set guifont=Source_Code_Pro:h12:cANSI:qDRAFT
-
+" Use Source Code Pro as default font
+if general#is_unix
+    set guifont=Source\ Code\ Pro\ 9
+else
+    set guifont=Source_Code_Pro:h12:cANSI:qDRAFT
+endif
 " Enable direct2d render
 set renderoptions=type:directx,renmode:5,taamode:1
