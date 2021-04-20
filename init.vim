@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-03-28
+" Last Change: 2021-04-20
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -485,6 +485,7 @@ endif
 let g:tagbar_show_linenumbers = 0
 let g:tagbar_compact = 1
 let g:tagbar_wrap = 1
+let g:tagbar_autofocus = 1
 nnoremap <silent> [ov :call <SID>open_tagbar()<CR>
 nnoremap <silent> ]ov :TagbarClose<CR>
 nnoremap <silent> yov :call <SID>toggle_tagbar()<CR>
