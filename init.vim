@@ -47,7 +47,17 @@ if dein#load_state(general#plugin_dir)
 				\ 'lazy': 1,
 				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDTreeToggle', 'NERDTreeToggleVCS']
 				\ })                                              " File system explorer
-	call dein#add('jeffkreeftmeijer/vim-numbertoggle')            " Automatically switch relative line number and absolute line number.
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufWinEnter'
+                \ })            " Automatically switch relative line number and absolute line number.
+
+    call dein#add('kdav5758/TrueZen.nvim', {
+                \ 'lazy': 1,
+                \ 'on_if': general#nvim_is_latest,
+                \ 'on_event': 'BufWinEnter',
+                \ 'hook_post_source': 'call ConfigureTrueZen()'
+                \ })
     call dein#add('andymass/vim-matchup', {
                 \ 'rev': 'v0.5.0',
                 \ 'lazy':1,
@@ -953,3 +963,51 @@ let g:terminal_cwd = 0
 let g:lens#disabled_filetypes = ['nerdtree', 'list', 'gitcommit', 'fugitive', 'man', 'tagbar', 'qf', '', 'help', 'diff', 'undotree', 'leaderf']
 let g:lens#disabled_buftypes = ['nofile', '', 'terminal']
 " }}}
+
+" TrueZen.nvim {{{
+" Called by dein.vim
+function ConfigureTrueZen()
+lua << EOF
+-- setup for TrueZen.nvim
+require("true-zen").setup({
+
+    true_false_commands = false,
+	cursor_by_mode = false,
+	bottom = {
+		hidden_laststatus = 0,
+		hidden_ruler = false,
+		hidden_showmode = false,
+		hidden_showcmd = false,
+		hidden_cmdheight = 1,
+
+		shown_laststatus = 2,
+		shown_ruler = true,
+		shown_showmode = false,
+		shown_showcmd = false,
+		shown_cmdheight = 1
+	},
+	top = {
+		hidden_showtabline = 0,
+
+		shown_showtabline = 2
+	},
+	left = {
+		hidden_number = false,
+		hidden_relativenumber = false,
+		hidden_signcolumn = "no",
+
+		shown_number = true,
+		shown_relativenumber = false,
+		shown_signcolumn = "no"
+	},
+	ataraxis = {
+		left_right_padding = 40
+	},
+    integrations = {
+        integration_gitgutter = true
+    }
+})
+EOF
+endfunction
+" }}}
+
