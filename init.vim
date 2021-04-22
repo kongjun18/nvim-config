@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-04-20
+" Last Change: 2021-04-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -57,6 +57,12 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_if': general#nvim_is_latest,
                 \ 'on_event': 'BufWinEnter',
                 \ 'hook_post_source': 'call ConfigureTrueZen()'
+                \ })
+    call dein#add('nacro90/numb.nvim', {
+                \ 'lazy': 1,
+                \ 'on_if': general#nvim_is_latest,
+                \ 'on_event': 'BufWinEnter',
+                \ 'hook_post_source': 'call ConfigureNumb()'
                 \ })
     call dein#add('andymass/vim-matchup', {
                 \ 'rev': 'v0.5.0',
@@ -1011,3 +1017,10 @@ EOF
 endfunction
 " }}}
 
+" numb.vim {{{
+function ConfigureNumb()
+lua <<EOF
+require('numb').setup()
+EOF
+endfunction
+" }}}
