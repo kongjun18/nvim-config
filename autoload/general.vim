@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-04-19
+" Last Change: 2021-04-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -53,6 +53,7 @@ elseif has('win32')
 endif
 let general#nvim_is_latest = utils#nvim_is_latest()
 let general#only_use_static_tag = 0
+let general#use_gtags_at_startup = 0
 let general#grepper = 'grep'
 let general#findder = 'find'
 if executable('fd')
@@ -64,10 +65,10 @@ if executable('rg')
 endif
 let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']
 
-call tools#ensure_dir_exist(general#backup_dir)
-call tools#ensure_dir_exist(general#swap_dir)
-call tools#ensure_dir_exist(general#undo_dir)
-call tools#ensure_dir_exist(general#session_dir)
+call utils#ensure_dir_exist(general#backup_dir)
+call utils#ensure_dir_exist(general#swap_dir)
+call utils#ensure_dir_exist(general#undo_dir)
+call utils#ensure_dir_exist(general#session_dir)
 let &backupdir = general#backup_dir . '/'
 let &directory = general#swap_dir . '/'
 let &undodir = general#undo_dir . '/'

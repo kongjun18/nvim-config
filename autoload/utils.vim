@@ -1,5 +1,5 @@
 " utilities for vimscript
-" Last Change: 2021-01-16
+" Last Change: 2021-04-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -209,3 +209,14 @@ function utils#copy(apath, dir)
         endif
     endif
 endfunction
+
+" Ensure directory exists
+" If dir exists, just exit. Otherwise, create it.
+function! utils#ensure_dir_exist(dir)
+    if !isdirectory(a:dir)
+        call mkdir(a:dir, 'p')
+    endif
+endfunction
+"
+
+

@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-03-17
+" Last Change: 2021-04-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -154,18 +154,6 @@ function tools#scroll_quickfix(dir, mode)
     endif
 
 endfunction
-
-" "
-
-" ensure_dir_exist() -- Ensure directory exists
-" if @dir exists, just exit.
-" if @dir not exists, create it
-function! tools#ensure_dir_exist(dir)
-    if !isdirectory(a:dir)
-        call mkdir(a:dir, 'p')
-    endif
-endfunction
-"
 
 " create_qt_project() -- Create Qt project
 " TODO: refactor code to platform-dependent
