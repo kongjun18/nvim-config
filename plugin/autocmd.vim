@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-03-25
+" Last Change: 2021-04-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -148,5 +148,8 @@ function s:vimspector_custom_ui()
     call win_gotoid(g:vimspector_session_windows.output)
     :quit
     call win_gotoid(g:vimspector_session_windows.code)
+    call setwinvar(g:vimspector_session_windows.variables, '&wrap', v:true)
+    call setwinvar(g:vimspector_session_windows.watches, '&wrap', v:true)
+    call setwinvar(g:vimspector_session_windows.stack_trace, '&wrap', v:true)
 endfunction
 
