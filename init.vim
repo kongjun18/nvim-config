@@ -43,7 +43,7 @@ if dein#load_state(general#plugin_dir)
 				\ 'on_event': 'BufReadPost'
 				\})                        " Show marks
 	call dein#add('preservim/nerdtree', {
-                \ 'rev': '6.9.11',
+                \ 'rev': '6.10.9',
 				\ 'lazy': 1,
 				\ 'on_cmd': ['NERDTree', 'NERDTreeVCS', 'NERDTreeFromBookmark', 'NERDTreeToggle', 'NERDTreeToggleVCS']
 				\ })                                              " File system explorer
@@ -65,7 +65,7 @@ if dein#load_state(general#plugin_dir)
                 \ 'hook_post_source': 'call ConfigureNumb()'
                 \ })
     call dein#add('andymass/vim-matchup', {
-                \ 'rev': 'v0.5.0',
+                \ 'rev': 'v0.6.0',
                 \ 'lazy':1,
                 \ 'on_event': 'BufReadPost'
                 \ })
@@ -241,7 +241,7 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_event': 'BufReadPost'
                 \ })
     call dein#add('kkoomen/vim-doge', {
-                \ 'rev': 'v3.6.0',
+                \ 'rev': 'v3.9.1',
                 \ 'lazy': 1,
                 \ 'on_ft': ['c', 'cpp'],
                 \ 'hook_post_update': 'call dein#source("vim-doge") | call doge#install()'
@@ -267,7 +267,7 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_map': '<M-=>'
                 \ })
 	call dein#add('skywind3000/vim-quickui', {
-                \ 'rev': 'v1.3.0',
+                \ 'rev': 'v1.3.2',
 				\ 'lazy': 1,
 				\ 'on_if': "has('patch-8.1.2292') == 0 && exists('*nvim_open_win') == 0"
 				\ })                                            " Simple menu bar of terminal Vim
