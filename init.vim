@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-04-22
+" Last Change: 2021-04-27
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -247,7 +247,7 @@ if dein#load_state(general#plugin_dir)
                 \ 'hook_post_update': 'call dein#source("vim-doge") | call doge#install()'
                 \ })                                         " Document code
 	call dein#add('tpope/vim-projectionist')                     " Switch between files
-	call dein#add('skywind3000/asyncrun.vim', {'rev': 'v2.7.8'})                    " Run shell command asynchronously
+	call dein#add('skywind3000/asyncrun.vim', {'rev': 'v2.8.6'})                    " Run shell command asynchronously
 	call dein#add('skywind3000/asynctasks.vim')                  " Run tasks asynchronously
 	call dein#add('Shougo/echodoc.vim', {
 				\ 'lazy': 1,
