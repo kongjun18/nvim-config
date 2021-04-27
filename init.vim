@@ -227,8 +227,8 @@ if dein#load_state(general#plugin_dir)
 				\ })                                           " Ease the development of vimscript
 
 	" Color scheme
-	call dein#add('sainnhe/edge', {'rev': 'v0.1.4'})							   " Defualt color scheme
-    call dein#add('cormacrelf/vim-colors-github', {'rev': 'v0.4'})
+	call dein#add('sainnhe/edge')							   " Defualt color scheme
+    call dein#add('cormacrelf/vim-colors-github')
 
 	" project management
     call dein#add('editorconfig/editorconfig-vim')
