@@ -1,8 +1,9 @@
 {
 	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".git"],
     "suggest.echodocSupport": true,
-    "diagnostic.errorSign": "✖",
-    "diagnostic.warningSign": "‼",
+    "diagnostic.errorSign": "❌",
+    "diagnostic.warningSign": "⚠️ ",
+    "diagnostic.hintSign": "💡",
 	"languageserver": {
 		"cmake": {
 			"command": "cmake-language-server",

@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-04-27
+" Last Change: 2021-05-06
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -354,10 +354,6 @@ nnoremap <silent><leader>T :Leaderf task<CR>
 
 " coc.nvim{{{
 let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer']
-hi! CocErrorSign guifg=#d1666a
-let g:coc_status_error_sign = "✖ "
-let g:coc_status_warning_sign = "‼ "
-
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
