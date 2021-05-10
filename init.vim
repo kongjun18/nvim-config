@@ -377,6 +377,7 @@ function! s:check_back_space() abort
 endfunction
 
 " GoTo code navigation.
+nmap gD <Plug>(coc-declaration)
 if !general#only_use_static_tag
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gs <Plug>(coc-references)
