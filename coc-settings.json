@@ -42,9 +42,13 @@
                 "index": {
                     "comments": 1
                 },
+                // Only support GCC/Clang
+                "clang": {
+                    "extraArgs": ["-pedantic-errors", "-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
+                },
                 "highlight": {"lsRanges": true }
 			}
 		}
 	},
-	"suggest.enablePreview": true,
+	"suggest.enablePreview": true
 }
