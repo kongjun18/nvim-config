@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-04-22
+" Last Change: 2021-05-10
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -99,6 +99,7 @@ let g:loaded_netrwFileHandlers = 1
 let g:did_install_default_menus = 1
 
 set path+=include
+set updatetime=300
 set fileformat=unix " Use UNIX line feed
 set backspace=indent,eol,start " Ensure backspace is available
 set mouse=a         " Enable mouse
