@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-05-06
+" Last Change: 2021-05-10
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -240,6 +240,14 @@ if dein#load_state(general#plugin_dir)
                 \ 'merge': 0,
                 \ 'on_event': 'BufReadPost'
                 \ })
+    call dein#add('dense-analysis/ale', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
+    call dein#add('maximbaz/lightline-ale', {
+                \ 'lazy': 1,
+                \ 'on_event': 'BufReadPost'
+                \ })
     call dein#add('kkoomen/vim-doge', {
                 \ 'rev': 'v3.9.1',
                 \ 'lazy': 1,
@@ -367,9 +375,6 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-nmap <silent> gN <Plug>(coc-diagnostic-prev)
-nmap <silent> gn <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 if !general#only_use_static_tag
@@ -653,23 +658,41 @@ let g:leetcode_browser = 'firefox'
 let g:leetcode_china = 1
 "}}}
 
-"  lightline -{{{
 let g:lightline = {
             \ 'active': {
             \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
-            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus']]
+            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ]]
             \ },
             \ 'component_function': {
             \   'gutentags': 'gutentags#statusline',
             \   'gitbranch': 'FugitiveHead',
-            \   'cocstatus': 'coc#status',
             \ },
             \ 'component_type': {
             \   'readonly': 'error',
             \ },
             \ }
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+autocmd User CocStatusChange call lightline#update()
 autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_infos': 'lightline#ale#infos',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_checking': 'right',
+      \     'linter_infos': 'right',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'right',
+      \ }
+let g:lightline#ale#indicator_checking = "\uf110"
+let g:lightline#ale#indicator_infos = '💡'
+let g:lightline#ale#indicator_warnings = '⚠️'
+let g:lightline#ale#indicator_errors = '✖'
+let g:lightline#ale#indicator_ok = "\uf00c"
+
 " }}}
 
 " color scheme {{{
@@ -1019,3 +1042,20 @@ require('numb').setup()
 EOF
 endfunction
 " }}}
+
+" ALE {{{
+let g:ale_disable_lsp = 1
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '⚠️'
+let g:ale_sign_info = '💡'
+let g:ale_c_parse_compile_commands = 1
+let g:ale_c_parse_makefile = 1
+let g:ale_linters_explicit = 1
+let g:ale_cpp_cc_options = '-std=c++17 -Wall'
+let g:ale_linters_explicit = 1 " Disable other linters
+let g:ale_lint_on_text_changed = 'never' " Only lint when save and leave insert
+let g:ale_lint_on_insert_leave = 1
+nmap <silent> gN <Plug>(ale_previous_wrap)
+nmap <silent> gn <Plug>(ale_next_wrap)
+" }}}
+

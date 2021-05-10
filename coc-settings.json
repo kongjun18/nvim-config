@@ -1,7 +1,8 @@
 {
 	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".git"],
     "suggest.echodocSupport": true,
-    "diagnostic.errorSign": "❌",
+    "diagnostic.displayByAle": true,
+    "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "⚠️ ",
     "diagnostic.hintSign": "💡",
 	"languageserver": {
@@ -33,11 +34,14 @@
 		"ccls": {
 			"command": "ccls",
 			"filetypes": ["c", "cc", "cpp", "c++"],
-			"rootPatterns": [".ccls", "compile_commands.json", ".git/", ".root"],
+			"rootPatterns": [".root", ".ccls", "compile_commands.json", ".git/"],
 			"initializationOptions": {
 				"cache": {
 					"directory": ".cache/ccls"
 				},
+                "index": {
+                    "comments": 1
+                },
                 "highlight": {"lsRanges": true }
 			}
 		}
