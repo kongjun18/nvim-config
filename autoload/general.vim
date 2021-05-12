@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-05-10
+" Last Change: 2021-05-12
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -106,7 +106,7 @@ set mouse=a         " Enable mouse
 set laststatus=2    " Always show status line
 set number          " Show line number
 set showtabline=2   " Always display tabline
-set diffopt+=vertical,algorithm:histogram
+set diffopt+=vertical,algorithm:histogram,indent-heuristic
 set noerrorbells    " No beep
 set vb t_vb=
 set undofile        " Persist undo history
