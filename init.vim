@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-05-10
+" Last Change: 2021-05-12
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -1049,9 +1049,9 @@ let g:ale_disable_lsp = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠️'
 let g:ale_sign_info = '💡'
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
 let g:ale_c_parse_compile_commands = 1
 let g:ale_c_parse_makefile = 1
-let g:ale_linters_explicit = 1
 let g:ale_cpp_cc_options = '-std=c++17 -Wall'
 let g:ale_linters_explicit = 1 " Disable other linters
 let g:ale_lint_on_text_changed = 'never' " Only lint when save and leave insert
