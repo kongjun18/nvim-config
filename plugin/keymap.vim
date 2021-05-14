@@ -1,5 +1,5 @@
 " Key mappings
-" Last Change: 2021-01-13
+" Last Change: 2021-05-14
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -96,6 +96,10 @@ nnoremap <leader>9 9gt
 nnoremap <leader>- gT
 " switch to the next tab
 nnoremap <leader>= gt
+" close current tab
+nnoremap <silent> <Leader>tq :tabclose<CR>
+" save all buffers in current tab and close
+nnoremap <silent> <Leader>ts :call <SID>close_tab_buffers()<CR>
 
 function s:close_window(direction) abort
     let win_view = winsaveview()
@@ -113,4 +117,21 @@ function s:hide_window(direction) abort
     hide
     call win_gotoid(win_id)
     call winrestview(win_view)
+endfunction
+
+function s:close_tab_buffers() abort
+    let buf_name = bufname()
+    let tab_buffers = tabpagebuflist()
+    let old_lazyredraw = &lazyredraw
+    try
+        set lazyredraw
+        for nr in tab_buffers
+            execute 'buffer ' .. bufname(nr)
+            update
+        endfor
+    finally
+        let &lazyredraw = old_lazyredraw
+        execute 'buffer ' .. buf_name
+    endtry
+    tabclose
 endfunction
