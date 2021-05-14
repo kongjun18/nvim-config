@@ -1,5 +1,5 @@
 " utilities for vimscript
-" Last Change: 2021-04-22
+" Last Change: 2021-05-14
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -55,11 +55,11 @@ endfunction
 "
 
 " utils#get_dir_entries(apath)
-" return all entries(include '.' and '..') of directory a:apath
+" return all entries including dotfiles of directory a:apath
 " TODO support windows
 function utils#get_dir_entries(apath)
-    let l:entries = glob(a:apath .. '/*', v:false, v:true)
-    let l:entries += glob(a:apath .. '/.*', v:false, v:true)
+    let l:entries = glob(a:apath .. '/*', v:true, v:true)
+    let l:entries += glob(a:apath .. '/.*', v:true, v:true)
     return l:entries
 endfunction
 "
@@ -87,7 +87,6 @@ endfunction
 function utils#get_root_dir(path) abort
     let l:project_root_makers =  deepcopy(g:general#project_root_makers)
     let l:project_root_dir = ''
-    " :echomsg 'l:project_root_makers' l:project_root_makers
     for l:maker in l:project_root_makers
         let l:project_root_dir = findfile(l:maker, a:path .. ';')
         let l:current_path = utils#current_path()
@@ -100,10 +99,7 @@ function utils#get_root_dir(path) abort
         endif
     endfor
 
-    " :echomsg 'l:project_root_dir' l:project_root_dir
     if g:general#is_unix
-        " :echomsg 'l:project_root_dir:' l:project_root_dir
-
         " The current file don't resieds in any projects
         if empty(l:project_root_dir)
             return ''
@@ -111,21 +107,17 @@ function utils#get_root_dir(path) abort
 
         if empty(matchstr(l:project_root_dir, '/'))
             let l:maker = l:project_root_dir
-            " :echomsg 'l:maker:' l:maker
-            " :echomsg 'l:project_root_dir:' l:project_root_dir
             " No buffer
             let l:project_root_dir = utils#current_path()
             " Find maker in the parent directory
             let l:root_is_found = v:false
             while (!l:root_is_found)
-                let l:project_root_dir = utils#up(l:project_root_dir)
                 for l:item in utils#get_dir_entries(l:project_root_dir)
-                " :echomsg 'l:item:' l:item
                     if l:item =~# '\.*/\' .. l:maker
-                        let l:root_is_found =  v:true
-                        break
+                        return l:project_root_dir
                     endif
                 endfor
+                let l:project_root_dir = utils#up(l:project_root_dir)
             endwhile
         else
             let l:project_root_dir = utils#up(l:project_root_dir)
@@ -133,7 +125,6 @@ function utils#get_root_dir(path) abort
     else
         " TODO
     endif
-    " :echomsg 'l:project_root_dir' l:project_root_dir
     return l:project_root_dir
 endfunction
 
