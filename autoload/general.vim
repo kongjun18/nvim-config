@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-05-12
+" Last Change: 2021-05-14
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -113,7 +113,7 @@ set undofile        " Persist undo history
 set backup          " Backup files
 set backupskip+=COMMIT_EDITMSG " Don't backup git commit
 set completeopt+=noselect " Don't select candidate automatically
-set wildignore=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
+set wildignore+=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
 set wildignore+=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib,*.out
 set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
 set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz
