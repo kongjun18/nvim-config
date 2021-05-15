@@ -28,16 +28,8 @@ endif
 match OverLength /\%81v.\+/
 
 if !g:general#only_use_static_tag
-    nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
-    nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
-else
-    if &csprg == 'gtags-cscope'
-        nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>
-        nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>
-    else
-        nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
-        nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
-    endif
+    nmap <buffer> <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+    nmap <buffer> <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
 endif
 
 " This comands are defined for ccls(only supports C/C++)

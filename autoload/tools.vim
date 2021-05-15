@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-04-22
+" Last Change: 2021-05-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -212,8 +212,39 @@ endfunction
 "
 
 " Switch tag system
+"
+" Vim-gutentags only generate tags which reside in g:gutentags_modules.
+" Tag generation needs the tag module resides in the job management data
+" structures (s:update_queue and s:update_in_progress) and tag file path
+" is keeped in b:gutentags_files. Thus, I just need to add those into
+" vim-gutentags' variables when switch to static tag system and do nothing
+" when switch to LSP tag system. Unfortunately, vim-gutentags don't expose
+" gutentags#add_in_progress() which I need, I have to fork vim-gutentags.
 function tools#use_static_tag() abort
     let g:general#only_use_static_tag = 1
+    if executable('gtags-cscope') && executable('gtags')
+        set csprg=gtags-cscope
+        let gtags_in_modules = v:false
+        for module in g:gutentags_modules
+            if module == 'gtags-cscope'
+                let gtags_in_modules = v:true
+            endif
+        endfor
+        if !gtags_in_modules
+            let g:gutentags_modules += ['gtags_cscope']
+            for buf in getbufinfo({'buflisted':1})
+                let l:gutentags_files = getbufvar(buf.bufnr, 'gutentags_files')
+                " If the buffer enables vim-gutentags
+                if type(l:gutentags_files) != v:t_string "
+                    " Add module gtags_cscope into job management data structures
+                    " (s:update_queue and s:update_in_progress) and initialize
+                    " module(set up b:gutentags_files and so on).
+                    call gutentags#add_in_progress('gtags_cscope')
+                    call gutentags#gtags_cscope#init(getbufvar(buf.bufnr, 'gutentags_root'))
+                endif
+            endfor
+        endif
+    endif
     if &csprg == 'gtags-cscope'
         nnoremap <silent> gs :GscopeFind s <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gd :GscopeFind g <C-R><C-W><cr>:cnext<CR>zz
@@ -232,6 +263,27 @@ function tools#use_static_tag() abort
     if &filetype == 'rust'
         nnoremap <silent> gi :echoerr 'Rust does not use header/source model'<CR>
     endif
+
+    " Unmap coc.nvim local mapping gc/gC in C/C++ buffers
+    let old_lazyredraw = &lazyredraw
+    let curr_buf = bufname()
+    try
+        for buf in getbufinfo({'buflisted':1})
+            let l:filetype = getbufvar(buf.bufnr, '&filetype')
+            if l:filetype == 'c' || l:filetype == 'cpp'
+                execute 'buffer ' .. bufname(buf.bufnr)
+                if maparg('gc', 'n')
+                    nunmap <buffer> gc
+                endif
+                if maparg('gC', 'n')
+                    nunmap <buffer> gC
+                endif
+            endif
+        endfor
+    finall
+        let &lazyredraw = old_lazyredraw
+        execute 'buffer ' .. curr_buf
+    endtry
 endfunction
 
 function tools#use_lsp_tag() abort
@@ -239,26 +291,40 @@ function tools#use_lsp_tag() abort
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gs <Plug>(coc-references)
     nmap <silent> gt <Plug>(coc-type-definition)
-    if &filetype == 'c' || &filetype == 'cpp'
-        nmap <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
-        nmap <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
-        if &csprg == 'gtags-cscope'
-            nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
-        else
-            nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
-        endif
-    elseif &filetype =='rust'
-        nmap <silent> gi <Plug>(coc-implementation)
-        if &csprg == 'gtags-cscope'
-            nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
-            nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-        else
-            nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
-            nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
-        endif
+    nmap <silent> gi <Plug>(coc-implementation)
+    if maparg('gc', 'n') =~? 'GscopeFind'
+        :nunmap gc
     endif
+    if maparg('gC', 'n') =~? 'GscopeFind'
+        :nunmap gC
+    endif
+
+    let index = 0
+    for module in g:gutentags_modules
+        if module == 'gtags_cscope'
+            call remove(g:gutentags_modules, index)
+        endif
+        let index += 1
+    endfor
+    let &csprg = 'cscope'
+
+    " Remap coc.nvim maping gc/gC in C/C++ buffers
+    let old_lazyredraw = &lazyredraw
+    let curr_buf = bufname()
+    try
+        for buf in getbufinfo({'buflisted':1})
+            let l:filetype = getbufvar(buf.bufnr, '&filetype')
+            if l:filetype == 'c' || l:filetype == 'cpp'
+                execute 'buffer ' .. bufname(buf.bufnr)
+                nmap <buffer> <silent> gc :call CocLocations('ccls','$ccls/call')<CR>
+                nmap <buffer> <silent> gC :call CocLocations('ccls','$ccls/call', {'callee': v:true})<CR>
+            endif
+        endfor
+    finall
+        let &lazyredraw = old_lazyredraw
+        execute 'buffer ' .. curr_buf
+    endtry
 endfunction
-"
 
 " Plugin operations
 function tools#plugin_clean()

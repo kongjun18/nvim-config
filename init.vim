@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-05-12
+" Last Change: 2021-05-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -159,7 +159,9 @@ if dein#load_state(general#plugin_dir)
                 \ 'lazy': 1,
                 \ 'on_event': 'BufWinEnter'
                 \ })
-	call dein#add('ludovicchabant/vim-gutentags')               " Generate tags automatically
+    call dein#add('kongjun18/vim-gutentags', {
+                \ 'hook_post_source': 'call SelectLspMode()'
+                \ })               " Generate tags automatically
 	call dein#add('skywind3000/gutentags_plus')                 " Switch cscope automatically
 
 	" debug
@@ -376,18 +378,8 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" GoTo code navigation.
-nmap gD <Plug>(coc-declaration)
-if !general#only_use_static_tag
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gs <Plug>(coc-references)
-    nmap <silent> gt <Plug>(coc-type-definition)
-endif
-
-
 " Use gK to show documentation in preview window.
 nnoremap <silent> gK :call <SID>show_documentation()<CR>
-
 
 function! s:show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
@@ -434,10 +426,14 @@ let g:gutentags_modules = []
 if executable('ctags')
 	let g:gutentags_modules += ['ctags']
 endif
-if executable('gtags-cscope') && executable('gtags')
-	set csprg=gtags-cscope
-	let g:gutentags_modules += ['gtags_cscope']
-endif
+
+function SelectLspMode()
+    if g:general#only_use_static_tag
+        :UseStaticTag
+    else
+        :UseLspTag
+    endif
+endfunction
 
 " Please use universal-ctags instead of exuberant-ctags which is not maintained. Tagbar doesn't
 " support old exuberant-ctags.
@@ -460,21 +456,7 @@ let g:gutentags_cache_dir = general#vimfiles .. general#delimiter .. '.tags'
 let g:gutentags_auto_add_gtags_cscope = 0
 " }}}
 
-nnoremap <silent> ge :GscopeFind e <C-R><C-W><cr>
-nnoremap <silent> gf :GscopeFind f <C-R>=expand("<cfile>")<CR><CR>
-nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<CR><CR>
-nnoremap <silent> ga :GscopeFind a <C-R><C-W><CR>
-nnoremap <silent> gc :GscopeFind c <C-R><C-W><CR>
-nnoremap <silent> gC :GscopeFind d <C-R><C-W><CR>
-
 "       gutentags_plus ------------{{{
-
-if general#only_use_static_tag
-	nnoremap <silent> gs :GscopeFind s <C-R><C-W><CR>:cnext<CR>zz
-	nnoremap <silent> gd :GscopeFind g <C-R><C-W><CR>:cnext<CR>zz
-    nnoremap <silent> gt :GscopeFind t <C-R><C-W><CR>:cnext<CR>zz
-endif
-
 nnoremap <C-g> :GtagsCursor<CR>zz
 
 " Don't change focus to quickfix window after search
@@ -482,21 +464,6 @@ let g:gutentags_plus_switch = 0
 " Disable default mapping
 let g:gutentags_plus_nomap = 1
 
-" Gtags is not installed
-if &csprg != 'gtags-cscope'
-    nnoremap <silent> ge :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> gf :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> gi :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> ga :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> <C-g> :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
-    nnoremap <silent> gC :echoerr 'gtags-scope is not available'<CR>
-    if general#only_use_static_tag
-        nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
-        nnoremap <silent> gs :echoerr 'gtags-scope is not available'<CR>
-        nnoremap <silent> gd :echoerr 'gtags-scope is not available'<CR>
-    endif
-endif
 " --------------}}}
 
 " tagbar{{{
@@ -1057,3 +1024,4 @@ let g:ale_lint_on_text_changed = 'never' " Only lint when save and leave insert
 let g:ale_lint_on_insert_leave = 1
 nmap <silent> gN <Plug>(ale_previous_wrap)
 nmap <silent> gn <Plug>(ale_next_wrap)
+" }}}
