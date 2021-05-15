@@ -1,5 +1,5 @@
 " Settings for C
-" Last Change: 2021-03-24
+" Last Change: 2021-05-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -18,6 +18,7 @@ setlocal errorformat+=
             \%-Gfrom\ %f:%l,
             \%-Gfrom\ %f:%l:%c
 
+let b:ale_linters = []
 " Highlight text that goes over the 80 column limit
 if &background == 'light'
     highlight OverLength ctermfg=243 ctermbg=153 guifg=#76787b guibg=#e4effb

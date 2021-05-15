@@ -1053,10 +1053,7 @@ let g:ale_echo_msg_format = '[%linter%] %code: %%s'
 let g:ale_c_parse_compile_commands = 1
 let g:ale_c_parse_makefile = 1
 let g:ale_cpp_cc_options = '-std=c++17 -Wall'
-let g:ale_linters_explicit = 1 " Disable other linters
 let g:ale_lint_on_text_changed = 'never' " Only lint when save and leave insert
 let g:ale_lint_on_insert_leave = 1
 nmap <silent> gN <Plug>(ale_previous_wrap)
 nmap <silent> gn <Plug>(ale_next_wrap)
-" }}}
-
