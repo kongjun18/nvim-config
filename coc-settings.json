@@ -44,7 +44,7 @@
                 },
                 // Only support GCC/Clang
                 "clang": {
-                    "extraArgs": ["-pedantic-errors", "-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
+                    "extraArgs": ["-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
                 },
                 "highlight": {"lsRanges": true }
 			}
