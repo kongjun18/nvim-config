@@ -199,6 +199,11 @@ if dein#load_state(general#plugin_dir)
                     \ 'lazy': 1,
                     \ 'on_event': 'BufReadPost'
                     \ })
+        call dein#add('norcalli/nvim-colorizer.lua', {
+                    \ 'lazy': 1,
+                    \ 'on_ft': ['javascript', 'html', 'css'],
+                    \ 'hook_post_source': 'call ConfigureNvimColorizer()'
+                    \ })
     else
         call dein#add('jackguo380/vim-lsp-cxx-highlight', {
                     \ 'lazy': 1,
@@ -363,7 +368,7 @@ nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
 " coc.nvim{{{
-let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer', 'coc-lua']
+let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer', 'coc-lua', 'coc-tsserver', 'coc-html', 'coc-css']
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -879,7 +884,7 @@ iabbrev today <C-r>=strftime("%Y-%m-%d")<CR>
 if general#nvim_is_latest
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust'},
+  ensure_installed = {'c', 'cpp', 'toml', 'json', 'lua', 'python', 'bash', 'rust', 'html', 'css', 'javascript'},
   highlight = {
     enable = true,
   },
@@ -1022,3 +1027,18 @@ let g:ale_lint_on_insert_leave = 1
 nmap <silent> gN <Plug>(ale_previous_wrap)
 nmap <silent> gn <Plug>(ale_next_wrap)
 " }}}
+
+" nvim-colorizer
+
+function ConfigureNvimColorizer()
+lua << EOF
+-- Attach to certain Filetypes, add special configuration for `html`
+-- Use `background` for everything else.
+require 'colorizer'.setup {
+  'css';
+  'javascript';
+  'html';
+}
+EOF
+endfunction
+
