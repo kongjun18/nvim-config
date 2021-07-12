@@ -63,7 +63,7 @@ if executable('rg')
 	let general#grepper = 'rg'
 	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
 endif
-let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git']
+let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git', '.vs']
 
 call utils#ensure_dir_exist(general#backup_dir)
 call utils#ensure_dir_exist(general#swap_dir)

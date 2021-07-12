@@ -1,5 +1,5 @@
 {
-	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".git"],
+	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".vs", ".git"],
     "suggest.echodocSupport": true,
     "diagnostic.displayByAle": true,
     "diagnostic.errorSign": "✖",
