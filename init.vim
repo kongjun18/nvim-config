@@ -105,7 +105,6 @@ if dein#load_state(general#plugin_dir)
                 \ 'on_ev': 'BufReadPost'
                 \ })                         " Exchange two words or lines
 	call dein#add('SirVer/ultisnips', {
-                \ 'rev': '3.2',
                 \ 'lazy': 1,
 				\ 'on_if':"has('python3')",
                 \ 'on_event': 'TextChangedI'
@@ -955,7 +954,7 @@ let g:terminal_cwd = 0
 
 " lens.vim {{{
 let g:lens#disabled_filetypes = ['nerdtree', 'list', 'gitcommit', 'fugitive', 'man', 'tagbar', 'qf', '', 'help', 'diff', 'undotree', 'leaderf']
-let g:lens#disabled_buftypes = ['nofile', '', 'terminal']
+let g:lens#disabled_buftypes = ['nofile', '', 'terminal', 'nowrite']
 " }}}
 
 " TrueZen.nvim {{{
