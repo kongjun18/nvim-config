@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-05-15
+" Last Change: 2021-06-08
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -251,7 +251,8 @@ function tools#use_static_tag() abort
         nnoremap <silent> gc :GscopeFind c <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gt :GscopeFind t <C-R><C-W><cr>:cnext<CR>zz
         nnoremap <silent> gC :GscopeFind d <C-R><C-W><cr>:cnext<CR>zz
-        nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>
+        nnoremap <silent> gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>:cnext<CR>zz
+        nnoremap <silent> ga :GscopeFind a <C-R><C-W><cr>:cnext<CR>zz
     else
         nnoremap <silent> gc :echoerr 'gtags-scope is not available'<CR>
         nnoremap <silent> gt :echoerr 'gtags-scope is not available'<CR>
