@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-05-15
+" Last Change: 2021-07-12
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -150,7 +150,7 @@ if dein#load_state(general#plugin_dir)
 	" Vimwiki
 	call dein#add('vimwiki/vimwiki', {
 				\ 'lazy': 1,
-				\ 'on_cmd': ['VimwikiIndex']
+				\ 'on_cmd': ['VimwikiIndex', 'Vimwiki']
 				\ })                                            " Personal wiki
 
 	" Tag system
@@ -722,7 +722,7 @@ let wiki.html_header= '~/.vimwiki/tepmlate/header.tpl'
 let wiki.auto_tags= 1
 let wiki.nested_syntaxes = {'py': 'python', 'cpp': 'cpp', 'c': 'c', 'rs': 'rust', 'sh': 'bash', 'cmake': 'cmake', 'lua': 'lua'}
 let g:vimwiki_list = [wiki]
-nnoremap <Leader>vi :VimwikiIndex<CR>
+nnoremap <Leader>vi :VimwikiTabIndex<CR>
 nnoremap <Leader>vt :VimwikiTOC<CR>
 nnoremap <Leader>vnl <Plug>VimwikiNextLink
 " remap gl<Space> and gL<Space>: remove checkbox
