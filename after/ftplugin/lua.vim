@@ -1,11 +1,11 @@
-" Configuration of Lua
-" Last Change: 2020-11-11
+" Configuration for Lua
+" Last Change: 2021-07-08
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
-" License: GPL-3.0
-
-execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
-
+" License: GPL-2.0
+" Only use coc.nvim as linter
+let b:ale_linters = []
+" Use 2 space indent for Lua
 setlocal tabstop=2
 setlocal shiftwidth=2
-setlocal efm=%E%.%#\ %f:%l:\ %m
+setlocal errorformat=%*\\f:\ %#%f:%l:\ %m

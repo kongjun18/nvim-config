@@ -363,7 +363,7 @@ nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
 " coc.nvim{{{
-let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer', 'coc-lua']
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -489,9 +489,6 @@ endfunction
 " -----------}}}
 
 " AutoFormat{{{
-" use lua-format as default lua formatter
-let g:formatdef_my_custom_lua = 'lua-format -i'
-let g:formatter_lua = ['my_custom_lua']
 nnoremap <Leader>bf :Autoformat<CR>
 "}}}
 
