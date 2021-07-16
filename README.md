@@ -3,6 +3,10 @@ This repository is my personal configuration of (Neo)vim.
 
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
 
+⚠️WARING:
+- THIS DOCUMENT IS OUT OF DATE. I WILL REWRITE IT WHEN I HAVE TIME.
+- I AM WORKING FOR TRANSFERRING TO NEOVIM.
+
 ## Feature
 My (Neo)vim is configured for C/C++ and Rust. It supports Vim and Neovim and can run in any GNU/Linux distributions, Windows and FreeBSD.
 
