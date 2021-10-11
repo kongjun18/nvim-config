@@ -5,3 +5,4 @@
 " License: GPL-3.0
 
 syntax match Comment +\/\/.\+$+
+setlocal commentstring=//%s

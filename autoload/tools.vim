@@ -1,5 +1,5 @@
 " Some tools for Vim
-" Last Change: 2021-06-08
+" Last Change: 2021-10-11
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -326,87 +326,3 @@ function tools#use_lsp_tag() abort
         execute 'buffer ' .. curr_buf
     endtry
 endfunction
-
-" Plugin operations
-function tools#plugin_clean()
-	let unused_plugin_dir = dein#check_clean()
-	if len(unused_plugin_dir) == 0
-		echomsg "There is no unused plugin"
-		return
-	endif
-	for dir in unused_plugin_dir
-		try
-			call delete(dir, 'rf')
-		catch /.*/
-			echoerr "remove unused plugin directory failed"
-		endtry
-		echomsg "removed unused plugin directory"
-	endfor
-endfunction
-
-function tools#plugin_recache()
-	try
-		call dein#clear_state()
-		call dein#recache_runtimepath()
-	catch /.*/
-		echoerr "Error in tools#PluginRecache"
-	endtry
-endfunction
-
-function tools#plugin_reinstall(list)
-    if type(a:list) == type([])
-        call call('dein#reinstall', a:list)
-    endif
-endfunction
-"
-
-" NERDTree
-
-" Only used by tools#nerdtree_XXXX()
-function s:get_last_accessed_buf_path() abort
-    let l:last_accessed_buffer_path = bufname(t:last_accessed_winnr)
-    if empty(l:last_accessed_buffer_path)
-        let l:last_accessed_buffer_path = utils#current_path()
-    else
-        let l:last_accessed_buffer_path = getcwd() .. g:general#delimiter .. l:last_accessed_buffer_path
-    endif
-    " :echomsg l:last_accessed_buffer_path
-    return l:last_accessed_buffer_path
-endfunction
-
-function tools#nerdtree_toggle_outermost_dir() abort
-    if t:nerdtree_open_mode.outermost == 1
-        let t:nerdtree_open_mode = map(t:nerdtree_open_mode, {key, val -> 0})
-        :NERDTreeClose
-    else
-        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
-        execute ':NERDTree' utils#get_outermost_dir(l:last_accessed_buffer_path)
-        let t:nerdtree_open_mode.outermost = 1
-    endif
-endfunction
-
-function tools#nerdtree_toggle_innermost_dir() abort
-    if t:nerdtree_open_mode.innermost == 1
-        :NERDTreeClose
-    else
-        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
-        execute ':NERDTree' utils#get_innermost_dir(l:last_accessed_buffer_path)
-        let t:nerdtree_open_mode.innermost = 1
-    endif
-endfunction
-
-function tools#nerdtree_close() abort
-    :NERDTreeClose
-endfunction
-
-function tools#nerdtree_toggle_root() abort
-    if t:nerdtree_open_mode.root == 1
-        :NERDTreeClose
-    else
-        let l:last_accessed_buffer_path = <SID>get_last_accessed_buf_path()
-        " :echomsg l:last_accessed_buffer_path
-        execute ':NERDTree' utils#get_root_dir(l:last_accessed_buffer_path)
-        let t:nerdtree_open_mode.root = 1
-    endif
-endfunction
-

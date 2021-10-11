@@ -1,5 +1,5 @@
 " Configuration for Lua
-" Last Change: 2021-07-08
+" Last Change: 2021-10-11
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0

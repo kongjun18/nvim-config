@@ -1,5 +1,5 @@
 " Key mappings
-" Last Change: 2021-05-14
+" Last Change: 2021-10-11
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -100,6 +100,11 @@ nnoremap <leader>= gt
 nnoremap <silent> <Leader>tq :tabclose<CR>
 " save all buffers in current tab and close
 nnoremap <silent> <Leader>ts :call <SID>close_tab_buffers()<CR>
+
+nnoremap <silent> <leader>tt :NvimTreeToggle<CR>
+nnoremap <silent> <leader>to :NvimTreeOpen<CR>
+nnoremap <silent> <leader>tr :NvimTreeRefresh<CR>
+nnoremap <silent> <leader>tf :NvimTreeFindFile<CR>
 
 function s:close_window(direction) abort
     let win_view = winsaveview()

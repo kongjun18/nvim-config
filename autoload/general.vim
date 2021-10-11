@@ -1,12 +1,12 @@
 " Vim general setting
-" Last Change: 2021-06-19
+" Last Change: 2021-10-11
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
 
 set nocompatible
 
-if exists('g:loaded_general_vim') || &cp || version < 700
+if exists('g:loaded_general_vim') || &cp || version < 800
     finish
 endif
 let g:loaded_general_vim = 1
@@ -15,20 +15,12 @@ if has('unix')
     let general#is_unix = 1
     let general#is_windows = 0
     let general#vimrc = $HOME . '/.config/nvim/init.vim'
-    let general#gvimrc = $HOME . '/.gvimrc'
     let general#vimfiles = $HOME . '/.config/nvim'
-    let general#plugin_dir = general#vimfiles . '/plugged'
-    let general#backup_dir = general#vimfiles . '/.backup'
+    let general#backup_dir = $HOME . '/.backup'
     let general#swap_dir = general#vimfiles . '/.swap'
     let general#undo_dir = general#vimfiles . '/.undo'
     let general#session_dir = general#vimfiles . '/.session'
-    let general#dein_file = general#plugin_dir . '/repos/github.com/Shougo/dein.vim'
     let general#delimiter = '/'
-    " suppress the output of external program
-    " I use fish shell, so give it extra attention
-    if &shell =~? 'fish'
-        set shellpipe=&>\ %s
-    endif
 
     " Skip python search to accelerate startup time
     let g:python_host_skip_check=1
@@ -40,29 +32,16 @@ elseif has('win32')
     let general#is_unix = 0
     let general#vimrc = $HOME .. '\_vimrc'
     let general#vimfiles = $HOME .. '\vimfiles'
-    let general#gvimrc = $HOME .. '\_gvimrc'
-    let general#plugin_dir = general#vimfiles . '\plugged'
-    let general#backup_dir = general#vimfiles . '\.backup'
+    let general#backup_dir = $HOME .. '\.backup'
     let general#swap_dir = general#vimfiles . '\.swap'
     let general#undo_dir = general#vimfiles . '\.undo'
     let general#session_dir = general#vimfiles . '\.session'
-    let general#dein_file = general#plugin_dir . '\repos\github.com\Shougo\dein.vim'
     let general#delimiter = '\'
     " Use the Documents as default working directory
 	:cd $HOME\Documents
 endif
-let general#nvim_is_latest = utils#nvim_is_latest()
 let general#only_use_static_tag = 0
 let general#use_gtags_at_startup = 0
-let general#grepper = 'grep'
-let general#findder = 'find'
-if executable('fd')
-	let general#findder = 'fd'
-endif
-if executable('rg')
-	let general#grepper = 'rg'
-	set grepprg=rg\ --ignore-case\ --vimgrep\ $*   " substitute grep with ripgrep
-endif
 let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git', '.vs']
 
 call utils#ensure_dir_exist(general#backup_dir)
@@ -159,31 +138,10 @@ set wildmode=full   "
 set shortmess+=c    " Don't give ins-completion-menu messages
 set lazyredraw      " Delay redraw event
 set listchars=eol:¬,tab:>·,extends:>,precedes:<,space:␣ " Display special characters
-
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-	set signcolumn=number
-else
-	set signcolumn=yes
-endif
-
-" Turn on true color
-if has('nvim')
-	set termguicolors
-elseif has('termguicolors')
-	" Fix bug for Vim
-	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-	set termguicolors
-else
-	set t_Co=256
-endif
-
-" Neovim gui
-if has('gui_running')
-    exec 'source' general#gvimrc
-endif
+set signcolumn=yes
+set termguicolors   " Enable 24bit color
 
 " Use vim(fugitive) as git merge tool
 if exists('g:merged')

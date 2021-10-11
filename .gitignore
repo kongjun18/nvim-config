@@ -19,3 +19,4 @@ installer.sh
 
 " edge.vim
 after/ftplugin/*/edge.vim
+plugin/packer_compiled.lua

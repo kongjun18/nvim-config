@@ -1,40 +1,54 @@
 {
-	"coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".vs", ".git"],
+    "coc.preferences.rootPatterns": [".root", "Cargo.toml", "compile_commands.json", ".vs", ".git"],
     "suggest.echodocSupport": true,
     "diagnostic.displayByAle": true,
     "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "⚠️ ",
     "diagnostic.hintSign": "💡",
-    "Lua.hint.enable": true,
-    "Lua.runtime.vesion": "Lua 5.1",
-    "Lua.diagnostics.disable": ["lowercase-global"],
-	"languageserver": {
-		"cmake": {
-			"command": "cmake-language-server",
-			"filetypes": ["cmake"],
-			"rootPatterns": [".git", ".root", "compile_commands.json"],
-			"initializationOptions": {
-				"buildDirectory": "_build"
-			}
-		},
-		"ccls": {
-			"command": "ccls",
-			"filetypes": ["c", "cc", "cpp", "c++"],
-			"rootPatterns": [".root", ".ccls", "compile_commands.json", ".git/"],
-			"initializationOptions": {
-				"cache": {
-					"directory": ".cache/ccls"
-				},
+    "suggest.enablePreview": true,
+    "sumneko-lua.enableNvimLuaDev": true,
+    "Lua": {
+        "hint": {
+            "enable": true
+        },
+        "runtime": {
+            "version": "LuaJIT"
+        },
+        "diagnostics": {
+            "globals": ["vim", "use"], // Suppress neovim's function and variable
+            "disable": ["lowercase-global"]
+        }
+    },
+    "languageserver": {
+        "cmake": {
+            "command": "cmake-language-server",
+            "filetypes": ["cmake"],
+            "rootPatterns": [".git", ".root", "compile_commands.json"],
+            "initializationOptions": {
+                "buildDirectory": "_build"
+            }
+        },
+        "sql": {
+            "command": "sql-language-server",
+            "args" : ["up", "--method", "stdio"],
+            "filetypes": ["sql", "mysql"]
+        },
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cc", "cpp", "c++"],
+            "rootPatterns": [".root", ".ccls", "compile_commands.json", ".git/"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": ".cache/ccls"
+                },
                 "index": {
                     "comments": 1
                 },
                 // Only support GCC/Clang
                 "clang": {
                     "extraArgs": ["-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
-                },
-                "highlight": {"lsRanges": true }
-			}
-		}
-	},
-	"suggest.enablePreview": true
+                }
+            }
+        }
+    }
 }
