@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-10-11
+" Last Change: 2021-10-15
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -87,7 +87,7 @@ nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
 " coc.nvim{{{
-let g:coc_global_extensions = ['coc-vimlsp', 'coc-rust-analyzer', 'coc-tsserver', 'coc-html', 'coc-css', 'coc-sh', 'coc-sumneko-lua', 'coc-db']
+let g:coc_global_extensions = ['coc-snippets', 'coc-vimlsp', 'coc-rust-analyzer', 'coc-tsserver', 'coc-html', 'coc-css', 'coc-sh', 'coc-sumneko-lua', 'coc-db']
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -126,6 +126,9 @@ inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float
 inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+
+" " Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
 
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
@@ -223,17 +226,6 @@ let g:floaterm_keymap_hide   = ']ot'
 let g:floaterm_keymap_prev   = '[t'
 let g:floaterm_keymap_next   = ']t'
 
-"}}}
-
-" Ultisnippet{{{
-"
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
 "}}}
 
 " vim-quickui{{{

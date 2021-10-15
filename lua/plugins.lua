@@ -87,7 +87,6 @@ return require('packer').startup({
     use 'wellle/targets.vim'
     use 'haya14busa/is.vim'
     use 'tommcdo/vim-exchange'
-    use {'SirVer/ultisnips', event='TextChangedI'}
     use {
       'kyazdani42/nvim-tree.lua',
       requires = 'kyazdani42/nvim-web-devicons',
@@ -135,8 +134,6 @@ return require('packer').startup({
 end
   }
   use {'kristijanhusak/vim-dadbod-ui', requires={'kristijanhusak/vim-packager', 'tpope/vim-dadbod'}}
-  use 'tpope/vim-scriptease'
-  use 'sainnhe/edge'
   use 'cormacrelf/vim-colors-github'
   use 'editorconfig/editorconfig-vim'
   use {'Yggdroot/LeaderF', run=':LeaderfInstallCExtension'}
