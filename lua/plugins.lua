@@ -134,6 +134,7 @@ return require('packer').startup({
 end
   }
   use {'kristijanhusak/vim-dadbod-ui', requires={'kristijanhusak/vim-packager', 'tpope/vim-dadbod'}}
+  use 'tpope/vim-rsi'
   use 'tpope/vim-sleuth'
   use 'cormacrelf/vim-colors-github'
   use 'editorconfig/editorconfig-vim'
