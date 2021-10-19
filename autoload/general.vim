@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-10-11
+" Last Change: 2021-10-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -142,6 +142,9 @@ set listchars=eol:¬,tab:>·,extends:>,precedes:<,space:␣ " Display special ch
 " diagnostics appear/become resolved.
 set signcolumn=yes
 set termguicolors   " Enable 24bit color
+set statusline=%#Mode#%{statusline#mode()}%*
+set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %*
+set statusline+=%=%{statusline#status()}\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %l:%v\ %*
 
 " Use vim(fugitive) as git merge tool
 if exists('g:merged')

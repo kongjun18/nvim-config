@@ -1,60 +1,63 @@
-let g:lightline = {
-            \ 'active': {
-            \   'left': [['mode', 'paste'], ['filename', 'modified'], ['gitbranch', 'gutentags']],
-            \   'right': [['lineinfo'], ['percent'], ['readonly'], ['cocstatus'], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ]]
-            \ },
-            \ 'component_function': {
-            \   'gutentags': 'gutentags#statusline',
-            \   'gitbranch': 'FugitiveHead',
-            \ },
-            \ 'component_type': {
-            \   'readonly': 'error',
-            \ },
-            \ }
-autocmd User CocStatusChange call lightline#update()
-autocmd User GutentagsUpdated,GutentagsUpdating call lightline#update()
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
+""""""""""""""""
+" Status
+""""""""""""""""
+let s:indicator_infos = '💡'
+let s:indicator_warnings = '⚠️'
+let s:indicator_errors = '✖'
+let s:indicator_ok = '✓'
+let s:indicator_checking = ''
+
+let s:mode = {
+      \ 'n': 'NORMAL',
+      \ 'v': 'VISUAL',
+      \ 's': 'VISUAL',
+      \ 'r': 'REPLEACE',
+      \ 'i': 'INSERT',
+      \ 'c': 'COMMAND'
       \ }
-let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
+
+" VISUAL
+" SELECT(VIS
+" REPLACE
+" INSERT
+" FILENAME
+" STATUSLINE
+let s:guibg = {
+      \ 'n': '#98C379',
+      \ 'v': '#C678DD',
+      \ 's': '#C678DD',
+      \ 'r': '#E06B75',
+      \ 'i': '#61AFF0',
+      \ 'c': 'Red',
+      \ 'f': '#BFBFBF',
+      \ 'l': '#D0D0D0',
       \ }
-let g:lightline#ale#indicator_checking = ""
-let g:lightline#ale#indicator_infos = '💡'
-let g:lightline#ale#indicator_warnings = '⚠️'
-let g:lightline#ale#indicator_errors = '✖'
-let g:lightline#ale#indicator_ok = ""
 
-" ------------------------
+      " \ 'l': '#F0F0F0',
+""""""""""""""""
+" Highlight
+""""""""""""""""
+function! s:highlight_mode() abort
+  execute printf('hi Mode guifg=%s guibg=%s', 'White', s:guibg[tolower(mode())])
+endfunction
 
-let s:indicator_infos = get(g:, 'lightline#ale#indicator_infos', 'I: ')
-let s:indicator_warnings = get(g:, 'lightline#ale#indicator_warnings', 'W: ')
-let s:indicator_errors = get(g:, 'lightline#ale#indicator_errors', 'E: ')
-let s:indicator_ok = get(g:, 'lightline#ale#indicator_ok', 'OK')
-let s:indicator_checking = get(g:, 'lightline#ale#indicator_checking', 'Linting...')
+execute printf('hi File guifg=%s guibg=%s', 'Black', s:guibg['f'])
+execute printf('hi StatusLine guifg=%s guibg=%s', 'Black', s:guibg['l'])
 
+""""""""""""""""
+" Auxiliary
+""""""""""""""""
 
-""""""""""""""""""""""
-" Lightline components
-
-function! lightline#ale#infos() abort
-  if !lightline#ale#linted()
+function! statusline#infos() abort
+  if !statusline#linted()
     return ''
   endif
   let l:counts = ale#statusline#Count(bufnr(''))
   return l:counts.info == 0 ? '' : printf(s:indicator_infos . '%d', l:counts.info)
 endfunction
 
-function! lightline#ale#warnings() abort
-  if !lightline#ale#linted()
+function! statusline#warnings() abort
+  if !statusline#linted()
     return ''
   endif
   let l:counts = ale#statusline#Count(bufnr(''))
@@ -62,8 +65,16 @@ function! lightline#ale#warnings() abort
   return l:all_warnings == 0 ? '' : printf(s:indicator_warnings . '%d', all_warnings)
 endfunction
 
-function! lightline#ale#errors() abort
-  if !lightline#ale#linted()
+function! statusline#ok() abort
+  if !statusline#linted()
+    return ''
+  endif
+  let l:counts = ale#statusline#Count(bufnr(''))
+  return l:counts.total == 0 ? s:indicator_ok : ''
+endfunction
+
+function! statusline#errors() abort
+  if !statusline#linted()
     return ''
   endif
   let l:counts = ale#statusline#Count(bufnr(''))
@@ -71,25 +82,26 @@ function! lightline#ale#errors() abort
   return l:all_errors == 0 ? '' : printf(s:indicator_errors . '%d', all_errors)
 endfunction
 
-function! lightline#ale#ok() abort
-  if !lightline#ale#linted()
-    return ''
-  endif
-  let l:counts = ale#statusline#Count(bufnr(''))
-  return l:counts.total == 0 ? s:indicator_ok : ''
-endfunction
-
-function! lightline#ale#checking() abort
+function! statusline#checking() abort
   return ale#engine#IsCheckingBuffer(bufnr('')) ? s:indicator_checking : ''
 endfunction
 
-
-""""""""""""""""""
-" Helper functions
-
-function! lightline#ale#linted() abort
+function! statusline#linted() abort
   return get(g:, 'ale_enabled', 0) == 1
     \ && getbufvar(bufnr(''), 'ale_enabled', 1)
     \ && getbufvar(bufnr(''), 'ale_linted', 0) > 0
     \ && ale#engine#IsCheckingBuffer(bufnr('')) == 0
 endfunction
+
+""""""""""""""""
+" APIs
+""""""""""""""""
+function! statusline#status() abort
+  return join([statusline#checking(), statusline#errors(), statusline#warnings(), statusline#infos(), statusline#ok()])
+endfunction
+
+function! statusline#mode() abort
+  call s:highlight_mode()
+  return s:mode[tolower(mode())]
+endfunction
+
