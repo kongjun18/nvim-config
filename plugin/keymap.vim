@@ -1,5 +1,5 @@
 " Key mappings
-" Last Change: 2021-10-11
+" Last Change: 2021-10-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -102,7 +102,6 @@ nnoremap <silent> <Leader>tq :tabclose<CR>
 nnoremap <silent> <Leader>ts :call <SID>close_tab_buffers()<CR>
 
 nnoremap <silent> <leader>tt :NvimTreeToggle<CR>
-nnoremap <silent> <leader>to :NvimTreeOpen<CR>
 nnoremap <silent> <leader>tr :NvimTreeRefresh<CR>
 nnoremap <silent> <leader>tf :NvimTreeFindFile<CR>
 
