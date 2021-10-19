@@ -40,6 +40,7 @@ call utils#ensure_dir_exist(general#session_dir)
 let &backupdir = general#backup_dir . '/'
 let &directory = general#swap_dir . '/'
 let &undodir = general#undo_dir . '/'
+let &dict = general#vimfiles . '/dict/word.dict'
 let g:session_directory = general#session_dir
 
 " Leader
