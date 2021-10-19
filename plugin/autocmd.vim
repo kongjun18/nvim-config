@@ -1,5 +1,5 @@
 " Autocmd
-" Last Change: 2021-10-11
+" Last Change: 2021-10-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -37,8 +37,6 @@ augroup format
     autocmd BufWritePre * call <SID>remove_trailing_space()
     autocmd BufWritePre *.vim if &modified | :call <SID>update_timestamp() | endif
 augroup END
-
-autocmd BufWritePre * let &backupext = substitute(utils#up(utils#current_path()), g:general#delimiter, '~', 'g')
 
 " Add git conflict maker to machit
 autocmd BufReadPre * let b:match_words = '^<<<<<<<:^|||||||:^=======:^>>>>>>>'

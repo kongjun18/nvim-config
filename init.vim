@@ -168,7 +168,7 @@ let g:gutentags_ctags_extra_args += ['--exclude=plugged']
 let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 
 " Integrate Leaderf and gutentags
-let g:gutentags_cache_dir = general#vimfiles .. general#delimiter .. '.tags'
+let g:gutentags_cache_dir = general#vimfiles .. '/.tags'
 
 " Don't load gtags_cscope database automatically
 let g:gutentags_auto_add_gtags_cscope = 0
@@ -217,7 +217,7 @@ let g:AutoPairsShortcutToggle = ''          " disable shortcut
 
 " vim-floaterm{{{
 
-if general#is_windows && executable('bash')
+if !general#is_unix && executable('bash')
     let g:floaterm_shell = exepath('bash')
 endif
 let g:floaterm_keymap_toggle = '[ot'

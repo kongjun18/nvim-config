@@ -5,4 +5,4 @@
 " License: GPL-3.0
 setlocal foldmethod=marker
 
-execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
+execute 'source ' .. g:general#vimfiles .. '/after/ftplugin/common.vim'

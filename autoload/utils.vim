@@ -1,5 +1,5 @@
 " utilities for vimscript
-" Last Change: 2021-05-14
+" Last Change: 2021-10-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -194,7 +194,7 @@ function utils#copy(apath, dir)
     endif
     let l:content = readfile(a:apath)
     if !empty(l:content)
-        let l:to = a:dir .. g:general#delimiter .. utils#get_basename(a:apath)
+        let l:to = a:dir .. '/' .. utils#get_basename(a:apath)
         if !filereadable(l:to)
             call writefile(l:content, l:to)
         endif

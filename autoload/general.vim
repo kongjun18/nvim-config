@@ -11,35 +11,24 @@ if exists('g:loaded_general_vim') || &cp || version < 800
 endif
 let g:loaded_general_vim = 1
 
+let general#vimfiles = stdpath('config')
+let general#vimrc = general#vimfiles . '/init.vim'
+let general#backup_dir = $HOME . '/.backup'
+let general#swap_dir = general#vimfiles . '/.swap'
+let general#undo_dir = general#vimfiles . '/.undo'
+let general#session_dir = general#vimfiles . '/.session'
 if has('unix')
     let general#is_unix = 1
-    let general#is_windows = 0
-    let general#vimrc = $HOME . '/.config/nvim/init.vim'
-    let general#vimfiles = $HOME . '/.config/nvim'
-    let general#backup_dir = $HOME . '/.backup'
-    let general#swap_dir = general#vimfiles . '/.swap'
-    let general#undo_dir = general#vimfiles . '/.undo'
-    let general#session_dir = general#vimfiles . '/.session'
-    let general#delimiter = '/'
-
     " Skip python search to accelerate startup time
     let g:python_host_skip_check=1
     let g:python_host_prog = '/usr/bin/python'
     let g:python3_host_skip_check=1
     let g:python3_host_prog = '/usr/bin/python3'
 elseif has('win32')
-    let general#is_windows = 1
     let general#is_unix = 0
-    let general#vimrc = $HOME .. '\_vimrc'
-    let general#vimfiles = $HOME .. '\vimfiles'
-    let general#backup_dir = $HOME .. '\.backup'
-    let general#swap_dir = general#vimfiles . '\.swap'
-    let general#undo_dir = general#vimfiles . '\.undo'
-    let general#session_dir = general#vimfiles . '\.session'
-    let general#delimiter = '\'
-    " Use the Documents as default working directory
-	:cd $HOME\Documents
+    :cd $HOME\Documents
 endif
+
 let general#only_use_static_tag = 0
 let general#use_gtags_at_startup = 0
 let general#project_root_makers = ['.root', '.pro', 'Cargo.toml', 'compile_commands.json', '.git', '.vs']
@@ -145,8 +134,6 @@ set termguicolors   " Enable 24bit color
 set statusline=%#Mode#%{statusline#mode()}%*
 set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %*
 set statusline+=%=%{statusline#status()}\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %l:%v\ %*
-
-let &dictionary = stdpath('config') .. '/dict/word.dict'
 
 " Use vim(fugitive) as git merge tool
 if exists('g:merged')
