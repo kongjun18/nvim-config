@@ -10,30 +10,40 @@ let s:indicator_checking = ''
 let s:mode = {
       \ 'n': 'NORMAL',
       \ 'v': 'VISUAL',
+      \ '^v': 'VISUAL',
       \ 's': 'VISUAL',
+      \ '^s': 'VISUAL',
       \ 'r': 'REPLEACE',
       \ 'i': 'INSERT',
-      \ 'c': 'COMMAND'
+      \ 'c': 'COMMAND',
+      \ 't': 'TERMINAL',
+      \ '!': 'OTHER'
       \ }
 
+" NORMAL
 " VISUAL
-" SELECT(VIS
 " REPLACE
 " INSERT
+" COMMAND
+" TERMINAL
+" SHELL COMMAND
 " FILENAME
 " STATUSLINE
 let s:guibg = {
       \ 'n': '#98C379',
       \ 'v': '#C678DD',
+      \ '^v': '#C678DD',
       \ 's': '#C678DD',
+      \ '^s': '#C678DD',
       \ 'r': '#E06B75',
       \ 'i': '#61AFF0',
       \ 'c': 'Red',
+      \ 't': 'Red',
+      \ '!': 'Red',
       \ 'f': '#BFBFBF',
-      \ 'l': '#D0D0D0',
+      \ 'l': '#D0D0D0'
       \ }
 
-      " \ 'l': '#F0F0F0',
 """"""""""""""""
 " Highlight
 """"""""""""""""
