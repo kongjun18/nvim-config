@@ -9,6 +9,9 @@ if exists('g:loaded_autocmd_vim') || &cp || version < 700
 endif
 let g:loaded_autocmd_vim = 1
 
+" filename~upperdir~date
+let &backupext = '~' . expand('%:p:h:t') . '~' . strftime("%Y-%m-%d")
+
 augroup format
     autocmd BufWritePre * call <SID>remove_trailing_space()
     autocmd BufWritePre *.vim if &modified | :call <SID>update_timestamp() | endif
