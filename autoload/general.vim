@@ -146,6 +146,8 @@ set statusline=%#Mode#%{statusline#mode()}%*
 set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %*
 set statusline+=%=%{statusline#status()}\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %l:%v\ %*
 
+let &dictionary = stdpath('config') .. '/dict/word.dict'
+
 " Use vim(fugitive) as git merge tool
 if exists('g:merged')
     let g:diff_translations = 0

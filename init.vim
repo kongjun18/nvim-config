@@ -1,9 +1,8 @@
 " (Neo)vim configuration
-" Last Change: 2021-10-15
+" Last Change: 2021-10-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
-
 
 " guard {{{
 if exists('loaded_init_vim') || &cp || version < 800
@@ -87,7 +86,7 @@ nnoremap <silent><leader>T :Leaderf task<CR>
 "}}}
 
 " coc.nvim{{{
-let g:coc_global_extensions = ['coc-snippets', 'coc-vimlsp', 'coc-rust-analyzer', 'coc-tsserver', 'coc-html', 'coc-css', 'coc-sh', 'coc-sumneko-lua', 'coc-db']
+let g:coc_global_extensions = ['coc-snippets', 'coc-dictionary', 'coc-vimlsp', 'coc-rust-analyzer', 'coc-tsserver', 'coc-html', 'coc-css', 'coc-sh', 'coc-sumneko-lua', 'coc-db']
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -517,10 +516,6 @@ let g:matchup_matchparen_deferred = 1
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
 let g:matchup_matchpref = {'cpp': {'template': 1}}
 "}}}
-
-" vim-auto-popmenu {{{
-let g:apc_enable_ft = {'text':1, 'markdown':1, 'gitcommit': 1, 'vimwiki': 1}
-" }}}
 
 " editorconfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']

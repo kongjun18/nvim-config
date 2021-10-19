@@ -6,6 +6,7 @@
     "diagnostic.warningSign": "⚠️ ",
     "diagnostic.hintSign": "💡",
     "suggest.enablePreview": true,
+    "sources.filetypes": ["text", "vimwiki", "markdown", "gitcommit"],
     "sumneko-lua.enableNvimLuaDev": true,
     "Lua": {
         "hint": {

@@ -82,8 +82,6 @@ return require('packer').startup({
     use 'farmergreg/vim-lastplace'
     use 'xolox/vim-misc'
     use 'xolox/vim-session'
-    use {'skywind3000/vim-auto-popmenu', ft={'text', 'markdown', 'gitcommit', 'vimwiki'}}
-    use {'skywind3000/vim-dict', ft={'text', 'markdown', 'gitcommit', 'vimwiki'}}
     use 'wellle/targets.vim'
     use 'haya14busa/is.vim'
     use 'tommcdo/vim-exchange'
@@ -94,7 +92,6 @@ return require('packer').startup({
     }
     use {'preservim/nerdcommenter', config=function() vim.api.nvim_call_function('CreateCommenterMappings', {}) end}
     use 'jiangmiao/auto-pairs'
-    use 'tpope/vim-repeat'
     use 'kongjun18/vim-unimpaired'
     use 'junegunn/vim-easy-align'
     use 'Chiel92/vim-autoformat'
@@ -108,8 +105,6 @@ return require('packer').startup({
     use {'kongjun18/vim-gutentags', config='vim.cmd[[UseLspTag]]'}
     use 'skywind3000/gutentags_plus'
     use 'puremourning/vimspector'
-    use 'tpope/vim-fugitive'
-    use 'tpope/vim-rhubarb'
     use 'junegunn/gv.vim'
     use {'lewis6991/gitsigns.nvim',
     requires='nvim-lua/plenary.nvim',
@@ -117,7 +112,6 @@ return require('packer').startup({
     use 'luochen1990/rainbow'
     use 'itchyny/vim-cursorword'
     use 'lfv89/vim-interestingwords'
-    use 'dag/vim-fish'
     use 'nvim-treesitter/nvim-treesitter'
     use {'nvim-treesitter/nvim-treesitter-textobjects',
     requires='nvim-treesitter/nvim-treesitter',
@@ -134,15 +128,20 @@ return require('packer').startup({
 end
   }
   use {'kristijanhusak/vim-dadbod-ui', requires={'kristijanhusak/vim-packager', 'tpope/vim-dadbod'}}
+  use 'tpope/vim-projectionist'
   use 'tpope/vim-rsi'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-endwise'
+  use 'tpope/vim-characterize'
   use 'tpope/vim-sleuth'
+  use 'tpope/vim-fugitive'
+  use 'tpope/vim-rhubarb'
   use 'cormacrelf/vim-colors-github'
   use 'editorconfig/editorconfig-vim'
   use {'Yggdroot/LeaderF', run=':LeaderfInstallCExtension'}
   use {'neoclide/coc.nvim', run='yarn install'}
   use 'dense-analysis/ale'
   use {'kkoomen/vim-doge', run=':call doge#install'}
-  use 'tpope/vim-projectionist'
   use 'skywind3000/asyncrun.vim'
   use 'skywind3000/asynctasks.vim'
   use 'Shougo/echodoc.vim'
