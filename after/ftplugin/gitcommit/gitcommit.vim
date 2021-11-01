@@ -1,5 +1,5 @@
 " Language-specific configuration of gitcommit
-" Last Change: 2021-10-16
+" Last Change: 2021-11-01
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-3.0
@@ -9,3 +9,4 @@ setlocal spell          " Enable spell checking
 setlocal cpt=.,k,w,b    " Source for dictionary, current buffer and other loaded buffers
 let b:EditorConfig_disable = 1 " Disable EditorConfig
 iabbrev refector refactor
+execute 'setlocal dict=' . general#vimfiles .'/dict/word.dict'

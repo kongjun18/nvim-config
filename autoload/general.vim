@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-10-19
+" Last Change: 2021-11-01
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -40,7 +40,6 @@ call utils#ensure_dir_exist(general#session_dir)
 let &backupdir = general#backup_dir . '/'
 let &directory = general#swap_dir . '/'
 let &undodir = general#undo_dir . '/'
-let &dict = general#vimfiles . '/dict/word.dict'
 let g:session_directory = general#session_dir
 
 " Leader
@@ -69,6 +68,7 @@ let g:did_install_default_menus = 1
 
 set path+=include
 set fileencodings=utf-8,gbk,big5
+set fileencoding=utf-8
 set updatetime=300
 set fileformat=unix " Use UNIX line feed
 set backspace=indent,eol,start " Ensure backspace is available
