@@ -1,9 +1,9 @@
 " Settings for C
-" Last Change: 2021-05-15
+" Last Change: 2021-11-01
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
-execute 'source' g:general#vimfiles .. g:general#delimiter .. 'after' .. g:general#delimiter .. 'ftplugin' .. g:general#delimiter .. 'common.vim'
+execute 'source' g:general#vimfiles .. '/after/ftplugin/common.vim'
 
 syntax sync fromstart
 
