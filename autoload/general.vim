@@ -133,7 +133,7 @@ set listchars=eol:¬,tab:>·,extends:>,precedes:<,space:␣ " Display special ch
 set signcolumn=yes
 set termguicolors   " Enable 24bit color
 set statusline=%#Mode#%{statusline#mode()}%*
-set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %*
+set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %{gutentags#statusline()}%*
 set statusline+=%=%{statusline#status()}\ %{&fileformat}\ \|\ %{&fileencoding}\ \|\ %l:%v\ %*
 
 " Use vim(fugitive) as git merge tool
