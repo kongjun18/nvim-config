@@ -10,10 +10,12 @@ let s:indicator_checking = ''
 let s:mode = {
       \ 'n': 'NORMAL',
       \ 'v': 'VISUAL',
-      \ '^v': 'VISUAL',
-      \ 's': 'VISUAL',
-      \ '^s': 'VISUAL',
-      \ 'r': 'REPLEACE',
+      \ 'V': 'V-LINE',
+      \ 's': 'SELECT',
+      \ 'S': 'S-LINE',
+      \ "\<C-s>": 'S-BLOCK',
+      \ "\<C-v>": 'V-BLOCK',
+      \ 'R': 'REPLEACE',
       \ 'i': 'INSERT',
       \ 'c': 'COMMAND',
       \ 't': 'TERMINAL',
@@ -32,10 +34,12 @@ let s:mode = {
 let s:guibg = {
       \ 'n': '#98C379',
       \ 'v': '#C678DD',
-      \ '^v': '#C678DD',
+      \ 'V': '#C678DD',
+      \ "\<C-v>": '#C678DD',
       \ 's': '#C678DD',
-      \ '^s': '#C678DD',
-      \ 'r': '#E06B75',
+      \ 'S': '#C678DD',
+      \ "\<C-s>": '#C678DD',
+      \ 'R': '#E06B75',
       \ 'i': '#61AFF0',
       \ 'c': 'Red',
       \ 't': 'Red',
@@ -48,7 +52,7 @@ let s:guibg = {
 " Highlight
 """"""""""""""""
 function! s:highlight_mode() abort
-  execute printf('hi Mode guifg=%s guibg=%s', 'White', s:guibg[tolower(mode())])
+  execute printf('hi Mode guifg=%s guibg=%s', 'White', get(s:guibg, mode(), '#C678DD'))
 endfunction
 
 execute printf('hi File guifg=%s guibg=%s', 'Black', s:guibg['f'])
@@ -57,7 +61,6 @@ execute printf('hi StatusLine guifg=%s guibg=%s', 'Black', s:guibg['l'])
 """"""""""""""""
 " Auxiliary
 """"""""""""""""
-
 function! statusline#infos() abort
   if !statusline#linted()
     return ''
@@ -112,6 +115,6 @@ endfunction
 
 function! statusline#mode() abort
   call s:highlight_mode()
-  return s:mode[tolower(mode())]
+  return get(s:mode, mode(), 'OTHER')
 endfunction
 
