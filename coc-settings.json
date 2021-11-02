@@ -7,6 +7,15 @@
     "diagnostic.hintSign": "💡",
     "suggest.enablePreview": true,
     "coc.source.filetypes": ["text", "vimwiki", "markdown", "gitcommit"],
+    "snippets": {
+        "textmateSnippetsRoots": [
+            "snippets"
+        ],
+        "extends": {
+          "cpp": ["c"],
+          "typescript": ["javascript"]
+        }
+    },
     "sumneko-lua.enableNvimLuaDev": true,
     "Lua": {
         "hint": {

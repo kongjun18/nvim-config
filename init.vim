@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-10-19
+" Last Change: 2021-11-02
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -543,4 +543,9 @@ let g:ale_lint_on_text_changed = 'never' " Only lint when save and leave insert
 let g:ale_lint_on_insert_leave = 1
 nmap <silent> gN <Plug>(ale_previous_wrap)
 nmap <silent> gn <Plug>(ale_next_wrap)
+" }}}
+
+" snippets {{{
+let g:snips_author = 'Kong Jun <kongjun18@outlook.com>'
+let g:snips_github = 'https://github.com/kongjun18'
 " }}}
