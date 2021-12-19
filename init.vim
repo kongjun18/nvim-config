@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-11-02
+" Last Change: 2021-12-19
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -70,7 +70,7 @@ let g:Lf_PreviewResult = {
 " Only used when g:Lf_UseVersionControlTool is 0 or files are not inside a
 " repo
 let g:Lf_WildIgnore = {
-			\ 'dir': ['_builds', 'target', 'doc', '.cache', '.ccls-cache'],
+			\ 'dir': ['_builds', 'Build', 'build', 'target', 'doc', '.cache', '.ccls-cache', 'node_modules'],
 			\ 'file': split(&wildignore, ',')
 			\}
 let g:Lf_RootMarkers = general#project_root_makers
