@@ -1,5 +1,5 @@
 " Vim general setting
-" Last Change: 2021-11-01
+" Last Change: 2021-12-20
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -79,6 +79,7 @@ set showtabline=2   " Always display tabline
 set diffopt+=vertical,algorithm:histogram,indent-heuristic
 set noerrorbells    " No beep
 set vb t_vb=
+set spelllang=en,cjk " Enable English spell check and ignore Chinese
 set undofile        " Persist undo history
 set backup          " Backup files
 set backupskip+=COMMIT_EDITMSG " Don't backup git commit
