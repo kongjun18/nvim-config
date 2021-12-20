@@ -4,7 +4,7 @@
     "diagnostic.displayByAle": true,
     "diagnostic.errorSign": "✖",
     "diagnostic.warningSign": "⚠️ ",
-    "diagnostic.hintSign": "💡",
+    "diagnostic.hintSign": "",
     "suggest.enablePreview": true,
     "coc.source.filetypes": ["text", "vimwiki", "markdown", "gitcommit"],
     "snippets": {

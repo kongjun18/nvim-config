@@ -1,7 +1,7 @@
 """"""""""""""""
 " Status
 """"""""""""""""
-let s:indicator_infos = '💡'
+let s:indicator_infos = ''
 let s:indicator_warnings = '⚠️'
 let s:indicator_errors = '✖'
 let s:indicator_ok = '✓'

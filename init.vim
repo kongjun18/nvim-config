@@ -1,5 +1,5 @@
 " (Neo)vim configuration
-" Last Change: 2021-12-19
+" Last Change: 2021-12-20
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -534,7 +534,7 @@ let g:lens#disabled_buftypes = ['nofile', '', 'terminal', 'nowrite']
 let g:ale_disable_lsp = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠️'
-let g:ale_sign_info = '💡'
+let g:ale_sign_info = ''
 let g:ale_echo_msg_format = '[%linter%] %code: %%s'
 let g:ale_c_parse_compile_commands = 1
 let g:ale_c_parse_makefile = 1
