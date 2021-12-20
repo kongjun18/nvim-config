@@ -100,7 +100,8 @@ function! statusline#checking() abort
 endfunction
 
 function! statusline#linted() abort
-  return get(g:, 'ale_enabled', 0) == 1
+  return get(g:, 'loaded_ale', 0) == 1
+    \ && get(g:, 'ale_enabled', 0) == 1
     \ && getbufvar(bufnr(''), 'ale_enabled', 1)
     \ && getbufvar(bufnr(''), 'ale_linted', 0) > 0
     \ && ale#engine#IsCheckingBuffer(bufnr('')) == 0
