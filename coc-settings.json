@@ -35,7 +35,7 @@
             "filetypes": ["cmake"],
             "rootPatterns": [".git", ".root", "compile_commands.json"],
             "initializationOptions": {
-                "buildDirectory": "_build"
+                "buildDirectory": ["_build", "Build", "build"]
             }
         },
         "sql": {
@@ -57,7 +57,8 @@
                 // Only support GCC/Clang
                 "clang": {
                     "extraArgs": ["-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
-                }
+                },
+                "compilationDatabaseDirectory": ["_builds", "build", "Build"]
             }
         }
     }
