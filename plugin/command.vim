@@ -1,5 +1,5 @@
 " Customed commands
-" Last Change: 2021-10-11
+" Last Change: 2021-12-22
 " Author: Kong Jun <kongjun18@outlook.com>
 " Github: https://github.com/kongjun18
 " License: GPL-2.0
@@ -39,4 +39,4 @@ command -nargs=0 Merge :call asyncrun#run('', {'errorformat': '%f'}, "git diff -
 command! -nargs=0 SudoWrite :execute 'silent! write !sudo tee "%" > /dev/null' | edit!
 
 " Rename current file
-command! -nargs=1 Rename try | execute "saveas %:p:h" . g:general#delimiter . "<args>" | call delete(expand('#')) | bd # | endtry
+command! -nargs=1 Rename try | execute "saveas %:p:h" . '/' . "<args>" | call delete(expand('#')) | bd # | endtry
