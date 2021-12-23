@@ -96,7 +96,7 @@ function! statusline#errors() abort
 endfunction
 
 function! statusline#checking() abort
-  return ale#engine#IsCheckingBuffer(bufnr('')) ? s:indicator_checking : ''
+  return get(g:, 'loaded_ale', 0) == 1 && ale#engine#IsCheckingBuffer(bufnr('')) ? s:indicator_checking : ''
 endfunction
 
 function! statusline#linted() abort
@@ -110,6 +110,15 @@ endfunction
 """"""""""""""""
 " APIs
 """"""""""""""""
+" set statusline+=%#File#\ %f\ %*\%*\%r%m\%#Git#\ %{FugitiveStatusline()}\ %{gutentags#statusline()}%*
+function! statusline#git() abort
+  return get(g:, 'loaded_fugitive', 0) == 1 ? FugitiveStatusline() : ''
+endfunction
+
+function! statusline#gutentags() abort
+  return get(g:, 'loaded_gutentags', 0) == 1 ? gutentags#statusline() : ''
+endfunction
+
 function! statusline#status() abort
   return join([statusline#checking(), statusline#errors(), statusline#warnings(), statusline#infos(), statusline#ok()])
 endfunction
