@@ -8,6 +8,7 @@ wget https://hub.fastgit.org/neovim/neovim/releases/download/v0.6.0/nvim.appimag
 chmod a+x nvim.appimage
 mv nvim.appimage /usr/local/bin/nvim
 # Neovim plugins dependencies
+apt install curl xclip
 apt install -y git gcc make python3 pip nodejs npm
 npm install -g yarn
 pip3 install pynvim
@@ -29,3 +30,4 @@ npm install -g eslint standard jsdoc
 apt install -y shellcheck
 # System utilites
 apt install -y ripgrep fd-find
+apt autoremove -y
