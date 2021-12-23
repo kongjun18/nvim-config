@@ -58,7 +58,7 @@
                 "clang": {
                     "extraArgs": ["-Wall", "-Wextra", "-Wconversion", "-Wsign-conversion"]
                 },
-                "compilationDatabaseDirectory": ["_builds", "build", "Build"]
+                "compilationDatabaseDirectory": "_builds"
             }
         }
     }
