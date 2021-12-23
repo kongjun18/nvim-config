@@ -13,7 +13,7 @@ npm install -g yarn
 pip3 install pynvim
 # Tag system
 apt install -y global universal-ctags
-pip3 install pygments
+pip3 install -y pygments
 # C++ development
 apt install -y ccls cmake gdb clang-format clang-tidy bear doxygen graphviz
 pip3 install cmake-language-server
@@ -26,6 +26,6 @@ luarocks install ldoc luacheck
 # Javascript development
 npm install -g eslint standard jsdoc
 # Bash shell
-apt install shellcheck
+apt install -y shellcheck
 # System utilites
 apt install -y ripgrep fd-find
