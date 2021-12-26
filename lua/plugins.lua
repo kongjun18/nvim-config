@@ -26,7 +26,13 @@ packer.startup({
     use 'wellle/targets.vim'
     use 'haya14busa/is.vim'
     use 'tommcdo/vim-exchange'
-    use {'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons'}
+    use {
+      'kyazdani42/nvim-tree.lua',
+      requires = {
+        'kyazdani42/nvim-web-devicons',
+      },
+      config = function() require'nvim-tree'.setup {} end
+    }
     use {'preservim/nerdcommenter', config=function() vim.api.nvim_call_function('CreateCommenterMappings', {}) end}
     use 'jiangmiao/auto-pairs'
     use 'kongjun18/vim-unimpaired'
@@ -48,45 +54,45 @@ packer.startup({
     use 'itchyny/vim-cursorword'
     use 'lfv89/vim-interestingwords'
     use {'nvim-treesitter/nvim-treesitter',
-      requires = {'nvim-treesitter/nvim-treesitter-textobjects',
-        after='nvim-treesitter'},
-    }
-    use {'turbio/bracey.vim', ft={'css', 'html', 'javascript'},
-    run = 'npm install --registry=https://registry.npm.taobao.org --prefix server'}
-    use 'norcalli/nvim-colorizer.lua'
-    use {'kristijanhusak/vim-dadbod-ui', requires={'kristijanhusak/vim-packager', 'tpope/vim-dadbod'}}
-    use 'tpope/vim-projectionist'
-    use 'tpope/vim-rsi'
-    use 'tpope/vim-repeat'
-    use 'tpope/vim-endwise'
-    use 'tpope/vim-characterize'
-    use 'tpope/vim-sleuth'
-    use 'tpope/vim-fugitive'
-    use 'tpope/vim-rhubarb'
-    use 'cormacrelf/vim-colors-github'
-    use 'editorconfig/editorconfig-vim'
-    use {'Yggdroot/LeaderF', run=':LeaderfInstallCExtension'}
-    use {'neoclide/coc.nvim', branch = 'master', run = 'yarn install --registry=https://registry.npm.taobao.org --frozen-lockfile'}
-    use 'dense-analysis/ale'
-    use {'https://gitee.com/kongjun18/vim-doge', run = function() vim.fn['doge#install']() end}
-    use 'skywind3000/asyncrun.vim'
-    use 'skywind3000/asynctasks.vim'
-    use 'Shougo/echodoc.vim'
-    use 'yianwillis/vimcdoc'
-    use 'voldikss/vim-translator'
-    use 'voldikss/vim-floaterm'
-    use 'skywind3000/vim-terminal-help'
-    use 'skywind3000/vim-quickui'
-    use 'liuchengxu/graphviz.vim'
-    use 'tweekmonster/startuptime.vim'
-    if packer_bootstrap then
-      packer.sync()
-    end
-  end,
-  config={
-    git ={
-      default_url_format = 'https://hub.fastgit.org/%s',
-      clone_timeout = 600 -- Prevent time out prematurely
-    }
+    requires = {'nvim-treesitter/nvim-treesitter-textobjects',
+    after='nvim-treesitter'},
   }
+  use {'turbio/bracey.vim', ft={'css', 'html', 'javascript'},
+  run = 'npm install --registry=https://registry.npm.taobao.org --prefix server'}
+  use 'norcalli/nvim-colorizer.lua'
+  use {'kristijanhusak/vim-dadbod-ui', requires={'kristijanhusak/vim-packager', 'tpope/vim-dadbod'}}
+  use 'tpope/vim-projectionist'
+  use 'tpope/vim-rsi'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-endwise'
+  use 'tpope/vim-characterize'
+  use 'tpope/vim-sleuth'
+  use 'tpope/vim-fugitive'
+  use 'tpope/vim-rhubarb'
+  use 'cormacrelf/vim-colors-github'
+  use 'editorconfig/editorconfig-vim'
+  use {'Yggdroot/LeaderF', run=':LeaderfInstallCExtension'}
+  use {'neoclide/coc.nvim', branch = 'master', run = 'yarn install --registry=https://registry.npm.taobao.org --frozen-lockfile'}
+  use 'dense-analysis/ale'
+  use {'https://gitee.com/kongjun18/vim-doge', run = function() vim.fn['doge#install']() end}
+  use 'skywind3000/asyncrun.vim'
+  use 'skywind3000/asynctasks.vim'
+  use 'Shougo/echodoc.vim'
+  use 'yianwillis/vimcdoc'
+  use 'voldikss/vim-translator'
+  use 'voldikss/vim-floaterm'
+  use 'skywind3000/vim-terminal-help'
+  use 'skywind3000/vim-quickui'
+  use 'liuchengxu/graphviz.vim'
+  use 'tweekmonster/startuptime.vim'
+  if packer_bootstrap then
+    packer.sync()
+  end
+end,
+config={
+  git ={
+    default_url_format = 'https://hub.fastgit.org/%s',
+    clone_timeout = 600 -- Prevent time out prematurely
+  }
+}
 })
