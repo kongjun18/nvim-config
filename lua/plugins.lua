@@ -9,6 +9,7 @@ end
 local packer = require('packer')
 packer.startup({
   function()
+    use 'wbthomason/packer.nvim'
     use 'camspiers/lens.vim'
     use 'kongjun18/vim-rest-reminder'
     use 'kshenoy/vim-signature'
