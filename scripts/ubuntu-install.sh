@@ -2,7 +2,7 @@
 #
 # Install neovim-6.0, C/C++, Javascript and Lua development dependencies.
 # The script is only tested on Ubuntu 18.04 LTS
-wget https://hub.fastgit.org/neovim/neovim/releases/download/v0.6.0/nvim.appimage
+wget https://hub.fastgit.org/neovim/neovim/releases/download/nightly/nvim.appimage
 chmod a+x nvim.appimage
 mv nvim.appimage /usr/local/bin/nvim
 # Neovim plugins dependencies

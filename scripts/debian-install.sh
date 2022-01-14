@@ -4,11 +4,11 @@
 # The script is only tested on Debian11.
 
 apt install -y fuse # support appimage
-wget https://hub.fastgit.org/neovim/neovim/releases/download/v0.6.0/nvim.appimage
+wget https://hub.fastgit.org/neovim/neovim/releases/download/nightly/nvim.appimage
 chmod a+x nvim.appimage
 mv nvim.appimage /usr/local/bin/nvim
 # Neovim plugins dependencies
-apt install curl xclip
+apt install -y curl xclip
 apt install -y git gcc make python3 pip nodejs npm
 npm install -g yarn
 pip3 install pynvim
