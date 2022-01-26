@@ -1,4 +1,13 @@
-# A (neo)vim configuration for C/C++ and Rust development
+# MOVE TO PURE LUA CONFIGURATION
+
+⚠️MOVE TO PURE LUA CONFIGURATION. PLEASE SEE [HERE](https://github.com/kongjun18/nvim).
+
+THIS IS THE OUT-OF-DATE README OF DEPRECATED REPO.
+
+-------------------------
+
+
+
 This repository is my personal configuration of (Neo)vim.
 
 If you want a community-driven configuration, please see [Spacevim](https://github.com/SpaceVim/SpaceVim).
